@@ -22,7 +22,7 @@ import {
   toggleChapterBookmark,
   type BookCameraPreset,
 } from '../../utils/book3dPhysics';
-import { SacredGitaBookEngine, type SacredBookTexts } from '../../three/book/SacredGitaBook3D';
+import { SacredGitaBookEngine, type SacredBookTexts, type TempleView } from '../../three/book/SacredGitaBook3D';
 import { detectWebGLCapability } from '../../three/webglSupport';
 import { IndianVoiceAssistant } from '../audio/IndianVoiceAssistant';
 
@@ -35,10 +35,10 @@ interface InteractiveGitaBook3DProps {
 type BookLang = 'en' | 'hi' | 'te';
 
 const CAMERA_PRESET_LABELS: Record<BookCameraPreset, string> = {
-  desk: 'Altar',
+  desk: 'Temple',
   reading: 'Read',
   close: 'Close-up',
-  spine: 'Spine',
+  spine: 'Darshan',
 };
 
 export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
@@ -59,6 +59,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
     typeof window !== 'undefined' ? loadBookmarks(window.localStorage) : [],
   );
   const [webglFallback, setWebglFallback] = useState<boolean>(false);
+  const [templeView, setTempleView] = useState<TempleView>('painted');
 
   const chapterRecord =
     GITA_CHAPTER_CATALOG[chapterNum - 1] ?? GITA_CHAPTER_CATALOG[0];
@@ -102,6 +103,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
     try {
       engine = new SacredGitaBookEngine(host, spreadTexts, {
         onWebglContextLost: () => setWebglFallback(true),
+        onTempleViewChange: setTempleView,
       });
       engine.setPaused(paused);
       engineRef.current = engine;
@@ -261,14 +263,46 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
       </div>
 
       {/* Main Split Stage: Left Interactive Three.js 3D Volume | Right Synced Folio Reader + Voice */}
-      <div className="grid grid-cols-1 lg:grid-cols-12">
-        {/* 3D WebGL Viewport */}
-        <div className="lg:col-span-6 relative h-[380px] sm:h-[460px] lg:h-[min(600px,calc(100vh-7rem))] lg:min-h-[480px] lg:sticky lg:top-24 lg:self-start bg-[radial-gradient(ellipse_at_50%_38%,#2A3A5C_0%,#17233A_38%,#0B111C_100%)] border-b lg:border-b-0 lg:border-r border-[#D4A537]/25">
-          {/* Warm sanctum glow behind the volume */}
+      <div className="grid grid-cols-1 lg:grid-cols-[52fr_48fr]">
+        {/* 3D WebGL Temple Viewport — rectangular, fills its panel */}
+        <div className="relative h-[420px] sm:h-[520px] lg:h-[min(660px,calc(100vh-7rem))] lg:min-h-[520px] lg:sticky lg:top-24 lg:self-start bg-[#101827] border-b lg:border-b-0 lg:border-r border-[#D4A537]/25 overflow-hidden">
+          {/* Cinematic vignette + warm grade over the scene (purely visual, never blocks input) */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full bg-[radial-gradient(circle,rgba(247,215,116,0.22)_0%,rgba(212,165,55,0.08)_40%,transparent_70%)] blur-2xl"
+            className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_50%_45%,transparent_52%,rgba(8,10,18,0.62)_100%)]"
           />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-28 bg-gradient-to-t from-[#0B111C]/80 to-transparent"
+          />
+
+          {/* Painted ↔ fully 3D sanctum */}
+          {!webglFallback && (
+            <div
+              className="absolute top-3 left-3 z-[2] inline-flex items-center rounded-full border border-[#D4A537]/45 bg-[#101827]/70 backdrop-blur-sm p-0.5"
+              role="group"
+              aria-label="Temple view"
+            >
+              {(
+                [
+                  ['painted', 'Painted Sanctum'],
+                  ['sculpted', '3D Sanctum'],
+                ] as const
+              ).map(([view, label]) => (
+                <button
+                  key={view}
+                  type="button"
+                  aria-pressed={templeView === view}
+                  onClick={() => engineRef.current?.setTempleView(view)}
+                  className={`px-3 py-1 rounded-full text-[11px] font-medium tracking-[0.04em] cursor-pointer transition-colors ${
+                    templeView === view ? 'royal-gold-surface font-semibold' : 'text-[#FFFDF7]/80 hover:text-[#F7D774]'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
           {!webglFallback ? (
             <div ref={canvasHostRef} className="relative overflow-hidden w-full h-full" />
           ) : (
@@ -291,7 +325,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
           )}
 
           {/* Bottom Floating Page Turn Bar */}
-          <div className="absolute inset-x-4 bottom-4 flex items-center justify-between gap-2 pointer-events-none">
+          <div className="absolute inset-x-4 bottom-4 z-[2] flex items-center justify-between gap-2 pointer-events-none">
             <button
               type="button"
               data-testid="book3d-prev-page"
@@ -303,7 +337,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
             </button>
 
             <span className="hidden sm:inline-block px-3 py-1 rounded-full bg-[#17233A]/75 backdrop-blur-sm border border-[#D4A537]/30 text-[11px] text-[#E9DCC5]/85">
-              Drag to orbit 360° · Scroll to zoom
+              Drag to look around · Scroll to approach
             </span>
 
             <button
@@ -319,7 +353,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
         </div>
 
         {/* Synchronized Parchment Reading Console */}
-        <div className="lg:col-span-6 p-5 sm:p-7 space-y-5 bg-[#FFFDF7] dark:bg-[#141E32] text-[#171717] dark:text-[#FFFDF7]">
+        <div className="min-w-0 p-5 sm:p-7 space-y-5 bg-[#FFFDF7] dark:bg-[#141E32] text-[#171717] dark:text-[#FFFDF7]">
           {/* Chapter Quick Stepper + Typography Controls */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--color-border)]">
             <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Reading language">

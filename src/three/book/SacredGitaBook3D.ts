@@ -12,10 +12,43 @@ import {
   easeInOutCubic,
   type BookCameraPreset,
 } from '../../utils/book3dPhysics';
+import {
+  buildBookStand,
+  buildPaintedSanctum,
+  buildTempleEffects,
+  STAND_BOARD_TILT,
+  type BookStandRig,
+  type PaintedSanctumRig,
+  type TempleLayer,
+} from '../temple/templeEffects';
+import { buildProceduralTemple, hasLicensedDeityModel } from '../temple/proceduralTemple';
+import defaultSanctumArtUrl from '../../assets/images/lord_krishna_devotional_portrait_1794747546478.jpg';
+
+/** 'painted' = devotional artwork backdrop + live 3D foreground; 'sculpted' = fully 3D temple. */
+export type TempleView = 'painted' | 'sculpted';
+
+/** The book model is authored at ~3.4 units wide; this brings it to a ~0.7 m lectern volume. */
+const BOOK_SCALE = 0.2;
+
+const DEFAULT_SANCTUM_ART_URL = defaultSanctumArtUrl;
+/** Operators can drop their own Radha-Krishna sanctum artwork here to replace the default. */
+export const CUSTOM_SANCTUM_ART_URL = '/assets/temple/sanctum-backdrop.jpg';
+
+async function resolveCustomSanctumArt(): Promise<string | null> {
+  try {
+    const res = await fetch(CUSTOM_SANCTUM_ART_URL, { method: 'HEAD' });
+    const type = res.headers.get('content-type') ?? '';
+    // SPA fallback serves index.html for unknown paths, so require an actual image
+    return res.ok && type.startsWith('image/') ? CUSTOM_SANCTUM_ART_URL : null;
+  } catch {
+    return null;
+  }
+}
 
 export interface SacredBookCallbacks {
   onChapterVisualSettled?: (chapterNumber: number) => void;
   onWebglContextLost?: () => void;
+  onTempleViewChange?: (view: TempleView) => void;
 }
 
 export interface SacredBookTexts {
@@ -278,24 +311,6 @@ function createGoldFiligreeCoverTextures(): { map: THREE.CanvasTexture; pbr: THR
   return { map, pbr };
 }
 
-/** Soft radial sprite used for the pedestal halo and floating gold motes. */
-function createRadialGlowTexture(inner: string, outer: string, size = 256): THREE.CanvasTexture {
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d');
-  if (ctx) {
-    const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-    g.addColorStop(0, inner);
-    g.addColorStop(1, outer);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, size, size);
-  }
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
-
 function wrapCanvasText(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -492,6 +507,13 @@ export class SacredGitaBookEngine {
   private turningLeafMesh: THREE.Mesh;
   private turningLeafBasePos: Float32Array;
   private turningLeafMat: THREE.MeshStandardMaterial;
+  private leafFrontCanvas: HTMLCanvasElement;
+  private leafBackCanvas: HTMLCanvasElement;
+  private stagingLeftCanvas: HTMLCanvasElement;
+  private stagingRightCanvas: HTMLCanvasElement;
+  private leafFrontTex: THREE.CanvasTexture;
+  private leafBackTex: THREE.CanvasTexture;
+  private turnTargetTexts: SacredBookTexts | null = null;
 
   private leftPageCanvas: HTMLCanvasElement;
   private rightPageCanvas: HTMLCanvasElement;
@@ -500,8 +522,15 @@ export class SacredGitaBookEngine {
   private coverTex: THREE.CanvasTexture;
   private coverPbrTex: THREE.CanvasTexture;
   private extraTextures: THREE.Texture[] = [];
-  private goldMotes: THREE.Points | null = null;
-  private goldMoteSpeeds: Float32Array | null = null;
+
+  // Temple environment
+  private stand: BookStandRig;
+  private effects: TempleLayer;
+  private painted: PaintedSanctumRig | null = null;
+  private sculpted: TempleLayer | null = null;
+  private deityArtTexture: THREE.Texture;
+  private quality: 'low' | 'high' = 'high';
+  private templeView: TempleView = 'painted';
 
   private openFactor = 1; // 0 = closed, 1 = opened 180°
   private targetOpenFactor = 1;
@@ -513,8 +542,6 @@ export class SacredGitaBookEngine {
   private cameraLerpTargetPos: THREE.Vector3 | null = null;
   private cameraLerpTargetLook: THREE.Vector3 | null = null;
   private activePreset: BookCameraPreset = 'desk';
-  /** ≥1 multiplier on camera distance so the open book fits narrow/portrait viewports. */
-  private fitFactor = 1;
 
   private isSoftwareGl = false;
   private paused = false;
@@ -594,80 +621,80 @@ export class SacredGitaBookEngine {
       this.scene.environment = this.envRenderTarget.texture;
     }
 
-    // Three-Point Sacred Warm Sanctuary Lighting
-    const ambient = new THREE.AmbientLight(0xfff4df, 0.48);
+    // Cinematic temple lighting: warm key through the hall, cool rim from the altar side,
+    // a soft "sunbeam" spot on the reading stand. Diya/aarti point lights live in templeEffects.
+    const ambient = new THREE.AmbientLight(0xfff0d8, 0.32);
     this.scene.add(ambient);
 
-    const keyLight = new THREE.DirectionalLight(0xffe7ba, 1.55);
-    keyLight.position.set(3.2, 5.4, 3.8);
+    const keyLight = new THREE.DirectionalLight(0xffe2b0, 1.35);
+    keyLight.position.set(2.6, 5.2, 3.4);
     keyLight.castShadow = !this.isSoftwareGl;
-    keyLight.shadow.mapSize.set(1024, 1024);
-    keyLight.shadow.bias = -0.0005;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.bias = -0.0004;
+    keyLight.shadow.normalBias = 0.02;
+    const sc = keyLight.shadow.camera;
+    sc.left = -3.5;
+    sc.right = 3.5;
+    sc.top = 3.5;
+    sc.bottom = -3.5;
+    sc.near = 0.5;
+    sc.far = 14;
     this.scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x9fb8df, 0.68);
-    rimLight.position.set(-4.0, 2.8, -3.2);
+    const rimLight = new THREE.DirectionalLight(0xa9bfe0, 0.45);
+    rimLight.position.set(-3.5, 3.2, -4.5);
     this.scene.add(rimLight);
 
-    const deskGlow = new THREE.PointLight(0xf2c35a, 1.1, 9);
-    deskGlow.position.set(0, 1.8, 1.5);
-    this.scene.add(deskGlow);
+    const sunbeam = new THREE.SpotLight(0xffe2a8, 9, 9, Math.PI / 9, 0.7, 1.4);
+    sunbeam.position.set(1.6, 4.6, 1.2);
+    sunbeam.target.position.set(0, 0.95, 0);
+    this.scene.add(sunbeam);
+    this.scene.add(sunbeam.target);
 
-    // Soft overhead "divine" pool of light that makes the gold leaf flare
-    // Kept moderate: stronger values wash the parchment out to flat white under ACES tone mapping
-    const haloSpot = new THREE.SpotLight(0xffe2a8, 4.5, 14, Math.PI / 7, 0.65, 1.3);
-    haloSpot.position.set(0, 6.2, 1.1);
-    haloSpot.target.position.set(0, 0, 0);
-    this.scene.add(haloSpot);
-    this.scene.add(haloSpot.target);
+    // Temple foreground shared by both sanctum views
+    this.stand = buildBookStand();
+    this.scene.add(this.stand.group);
 
-    // Polished rosewood pedestal beneath the Sacred Volume
-    const pedestal = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.55, 2.75, 0.16, 64),
-      new THREE.MeshStandardMaterial({
-        color: 0x1c100c,
-        roughness: 0.32,
-        metalness: 0.2,
-      }),
-    );
-    pedestal.position.y = -0.22;
-    pedestal.receiveShadow = true;
-    this.scene.add(pedestal);
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.quality = this.isSoftwareGl || (typeof window !== 'undefined' && window.innerWidth < 640) ? 'low' : 'high';
+    this.effects = buildTempleEffects({ quality: this.quality, reduceMotion });
+    this.scene.add(this.effects.group);
 
-    const brassMat = new THREE.MeshStandardMaterial({
-      color: 0xe0b24a,
-      roughness: 0.18,
-      metalness: 1,
+    // Devotional artwork: an operator-supplied backdrop if present, else the bundled portrait
+    this.deityArtTexture = new THREE.TextureLoader().load(DEFAULT_SANCTUM_ART_URL, (tex) => {
+      this.painted?.fitToCamera(this.camera);
+      tex.needsUpdate = true;
     });
-    const brassTrimRing = new THREE.Mesh(new THREE.TorusGeometry(2.54, 0.024, 16, 96), brassMat);
-    brassTrimRing.rotation.x = Math.PI / 2;
-    brassTrimRing.position.y = -0.14;
-    this.scene.add(brassTrimRing);
+    this.deityArtTexture.colorSpace = THREE.SRGBColorSpace;
+    this.deityArtTexture.anisotropy = 8;
+    this.extraTextures.push(this.deityArtTexture);
+    void resolveCustomSanctumArt().then((url) => {
+      if (!url || this.disposed) return;
+      new THREE.TextureLoader().load(url, (tex) => {
+        if (this.disposed) return tex.dispose();
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        this.extraTextures.push(tex);
+        if (this.painted) {
+          this.painted.group.removeFromParent();
+          this.painted.dispose();
+        }
+        this.painted = buildPaintedSanctum(tex);
+        this.painted.fitToCamera(this.camera);
+        this.painted.group.visible = this.templeView === 'painted';
+        this.scene.add(this.painted.group);
+      });
+    });
+    this.painted = buildPaintedSanctum(this.deityArtTexture);
+    this.scene.add(this.painted.group);
 
-    const brassBaseRing = new THREE.Mesh(new THREE.TorusGeometry(2.75, 0.016, 12, 96), brassMat.clone());
-    brassBaseRing.rotation.x = Math.PI / 2;
-    brassBaseRing.position.y = -0.3;
-    this.scene.add(brassBaseRing);
-
-    // Golden halo pooled on the pedestal around the book
-    const haloTex = createRadialGlowTexture('rgba(247, 215, 116, 0.55)', 'rgba(247, 215, 116, 0)');
-    this.extraTextures.push(haloTex);
-    const halo = new THREE.Mesh(
-      new THREE.PlaneGeometry(5.2, 5.2),
-      new THREE.MeshBasicMaterial({
-        map: haloTex,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      }),
-    );
-    halo.rotation.x = -Math.PI / 2;
-    halo.position.y = -0.135;
-    this.scene.add(halo);
-
-    // Root Book Assembly
+    // Root Book Assembly — rests on the carved stand at lectern scale
     this.bookRoot = new THREE.Group();
-    this.scene.add(this.bookRoot);
+    this.bookRoot.scale.setScalar(BOOK_SCALE);
+    this.stand.bookAnchor.add(this.bookRoot);
 
     const coverTextures = createGoldFiligreeCoverTextures();
     this.coverTex = coverTextures.map;
@@ -841,66 +868,73 @@ export class SacredGitaBookEngine {
     leafGeo.translate(1.54 / 2 + 0.03, 0, 0);
     this.turningLeafBasePos = Float32Array.from(leafGeo.attributes.position.array);
 
+    // Two-sided printed leaf: the front carries the outgoing right folio, the back the incoming
+    // left folio (mirrored in U because the sheet flips about the spine).
+    const makePageCanvas = () => {
+      const c = document.createElement('canvas');
+      c.width = 768;
+      c.height = 1040;
+      return c;
+    };
+    this.leafFrontCanvas = makePageCanvas();
+    this.leafBackCanvas = makePageCanvas();
+    this.stagingLeftCanvas = makePageCanvas();
+    this.stagingRightCanvas = makePageCanvas();
+    this.leafFrontTex = new THREE.CanvasTexture(this.leafFrontCanvas);
+    this.leafBackTex = new THREE.CanvasTexture(this.leafBackCanvas);
+    for (const tex of [this.leafFrontTex, this.leafBackTex]) {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
+      this.extraTextures.push(tex);
+    }
+    this.leafBackTex.wrapS = THREE.RepeatWrapping;
+    this.leafBackTex.repeat.x = -1;
+    this.leafBackTex.offset.x = 1;
+
     this.turningLeafMat = new THREE.MeshStandardMaterial({
-      color: 0xf6ebd3,
-      roughness: 0.8,
-      metalness: 0.03,
-      side: THREE.DoubleSide,
+      map: this.leafFrontTex,
+      roughness: 0.82,
+      metalness: 0.02,
+      side: THREE.FrontSide,
     });
     this.turningLeafMesh = new THREE.Mesh(leafGeo, this.turningLeafMat);
     this.turningLeafMesh.position.set(0, 0.105, 0);
     this.turningLeafMesh.rotation.x = -Math.PI / 2;
     this.turningLeafMesh.visible = false;
     this.turningLeafMesh.castShadow = true;
+    const leafBack = new THREE.Mesh(
+      leafGeo,
+      new THREE.MeshStandardMaterial({
+        map: this.leafBackTex,
+        roughness: 0.82,
+        metalness: 0.02,
+        side: THREE.BackSide,
+      }),
+    );
+    this.turningLeafMesh.add(leafBack);
     this.bookRoot.add(this.turningLeafMesh);
 
-    // OrbitControls with restrained luxury inspection range
+    // Restrained orbit: enough to feel the depth of the sanctum, never enough to reveal the
+    // painted backdrop's edges. Panning off; zoom stays between the stand and the hall entrance.
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.06;
-    this.controls.maxPolarAngle = Math.PI / 2.15;
-    this.controls.minPolarAngle = 0.28;
-    this.controls.target.set(0, 0.05, 0);
-    this.applyFitFactor(this.computeFitFactor(), false);
+    this.controls.enablePan = false;
+    this.controls.minPolarAngle = 0.35;
+    this.controls.maxPolarAngle = 1.62;
+    this.controls.minDistance = 0.45;
+    this.controls.maxDistance = 6;
+    this.applyViewLimits();
+    const initial = SacredGitaBookEngine.presetPose('desk');
+    this.camera.position.copy(initial.pos);
+    this.controls.target.copy(initial.look);
+    this.adaptFieldOfView();
+    this.painted?.fitToCamera(this.camera);
 
-    // Slowly rising gold motes around the volume (skipped on software GL to stay light)
-    const reduceMotion =
-      typeof window !== 'undefined' &&
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!this.isSoftwareGl) {
-      const count = 150;
-      const positions = new Float32Array(count * 3);
-      this.goldMoteSpeeds = new Float32Array(count);
-      const rand = seededRandom(108);
-      for (let i = 0; i < count; i++) {
-        // Ring outside the book's footprint (corners reach r≈2.05) so motes never drift over the text
-        const r = 2.1 + rand() * 0.6;
-        const a = rand() * Math.PI * 2;
-        positions[i * 3] = Math.cos(a) * r;
-        positions[i * 3 + 1] = -0.1 + rand() * 2.4;
-        positions[i * 3 + 2] = Math.sin(a) * r;
-        this.goldMoteSpeeds[i] = reduceMotion ? 0 : 0.05 + rand() * 0.12;
-      }
-      const moteGeo = new THREE.BufferGeometry();
-      moteGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      const moteTex = createRadialGlowTexture('rgba(255, 240, 190, 1)', 'rgba(255, 200, 90, 0)', 64);
-      this.extraTextures.push(moteTex);
-      this.goldMotes = new THREE.Points(
-        moteGeo,
-        new THREE.PointsMaterial({
-          map: moteTex,
-          color: 0xffd88a,
-          size: 0.045,
-          sizeAttenuation: true,
-          transparent: true,
-          opacity: 0.85,
-          depthWrite: false,
-          blending: THREE.AdditiveBlending,
-        }),
-      );
-      this.scene.add(this.goldMotes);
-    }
+    // Licensed deity model present → the sculpted 3D sanctum becomes the default view
+    void hasLicensedDeityModel().then((present) => {
+      if (present && !this.disposed) this.setTempleView('sculpted');
+    });
 
     // ResizeObserver for crisp responsive framing without synchronous layout loops
     this.resizeObserver = new ResizeObserver(() => this.scheduleResize());
@@ -946,6 +980,11 @@ export class SacredGitaBookEngine {
   }
 
   public updateTexts(texts: SacredBookTexts): void {
+    // Mid-turn, the resting folios are staged by triggerPageTurn; apply the latest texts on landing.
+    if (this.turnActive) {
+      this.turnTargetTexts = texts;
+      return;
+    }
     paintParchmentSpread(this.leftPageCanvas, this.rightPageCanvas, texts);
     this.leftPageTex.needsUpdate = true;
     this.rightPageTex.needsUpdate = true;
@@ -955,78 +994,127 @@ export class SacredGitaBookEngine {
     this.targetOpenFactor = open ? 1 : 0;
   }
 
+  /**
+   * Physically ordered page turn. 'next': the right folio lifts (front of the leaf = outgoing
+   * page), the new right folio is revealed beneath it, and the leaf's reverse lands as the new
+   * left folio. 'prev' mirrors this from the left.
+   */
   public triggerPageTurn(direction: 'next' | 'prev', nextTexts: SacredBookTexts): void {
     if (this.targetOpenFactor < 0.5) {
       this.targetOpenFactor = 1;
     }
-    this.updateTexts(nextTexts);
+    if (this.turnActive) this.finishTurn();
+
+    paintParchmentSpread(this.stagingLeftCanvas, this.stagingRightCanvas, nextTexts);
+    const copy = (dst: HTMLCanvasElement, src: HTMLCanvasElement) => dst.getContext('2d')?.drawImage(src, 0, 0);
+    if (direction === 'next') {
+      copy(this.leafFrontCanvas, this.rightPageCanvas);
+      copy(this.leafBackCanvas, this.stagingLeftCanvas);
+      copy(this.rightPageCanvas, this.stagingRightCanvas);
+      this.rightPageTex.needsUpdate = true;
+    } else {
+      copy(this.leafBackCanvas, this.leftPageCanvas);
+      copy(this.leafFrontCanvas, this.stagingRightCanvas);
+      copy(this.leftPageCanvas, this.stagingLeftCanvas);
+      this.leftPageTex.needsUpdate = true;
+    }
+    this.leafFrontTex.needsUpdate = true;
+    this.leafBackTex.needsUpdate = true;
+
+    this.turnTargetTexts = nextTexts;
     this.turnDirection = direction;
     this.turnProgress = 0;
     this.turnActive = true;
+    this.applyTurningLeafCurl();
     this.turningLeafMesh.visible = true;
   }
 
-  private static presetPose(preset: BookCameraPreset): { pos: THREE.Vector3; look: THREE.Vector3 } {
-    switch (preset) {
-      case 'reading':
-        return { pos: new THREE.Vector3(0, 3.85, 1.55), look: new THREE.Vector3(0, 0.05, 0.08) };
-      case 'close':
-        return { pos: new THREE.Vector3(0.45, 2.25, 2.15), look: new THREE.Vector3(0, 0.08, 0.15) };
-      case 'spine':
-        return { pos: new THREE.Vector3(-2.6, 1.95, 2.75), look: new THREE.Vector3(0, 0.05, 0) };
-      case 'desk':
-      default:
-        return { pos: new THREE.Vector3(0, 3.35, 3.65), look: new THREE.Vector3(0, 0.05, 0) };
+  /** Lands the leaf: hide it and commit the final spread (including any texts that arrived mid-turn). */
+  private finishTurn(): void {
+    this.turnActive = false;
+    this.turningLeafMesh.visible = false;
+    if (this.turnTargetTexts) {
+      paintParchmentSpread(this.leftPageCanvas, this.rightPageCanvas, this.turnTargetTexts);
+      this.leftPageTex.needsUpdate = true;
+      this.rightPageTex.needsUpdate = true;
+      this.turnTargetTexts = null;
     }
-  }
-
-  /** Preset camera position pushed back along its view direction by the current fit factor. */
-  private fittedPresetPos(preset: BookCameraPreset): { pos: THREE.Vector3; look: THREE.Vector3 } {
-    const { pos, look } = SacredGitaBookEngine.presetPose(preset);
-    const offset = pos.clone().sub(look).multiplyScalar(this.fitFactor);
-    return { pos: look.clone().add(offset), look };
   }
 
   /**
-   * Camera distance needed so the open book (≈3.5 × 2.3 units, plus margin) fits the
-   * viewport. Presets were authored for ~16:10; narrower viewports need the camera further back.
+   * Temple camera poses. Book centre ≈ (0, 1.0, 0) on a board tilted STAND_BOARD_TILT toward
+   * the viewer; altar toward -z. 'desk' = whole-temple view, 'reading' = along the page normal,
+   * 'close' = three-quarter close-up, 'spine' = darshan view over the book toward the deities.
    */
-  private computeFitFactor(): number {
-    const BASE_DISTANCE = 4.95; // |desk preset offset|
-    const HALF_WIDTH = 2.0; // half the open book's width + margin
-    const HALF_DEPTH = 1.55;
-    const tanV = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
-    const tanH = tanV * this.camera.aspect;
-    const needed = Math.max(HALF_WIDTH / tanH, HALF_DEPTH / tanV) + 0.45;
-    return Math.max(1, needed / BASE_DISTANCE);
+  private static presetPose(preset: BookCameraPreset): { pos: THREE.Vector3; look: THREE.Vector3 } {
+    switch (preset) {
+      case 'reading': {
+        const n = new THREE.Vector3(0, Math.cos(STAND_BOARD_TILT), Math.sin(STAND_BOARD_TILT));
+        const center = new THREE.Vector3(0, 1.0, 0);
+        return { pos: center.clone().addScaledVector(n, 0.88), look: center };
+      }
+      case 'close':
+        return { pos: new THREE.Vector3(0.34, 1.33, 0.64), look: new THREE.Vector3(0, 1.0, 0) };
+      case 'spine':
+        return { pos: new THREE.Vector3(0, 1.5, 0.78), look: new THREE.Vector3(0, 1.55, -5) };
+      case 'desk':
+      default:
+        return { pos: new THREE.Vector3(0, 1.62, 2.35), look: new THREE.Vector3(0, 1.2, -2.2) };
+    }
   }
 
-  private applyFitFactor(next: number, animate: boolean): void {
-    const prev = this.fitFactor;
-    this.fitFactor = next;
-    this.controls.minDistance = 2.4;
-    this.controls.maxDistance = 6.2 * next;
+  /**
+   * Keeps the horizontal field of view constant on portrait/narrow panels (widening the
+   * vertical FOV) instead of moving the camera — moving back in a temple would leave the hall.
+   */
+  private adaptFieldOfView(): void {
+    const BASE_VFOV = 40;
+    const DESIGN_ASPECT = 1.25;
+    const tanH = Math.tan(THREE.MathUtils.degToRad(BASE_VFOV / 2)) * DESIGN_ASPECT;
+    const vfov =
+      this.camera.aspect >= DESIGN_ASPECT
+        ? BASE_VFOV
+        : Math.min(66, THREE.MathUtils.radToDeg(2 * Math.atan(tanH / this.camera.aspect)));
+    this.camera.fov = vfov;
+    this.camera.near = 0.05;
+    this.camera.updateProjectionMatrix();
+  }
 
-    if (!animate) {
-      const { pos, look } = this.fittedPresetPos(this.activePreset);
-      this.camera.position.copy(pos);
-      this.controls.target.copy(look);
-      return;
+  /** Painted view allows only a gentle drift; the sculpted temple can be explored further. */
+  private applyViewLimits(): void {
+    const sculpted = this.templeView === 'sculpted';
+    // The sculpted hall is open behind z≈3.5, so cap distance/azimuth to stay inside its walls.
+    this.controls.minAzimuthAngle = sculpted ? -0.55 : -0.2;
+    this.controls.maxAzimuthAngle = sculpted ? 0.55 : 0.2;
+    this.controls.maxDistance = sculpted ? 5.3 : 4.7;
+  }
+
+  public getTempleView(): TempleView {
+    return this.templeView;
+  }
+
+  /** Switches between the painted sanctum and the fully sculpted 3D temple. */
+  public setTempleView(view: TempleView): void {
+    if (this.disposed) return;
+    this.templeView = view;
+    if (view === 'sculpted' && !this.sculpted) {
+      const temple: TempleLayer = buildProceduralTemple({
+        renderer: this.renderer,
+        quality: this.quality,
+        deityFallbackTexture: this.deityArtTexture,
+      });
+      this.sculpted = temple;
+      this.scene.add(temple.group);
     }
-    if (Math.abs(next - prev) < 0.01) return;
-    if (this.cameraLerpTargetPos) {
-      // A preset glide is in flight: retarget it with the new framing
-      this.setCameraPreset(this.activePreset);
-    } else {
-      // Keep the user's orbit angle, only rescale the distance
-      const offset = this.camera.position.clone().sub(this.controls.target).multiplyScalar(next / prev);
-      this.camera.position.copy(this.controls.target).add(offset);
-    }
+    if (this.sculpted) this.sculpted.group.visible = view === 'sculpted';
+    if (this.painted) this.painted.group.visible = view === 'painted';
+    this.applyViewLimits();
+    this.callbacks.onTempleViewChange?.(view);
   }
 
   public setCameraPreset(preset: BookCameraPreset): void {
     this.activePreset = preset;
-    const { pos, look } = this.fittedPresetPos(preset);
+    const { pos, look } = SacredGitaBookEngine.presetPose(preset);
     this.cameraLerpTargetPos = pos;
     this.cameraLerpTargetLook = look;
   }
@@ -1069,7 +1157,8 @@ export class SacredGitaBookEngine {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
-    this.applyFitFactor(this.computeFitFactor(), true);
+    this.adaptFieldOfView();
+    this.painted?.fitToCamera(this.camera);
   }
 
   private animate = (): void => {
@@ -1082,21 +1171,10 @@ export class SacredGitaBookEngine {
     const dt = Math.min(0.05, (now - this.lastTick) / 1000);
     this.lastTick = now;
 
-    // Gentle book floating breathing when idle
-    this.bookRoot.position.y = Math.sin(now * 0.0014) * 0.025;
-
-    // Drift gold motes upward, wrapping back to the pedestal
-    if (this.goldMotes && this.goldMoteSpeeds) {
-      const pos = this.goldMotes.geometry.attributes.position as THREE.BufferAttribute;
-      const arr = pos.array as Float32Array;
-      for (let i = 0; i < this.goldMoteSpeeds.length; i++) {
-        let y = arr[i * 3 + 1] + this.goldMoteSpeeds[i] * dt;
-        if (y > 2.3) y = -0.1;
-        arr[i * 3 + 1] = y;
-      }
-      pos.needsUpdate = true;
-      this.goldMotes.rotation.y += dt * 0.03;
-    }
+    // Living temple: flames, aarti, incense, light shafts, petals, drapes/bells
+    const t = now / 1000;
+    this.effects.update(t, dt);
+    if (this.sculpted?.group.visible) this.sculpted.update(t, dt);
 
     // Smooth open / close cover fold
     if (Math.abs(this.openFactor - this.targetOpenFactor) > 0.002) {
@@ -1113,8 +1191,7 @@ export class SacredGitaBookEngine {
       this.turnProgress = Math.min(1, this.turnProgress + dt * 1.45);
       this.applyTurningLeafCurl();
       if (this.turnProgress >= 1) {
-        this.turnActive = false;
-        this.turningLeafMesh.visible = false;
+        this.finishTurn();
       }
     }
 
@@ -1164,6 +1241,10 @@ export class SacredGitaBookEngine {
     this.rightPageTex.dispose();
     this.coverTex.dispose();
     this.coverPbrTex.dispose();
+    this.stand.dispose();
+    this.effects.dispose();
+    this.painted?.dispose();
+    this.sculpted?.dispose();
     for (const tex of this.extraTextures) tex.dispose();
     this.extraTextures = [];
     this.envRenderTarget?.dispose();
