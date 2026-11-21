@@ -244,7 +244,7 @@ export const AboutPage: React.FC = () => {
           <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12 space-y-8">
             <div className="max-w-3xl space-y-2.5">
               <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-bronze)]">
-                Verification Ledger · bhagavadgitavishwamahotsav.com
+                Verification Ledger
               </p>
               <h2 className="font-editorial text-3xl sm:text-4xl font-normal text-[var(--color-ink)]">
                 Official Content Parity &amp; Readiness Matrix

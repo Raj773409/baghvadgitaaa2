@@ -173,7 +173,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
   return (
     <div
       data-testid="interactive-gita-book-3d"
-      className="relative rounded-2xl border border-[#D4A537]/45 bg-[#11192A] text-[#FFFDF7] overflow-hidden shadow-[0_24px_64px_rgba(8,12,20,0.55),0_0_0_1px_rgba(247,215,116,0.08),0_0_60px_-20px_rgba(212,165,55,0.45)]"
+      className="relative rounded-2xl border border-[#D4A537]/45 bg-[#11192A] text-[#FFFDF7] overflow-clip shadow-[0_24px_64px_rgba(8,12,20,0.55),0_0_0_1px_rgba(247,215,116,0.08),0_0_60px_-20px_rgba(212,165,55,0.45)]"
     >
       {/* Gold-leaf top edge */}
       <div className="absolute inset-x-0 top-0 h-[2px] gold-leaf-line" aria-hidden="true" />
@@ -263,14 +263,14 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
       {/* Main Split Stage: Left Interactive Three.js 3D Volume | Right Synced Folio Reader + Voice */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
         {/* 3D WebGL Viewport */}
-        <div className="lg:col-span-6 relative min-h-[360px] sm:min-h-[440px] lg:min-h-[520px] bg-[radial-gradient(ellipse_at_50%_38%,#2A3A5C_0%,#17233A_38%,#0B111C_100%)] border-b lg:border-b-0 lg:border-r border-[#D4A537]/25">
+        <div className="lg:col-span-6 relative h-[380px] sm:h-[460px] lg:h-[min(600px,calc(100vh-7rem))] lg:min-h-[480px] lg:sticky lg:top-24 lg:self-start bg-[radial-gradient(ellipse_at_50%_38%,#2A3A5C_0%,#17233A_38%,#0B111C_100%)] border-b lg:border-b-0 lg:border-r border-[#D4A537]/25">
           {/* Warm sanctum glow behind the volume */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full bg-[radial-gradient(circle,rgba(247,215,116,0.22)_0%,rgba(212,165,55,0.08)_40%,transparent_70%)] blur-2xl"
           />
           {!webglFallback ? (
-            <div ref={canvasHostRef} className="relative overflow-hidden w-full h-full min-h-[360px] sm:min-h-[440px] lg:min-h-[520px]" />
+            <div ref={canvasHostRef} className="relative overflow-hidden w-full h-full" />
           ) : (
             <div className="p-8 h-full flex flex-col items-center justify-center text-center space-y-4">
               <div className="relative w-48 h-64 rounded-lg border-2 border-[#D4A537] bg-gradient-to-br from-[#6A1624] via-[#4A0E19] to-[#2C0710] p-5 flex flex-col items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_40px_-10px_rgba(212,165,55,0.5)] outline outline-1 outline-offset-[-10px] outline-[#D4A537]/50">

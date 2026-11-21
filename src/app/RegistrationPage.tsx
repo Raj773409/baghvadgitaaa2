@@ -5,7 +5,7 @@ import { ASSET_MANIFEST } from '../assets/assetManifest';
 import { Header } from '../components/layout/Header';
 import { InstitutionalNoticeModal, type NoticeKind } from '../components/layout/InstitutionalNoticeModal';
 import { DevotionalArtworkPanel } from '../components/registration/DevotionalArtworkPanel';
-import { PaymentHandoffModal } from '../components/registration/PaymentHandoffModal';
+import { CheckoutExperience } from '../components/payment/CheckoutExperience';
 import { RegistrationFormCard } from '../components/registration/RegistrationFormCard';
 import { useI18n } from '../i18n';
 import type { CoreLocale } from '../utils/i18nHelpers';
@@ -184,7 +184,7 @@ export const RegistrationPage: React.FC = () => {
         onClose={() => setActivePolicy(null)}
       />
 
-      <PaymentHandoffModal
+      <CheckoutExperience
         isOpen={handoffValues !== null}
         values={handoffValues ?? INITIAL_REGISTRATION_VALUES}
         onClose={() => setHandoffValues(null)}

@@ -5,7 +5,7 @@ import { PublishedBlocksRenderer } from '../../components/cms/PublishedBlocksRen
 import { Footer } from '../../components/layout/Footer';
 import { Header } from '../../components/layout/Header';
 import { PageHeroBanner } from '../../components/layout/PageHeroBanner';
-import { OFFICIAL_EVENT_URLS, OFFICIAL_SECRETARIAT_CONTACT } from '../../content/eventContent';
+import { OFFICIAL_SECRETARIAT_CONTACT, SOCIAL_LINKS } from '../../content/eventContent';
 import { OFFICIAL_FAQS } from '../../content/faqAndPolicyContent';
 import { extractPublishedPageDetails } from '../../content/siteCatalog';
 import { usePublicCms, usePublishedCollections } from '../../hooks/usePublicCms';
@@ -167,40 +167,21 @@ export const ContactFaqPage: React.FC = () => {
                 </div>
               </dl>
 
-              <div className="pt-4 border-t border-[var(--color-border)] flex flex-wrap gap-4 text-xs">
-                <a
-                  href={OFFICIAL_EVENT_URLS.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--color-bronze)] hover:underline"
-                >
-                  Instagram
-                </a>
-                <a
-                  href={OFFICIAL_EVENT_URLS.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--color-bronze)] hover:underline"
-                >
-                  Facebook
-                </a>
-                <a
-                  href={OFFICIAL_EVENT_URLS.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--color-bronze)] hover:underline"
-                >
-                  X
-                </a>
-                <a
-                  href={OFFICIAL_EVENT_URLS.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--color-bronze)] hover:underline"
-                >
-                  YouTube
-                </a>
-              </div>
+              {SOCIAL_LINKS.length > 0 && (
+                <div className="pt-4 border-t border-[var(--color-border)] flex flex-wrap gap-4 text-xs">
+                  {SOCIAL_LINKS.map((link) => (
+                    <a
+                      key={link.id}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--color-bronze)] hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="lg:col-span-5 bg-[#101426] text-[#FFF6E8] border border-[#D6A447]/30 p-7 sm:p-9 flex flex-col justify-between gap-6">

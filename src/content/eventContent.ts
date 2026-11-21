@@ -1,13 +1,25 @@
 import type { AnnouncementRecord, EventRecord, LeadershipProfile, PartnerOrganization, ScheduleItem } from '../types/cms';
 
+// This site is the new official website: every primary link stays on this site. The previous
+// portal was used only as a content reference and must not be linked to.
 export const OFFICIAL_EVENT_URLS = {
-  home: 'https://bhagavadgitavishwamahotsav.com/',
-  register: 'https://bhagavadgitavishwamahotsav.com/participate/register',
-  instagram: 'https://instagram.com/bhagavad_gita_vishwa_mahotsav',
-  facebook: 'https://facebook.com/BhagavadGitaVishwaMahotsav',
-  twitter: 'https://x.com/gita_event',
-  youtube: 'https://youtube.com/@bhagavadgitavishwamahotsav',
+  home: '/',
+  register: '/participate/register',
+  dashboard: '/dashboard',
 } as const;
+
+// Social profiles for the new organisation are configured at build time
+// (VITE_SOCIAL_INSTAGRAM, VITE_SOCIAL_FACEBOOK, VITE_SOCIAL_X, VITE_SOCIAL_YOUTUBE).
+// Unset entries are hidden. Guarded because this module is also imported by the Node server.
+const viteEnv: Record<string, string | undefined> =
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {};
+
+export const SOCIAL_LINKS: ReadonlyArray<{ id: string; label: string; href: string }> = [
+  { id: 'instagram', label: 'Instagram', href: viteEnv.VITE_SOCIAL_INSTAGRAM ?? '' },
+  { id: 'facebook', label: 'Facebook', href: viteEnv.VITE_SOCIAL_FACEBOOK ?? '' },
+  { id: 'x', label: 'X', href: viteEnv.VITE_SOCIAL_X ?? '' },
+  { id: 'youtube', label: 'YouTube', href: viteEnv.VITE_SOCIAL_YOUTUBE ?? '' },
+].filter((link) => /^https:\/\//.test(link.href));
 
 export const OFFICIAL_SECRETARIAT_CONTACT = {
   foundationName: 'Aishwarya Sarvahith Foundation (ASF)',
@@ -420,7 +432,7 @@ export const VERIFIED_ORGANISING_COMMITTEE: ReadonlyArray<LeadershipProfile> = [
     bio: 'A senior media professional with leadership experience spanning more than 30 years across television, new media, programming, creative direction, content and marketing.',
     portraitSrc: null,
     status: 'confirmed',
-    sourcePortalPath: 'https://bhagavadgitavishwamahotsav.com/about/organising-committee',
+    sourcePortalPath: '/leadership',
   },
   {
     id: 'daitha-susheel-kumar',
@@ -431,7 +443,7 @@ export const VERIFIED_ORGANISING_COMMITTEE: ReadonlyArray<LeadershipProfile> = [
     bio: 'With 25 years of experience in healthcare sales, marketing, and business development, bringing expertise in strategic planning, communication, content creation, event designing, presentations, and administration.',
     portraitSrc: null,
     status: 'confirmed',
-    sourcePortalPath: 'https://bhagavadgitavishwamahotsav.com/about/organising-committee',
+    sourcePortalPath: '/leadership',
   },
   {
     id: 'vemuri-shravani',
@@ -442,7 +454,7 @@ export const VERIFIED_ORGANISING_COMMITTEE: ReadonlyArray<LeadershipProfile> = [
     bio: 'A senior media professional with 22 years of experience as a Senior Anchor and Artist, with an extensive body of work in devotional programming across leading television channels including Zee and Maa TV.',
     portraitSrc: null,
     status: 'confirmed',
-    sourcePortalPath: 'https://bhagavadgitavishwamahotsav.com/about/organising-committee',
+    sourcePortalPath: '/leadership',
   },
   {
     id: 'pyreddy-krishna-reddy',
@@ -453,7 +465,7 @@ export const VERIFIED_ORGANISING_COMMITTEE: ReadonlyArray<LeadershipProfile> = [
     bio: 'An entrepreneur leading Propel Forge, with a professional background of over 14 years across business development, client relationships, creative thinking, and execution.',
     portraitSrc: null,
     status: 'confirmed',
-    sourcePortalPath: 'https://bhagavadgitavishwamahotsav.com/about/organising-committee',
+    sourcePortalPath: '/leadership',
   },
   {
     id: 'k-satya-prasad-surya',
@@ -464,7 +476,7 @@ export const VERIFIED_ORGANISING_COMMITTEE: ReadonlyArray<LeadershipProfile> = [
     bio: 'Entrepreneur, infrastructure professional and business leader with a professional journey spanning infrastructure development, civil contracting, mining and crushing, digital media, creative studios, energy exploration, food ventures, technology-enabled services, and social welfare.',
     portraitSrc: null,
     status: 'confirmed',
-    sourcePortalPath: 'https://bhagavadgitavishwamahotsav.com/about/organising-committee',
+    sourcePortalPath: '/leadership',
   },
 ];
 
@@ -500,7 +512,7 @@ export const VERIFIED_ORGANIZING_PARTNERS: ReadonlyArray<PartnerOrganization> = 
     name: 'Aishwarya Sarvahith Foundation (ASF)',
     tier: 'institutional',
     logoSrc: null,
-    websiteUrl: 'https://bhagavadgitavishwamahotsav.com/about/organising-body',
+    websiteUrl: '',
     status: 'confirmed',
   },
   {
@@ -508,7 +520,7 @@ export const VERIFIED_ORGANIZING_PARTNERS: ReadonlyArray<PartnerOrganization> = 
     name: 'Sree Media',
     tier: 'media',
     logoSrc: null,
-    websiteUrl: 'https://bhagavadgitavishwamahotsav.com/',
+    websiteUrl: '',
     status: 'confirmed',
   },
 ];

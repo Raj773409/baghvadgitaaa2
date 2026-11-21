@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight, ArrowUpRight, Mail, MapPin, Phone, RotateCcw } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SITEMAP_EXPANSION_LINKS } from '../../content/navigationContent';
-import { OFFICIAL_EVENT_URLS, OFFICIAL_SECRETARIAT_CONTACT } from '../../content/eventContent';
+import { OFFICIAL_EVENT_URLS, OFFICIAL_SECRETARIAT_CONTACT, SOCIAL_LINKS } from '../../content/eventContent';
 import { useI18n } from '../../i18n';
 import { dispatchReplayWelcome } from '../../utils/welcomeExperience';
 import { BackToTop } from '../ui/BackToTop';
@@ -38,43 +38,23 @@ export const Footer: React.FC = () => {
             <p className="text-xs tracking-[0.04em] text-white/65 pt-1">
               {t('site.announcement')}
             </p>
-            <div className="pt-2 flex flex-wrap gap-3 text-xs text-white/75">
-              <a
-                href={OFFICIAL_EVENT_URLS.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--color-bronze-light)] transition-colors"
-              >
-                Instagram
-              </a>
-              <span aria-hidden="true" className="text-white/30">·</span>
-              <a
-                href={OFFICIAL_EVENT_URLS.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--color-bronze-light)] transition-colors"
-              >
-                Facebook
-              </a>
-              <span aria-hidden="true" className="text-white/30">·</span>
-              <a
-                href={OFFICIAL_EVENT_URLS.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--color-bronze-light)] transition-colors"
-              >
-                X
-              </a>
-              <span aria-hidden="true" className="text-white/30">·</span>
-              <a
-                href={OFFICIAL_EVENT_URLS.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--color-bronze-light)] transition-colors"
-              >
-                YouTube
-              </a>
-            </div>
+            {SOCIAL_LINKS.length > 0 && (
+              <div className="pt-2 flex flex-wrap gap-3 text-xs text-white/75">
+                {SOCIAL_LINKS.map((link, i) => (
+                  <React.Fragment key={link.id}>
+                    {i > 0 && <span aria-hidden="true" className="text-white/30">·</span>}
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[var(--color-bronze-light)] transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Complete Multi-Page Navigation Index */}
@@ -113,15 +93,13 @@ export const Footer: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href={OFFICIAL_EVENT_URLS.home}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to={OFFICIAL_EVENT_URLS.dashboard}
                     className="inline-flex items-center gap-1.5 text-white/80 hover:text-[var(--color-bronze-light)] transition-colors"
                   >
-                    <span>{t('footer.officialWebsite')}</span>
+                    <span>My Dashboard · Passes &amp; Receipts</span>
                     <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                  </a>
+                  </Link>
                 </li>
                 <li className="pt-2 flex items-start gap-2 text-xs text-white/68 leading-relaxed">
                   <MapPin className="w-3.5 h-3.5 text-[var(--color-bronze-light)] shrink-0 mt-0.5" aria-hidden="true" />

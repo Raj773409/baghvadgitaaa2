@@ -1,14 +1,85 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, ArrowRight, LayoutGrid, UserRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useI18n } from '../../i18n';
 import { LanguageSelector } from '../ui/LanguageSelector';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { MoreMenuOverlay } from './MoreMenuOverlay';
+import { portalApi, PORTAL_SESSION_EVENT } from '../../utils/portalApi';
 
 interface HeaderProps {
   variant?: 'transparent-hero' | 'solid-dark' | 'registration';
 }
+
+type PortalSessionState = { authenticated: false } | { authenticated: true; fullName: string; unread: number };
+
+/** Signed-in participants see their initials + unread badge; others get a sign-in entry point. */
+const AccountButton: React.FC<{ light: boolean }> = ({ light }) => {
+  const [session, setSession] = useState<PortalSessionState>({ authenticated: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      portalApi
+        .session()
+        .then((s) => {
+          if (!cancelled) setSession(s.authenticated ? { authenticated: true, fullName: s.fullName, unread: s.unread } : s);
+        })
+        .catch(() => undefined);
+    };
+    load();
+    window.addEventListener(PORTAL_SESSION_EVENT, load);
+    window.addEventListener('focus', load);
+    return () => {
+      cancelled = true;
+      window.removeEventListener(PORTAL_SESSION_EVENT, load);
+      window.removeEventListener('focus', load);
+    };
+  }, []);
+
+  const base = `relative inline-flex items-center justify-center gap-2 min-h-[38px] rounded-full border text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 ${
+    light
+      ? 'border-[var(--color-border)] text-[var(--color-ink)] hover:border-[#9C6B1E] bg-[var(--surface-elevated)]/85 dark:bg-[#17233A]/85 dark:text-[#FFFDF7]'
+      : 'border-[#D4A537]/50 text-[#FFFDF7] hover:border-[#F7D774] bg-[#17233A]/55'
+  }`;
+
+  if (!session.authenticated) {
+    return (
+      <Link to="/dashboard" className={`${base} w-[38px] sm:w-auto sm:px-3.5`} aria-label="Sign in to your dashboard">
+        <UserRound className="w-4 h-4 shrink-0" aria-hidden="true" />
+        <span className="hidden lg:inline">Sign in</span>
+      </Link>
+    );
+  }
+
+  const initials = session.fullName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join('');
+
+  return (
+    <Link
+      to="/dashboard"
+      className={`${base} pl-1 pr-1 sm:pr-3.5`}
+      aria-label={`My dashboard${session.unread ? `, ${session.unread} unread notifications` : ''}`}
+    >
+      <span className="grid place-items-center w-[30px] h-[30px] rounded-full royal-gold-surface text-[11px] font-bold">
+        {initials || <UserRound className="w-4 h-4" aria-hidden="true" />}
+      </span>
+      <span className="hidden lg:inline">My Dashboard</span>
+      {session.unread > 0 && (
+        <span
+          className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#D9561C] text-white text-[10px] font-bold grid place-items-center shadow-[0_0_10px_rgba(217,86,28,0.8)]"
+          aria-hidden="true"
+        >
+          {session.unread > 9 ? '9+' : session.unread}
+        </span>
+      )}
+    </Link>
+  );
+};
 
 export const Header: React.FC<HeaderProps> = ({ variant = 'transparent-hero' }) => {
   const { t } = useI18n();
@@ -148,6 +219,8 @@ export const Header: React.FC<HeaderProps> = ({ variant = 'transparent-hero' }) 
               <LayoutGrid className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               <span className="hidden min-[380px]:inline">{t('navigationOverlay.moreButton')}</span>
             </button>
+
+            <AccountButton light={isLightHeader} />
 
             {isRegistration ? (
               <Link

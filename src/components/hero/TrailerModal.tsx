@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { ArrowRight, Play, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { ASSET_MANIFEST } from '../../assets/assetManifest';
 import { OFFICIAL_EVENT_URLS } from '../../content/eventContent';
 import { useI18n } from '../../i18n';
@@ -96,15 +97,14 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({ isOpen, onClose }) =
                   {t('hero.curtainRaiserDate')} · {t('hero.mainMahotsavDate')}
                 </p>
                 <div className="flex items-center gap-3">
-                  <a
-                    href={OFFICIAL_EVENT_URLS.home}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 min-h-[40px] px-5 py-2 rounded-full bg-[#D5AC70] text-[#101D32] text-xs font-medium hover:bg-[#F5F0E7] transition-colors"
+                  <Link
+                    to={OFFICIAL_EVENT_URLS.register}
+                    onClick={onClose}
+                    className="inline-flex items-center gap-2 min-h-[40px] px-5 py-2 rounded-full royal-gold-surface text-xs font-semibold"
                   >
-                    <span>{t('hero.trailerPortalCta')}</span>
+                    <span>{t('nav.register')}</span>
                     <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

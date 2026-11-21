@@ -72,10 +72,51 @@ export interface PaymentRecord {
   participantName: string;
   amountInr: number;
   currency: 'INR';
-  gateway: 'external-handoff' | 'razorpay' | 'stripe';
+  /** 'sandbox' = built-in test gateway used when no live gateway keys are configured. */
+  gateway: 'external-handoff' | 'razorpay' | 'stripe' | 'sandbox';
   gatewayReference: string;
   gatewayOrderId: string | null;
   status: 'initiated' | 'captured' | 'refunded' | 'failed';
+  createdAt: string;
+  /** 'live' = real money (Razorpay live keys), 'test' = Razorpay test keys or sandbox. */
+  mode?: 'live' | 'test';
+  methodFamily?: 'upi' | 'card' | 'netbanking' | 'wallet' | null;
+  methodProvider?: string | null;
+  /** Masked display label only (e.g. "Visa •••• 4242"); never a full card number. */
+  methodLabel?: string | null;
+  receiptNumber?: string | null;
+  capturedAt?: string | null;
+  failureReason?: string | null;
+  attempts?: number;
+}
+
+/** Entry pass ("token") issued per selected event once a payment is captured. */
+export interface EntryPassRecord {
+  id: string;
+  participantId: string;
+  paymentId: string;
+  passCode: string;
+  eventKey: 'curtainRaiser' | 'mahotsav';
+  eventName: string;
+  eventDate: string;
+  venue: string;
+  admits: number;
+  tier: string;
+  /** Signed payload encoded into the QR so gate staff can verify offline-issued passes. */
+  qrPayload: string;
+  status: 'active' | 'checked-in' | 'revoked';
+  issuedAt: string;
+  checkedInAt: string | null;
+}
+
+export interface ParticipantNotificationRecord {
+  id: string;
+  participantId: string;
+  kind: 'registration' | 'payment' | 'pass' | 'profile' | 'system';
+  tone: 'success' | 'info' | 'warning' | 'error';
+  title: string;
+  body: string;
+  read: boolean;
   createdAt: string;
 }
 
@@ -202,6 +243,8 @@ export interface PlatformDatabase {
   revisions: ContentRevisionRecord[];
   auditLogs: AuditLogRecord[];
   webhookEvents: WebhookEventRecord[];
+  entryPasses: EntryPassRecord[];
+  participantNotifications: ParticipantNotificationRecord[];
   settings: SystemSettingsRecord;
 }
 
@@ -903,6 +946,8 @@ export function createInitialDatabase(bootstrapPassword?: string): PlatformDatab
     revisions: [],
     auditLogs: [],
     webhookEvents: [],
+    entryPasses: [],
+    participantNotifications: [],
     settings: {
       registrationOpen: true,
       requireVolunteerApproval: true,
@@ -1016,6 +1061,11 @@ export class PlatformStore {
           storyScenes: Array.isArray(parsed.storyScenes) ? parsed.storyScenes : [],
           collections: Array.isArray(parsed.collections) ? parsed.collections : [],
           revisions: Array.isArray(parsed.revisions) ? parsed.revisions : [],
+          webhookEvents: Array.isArray(parsed.webhookEvents) ? parsed.webhookEvents : [],
+          entryPasses: Array.isArray(parsed.entryPasses) ? parsed.entryPasses : [],
+          participantNotifications: Array.isArray(parsed.participantNotifications)
+            ? parsed.participantNotifications
+            : [],
           settings: { ...fresh.settings, ...(parsed.settings ?? {}) },
         };
         const migration = ensureCanonicalSeedData(merged);

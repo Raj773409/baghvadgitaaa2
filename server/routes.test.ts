@@ -103,18 +103,164 @@ test('POST /api/public/registrations persists conditional fields & creates await
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ referenceCode: regJson.referenceCode }),
     });
-    assert.equal(orderRes.status, 200);
+    // Without Razorpay keys the server uses its built-in test gateway — never an external portal.
+    assert.equal(orderRes.status, 201);
     const orderJson = (await orderRes.json()) as {
       configured: boolean;
       mode: string;
       status: string;
+      testMode: boolean;
+      orderId: string;
     };
-    assert.equal(orderJson.configured, false);
-    assert.equal(orderJson.mode, 'official-portal-handoff');
+    assert.equal(orderJson.mode, 'sandbox-checkout');
+    assert.equal(orderJson.testMode, true);
+    assert.match(orderJson.orderId, /^order_sbx_/);
     assert.equal(orderJson.status, 'awaiting-gateway');
 
     const missingStatus = await fetch(`${srv.baseUrl}/api/public/payments/BVGM-UNKNOWN/status`);
     assert.equal(missingStatus.status, 404);
+  } finally {
+    await srv.cleanup();
+  }
+});
+
+test('Checkout → failed attempt → retry → passes, receipt, dashboard, login and QR verification', async () => {
+  const srv = await createTestServer();
+  try {
+    const json = (body: unknown) => ({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const reg = (await (
+      await fetch(
+        `${srv.baseUrl}/api/public/registrations`,
+        json({
+          fullName: 'Simon Baler',
+          email: 'simon@example.org',
+          phone: '+91 98490 00000',
+          noOfPersons: 2,
+          donationAmount: 501,
+          registrationType: 'individual',
+          country: 'india',
+          city: 'Hyderabad',
+          events: { curtainRaiser: true, mahotsav: true },
+          assistance: { visa: false, accommodation: false, localTransport: false },
+        }),
+      )
+    ).json()) as { referenceCode: string };
+
+    // 1. Dashboard is protected
+    assert.equal((await fetch(`${srv.baseUrl}/api/portal/me`)).status, 401);
+
+    // 2. First attempt is declined (UPI)
+    const order1 = (await (
+      await fetch(
+        `${srv.baseUrl}/api/public/payments/create-order`,
+        json({ referenceCode: reg.referenceCode, methodFamily: 'upi', methodProvider: 'gpay' }),
+      )
+    ).json()) as { orderId: string };
+    const declined = await fetch(
+      `${srv.baseUrl}/api/public/payments/sandbox/complete`,
+      json({ orderId: order1.orderId, methodFamily: 'upi', methodProvider: 'gpay', outcome: 'failure' }),
+    );
+    assert.equal(declined.status, 402);
+
+    // 3. Retry with a card succeeds; a full PAN in the label must be rejected/not stored
+    const order2 = (await (
+      await fetch(
+        `${srv.baseUrl}/api/public/payments/create-order`,
+        json({ referenceCode: reg.referenceCode, methodFamily: 'card', methodProvider: 'visa' }),
+      )
+    ).json()) as { orderId: string };
+    const paidRes = await fetch(
+      `${srv.baseUrl}/api/public/payments/sandbox/complete`,
+      json({
+        orderId: order2.orderId,
+        methodFamily: 'card',
+        methodProvider: 'visa',
+        methodLabel: 'Visa •••• 4242',
+        outcome: 'success',
+      }),
+    );
+    assert.equal(paidRes.status, 200);
+    const paid = (await paidRes.json()) as { status: string; receiptNumber: string; passesIssued: number };
+    assert.equal(paid.status, 'paid');
+    assert.match(paid.receiptNumber, /^BGVM-RCPT-\d{4}-\d{6}$/);
+    assert.equal(paid.passesIssued, 2);
+    const sessionCookie = (paidRes.headers.get('set-cookie') || '').split(';')[0];
+    assert.match(sessionCookie, /^bgvm_portal_session=/);
+
+    // 4. Paying again is refused
+    const again = await fetch(
+      `${srv.baseUrl}/api/public/payments/create-order`,
+      json({ referenceCode: reg.referenceCode }),
+    );
+    assert.equal(again.status, 409);
+
+    // 5. Dashboard shows passes, transactions, notifications, activity
+    const me = (await (
+      await fetch(`${srv.baseUrl}/api/portal/me`, { headers: { Cookie: sessionCookie } })
+    ).json()) as {
+      profile: { paymentStatus: string };
+      payments: Array<{ id: string; status: string; methodLabel: string }>;
+      passes: Array<{ qrPayload: string; admits: number; status: string }>;
+      notifications: Array<{ title: string }>;
+      activity: Array<{ label: string }>;
+    };
+    assert.equal(me.profile.paymentStatus, 'paid');
+    assert.equal(me.payments[0].status, 'captured');
+    assert.equal(me.payments[0].methodLabel, 'Visa •••• 4242');
+    assert.equal(me.passes.length, 2);
+    assert.equal(me.passes[0].admits, 2);
+    assert.ok(me.notifications.some((n) => n.title === 'Payment successful'));
+    assert.ok(me.notifications.some((n) => n.title === 'Payment not completed'));
+    assert.ok(me.activity.some((a) => a.label === 'Payment captured'));
+
+    // 6. Receipt
+    const receipt = await fetch(`${srv.baseUrl}/api/portal/payments/${me.payments[0].id}/receipt`, {
+      headers: { Cookie: sessionCookie },
+    });
+    assert.equal(receipt.status, 200);
+
+    // 7. QR pass verifies; a tampered one does not
+    const ok = (await (
+      await fetch(`${srv.baseUrl}/api/public/passes/verify`, json({ payload: me.passes[0].qrPayload }))
+    ).json()) as { valid: boolean; admits: number };
+    assert.equal(ok.valid, true);
+    const tampered = me.passes[0].qrPayload.replace(/.$/, (c) => (c === '0' ? '1' : '0'));
+    const bad = (await (
+      await fetch(`${srv.baseUrl}/api/public/passes/verify`, json({ payload: tampered }))
+    ).json()) as { valid: boolean };
+    assert.equal(bad.valid, false);
+
+    // 8. Login needs BOTH email and reference
+    assert.equal(
+      (await fetch(`${srv.baseUrl}/api/portal/login`, json({ email: 'simon@example.org', referenceCode: 'BVGM-000000' }))).status,
+      401,
+    );
+    const login = await fetch(
+      `${srv.baseUrl}/api/portal/login`,
+      json({ email: 'SIMON@example.org', referenceCode: reg.referenceCode.toLowerCase() }),
+    );
+    assert.equal(login.status, 200);
+
+    // 9. Profile update validates and persists
+    const badPhone = await fetch(`${srv.baseUrl}/api/portal/profile`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Cookie: sessionCookie },
+      body: JSON.stringify({ phone: 'call me' }),
+    });
+    assert.equal(badPhone.status, 400);
+    const goodProfile = (await (
+      await fetch(`${srv.baseUrl}/api/portal/profile`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Cookie: sessionCookie },
+        body: JSON.stringify({ city: 'Tirupati', phone: '+91 90000 11111' }),
+      })
+    ).json()) as { profile: { city: string; phone: string } };
+    assert.equal(goodProfile.profile.city, 'Tirupati');
   } finally {
     await srv.cleanup();
   }

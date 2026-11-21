@@ -81,7 +81,51 @@ export const payments = mysqlTable('payments', {
   gatewayOrderId: varchar('gateway_order_id', { length: 120 }),
   status: varchar('status', { length: 40 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-}, (t) => [index('payments_participant_idx').on(t.participantId)]);
+  mode: varchar('mode', { length: 8 }),
+  methodFamily: varchar('method_family', { length: 20 }),
+  methodProvider: varchar('method_provider', { length: 40 }),
+  // Masked label only (e.g. "Visa •••• 4242"). Full card numbers / CVVs are never stored.
+  methodLabel: varchar('method_label', { length: 120 }),
+  receiptNumber: varchar('receipt_number', { length: 40 }),
+  capturedAt: timestamp('captured_at'),
+  failureReason: varchar('failure_reason', { length: 255 }),
+  attempts: int('attempts').notNull().default(0),
+}, (t) => [
+  index('payments_participant_idx').on(t.participantId),
+  index('payments_order_idx').on(t.gatewayOrderId),
+]);
+
+// Entry passes ("tokens") issued per selected event after a captured payment.
+export const entryPasses = mysqlTable('entry_passes', {
+  id: varchar('id', { length: 64 }).primaryKey(),
+  participantId: varchar('participant_id', { length: 64 }).notNull(),
+  paymentId: varchar('payment_id', { length: 64 }).notNull(),
+  passCode: varchar('pass_code', { length: 40 }).notNull(),
+  eventKey: varchar('event_key', { length: 40 }).notNull(),
+  eventName: varchar('event_name', { length: 200 }).notNull(),
+  eventDate: varchar('event_date', { length: 40 }).notNull(),
+  venue: varchar('venue', { length: 255 }).notNull(),
+  admits: int('admits').notNull().default(1),
+  tier: varchar('tier', { length: 80 }).notNull(),
+  qrPayload: varchar('qr_payload', { length: 255 }).notNull(),
+  status: varchar('status', { length: 20 }).notNull(),
+  issuedAt: timestamp('issued_at').notNull().defaultNow(),
+  checkedInAt: timestamp('checked_in_at'),
+}, (t) => [
+  uniqueIndex('entry_passes_code_idx').on(t.passCode),
+  index('entry_passes_participant_idx').on(t.participantId),
+]);
+
+export const participantNotifications = mysqlTable('participant_notifications', {
+  id: varchar('id', { length: 64 }).primaryKey(),
+  participantId: varchar('participant_id', { length: 64 }).notNull(),
+  kind: varchar('kind', { length: 20 }).notNull(),
+  tone: varchar('tone', { length: 20 }).notNull(),
+  title: varchar('title', { length: 200 }).notNull(),
+  body: text('body').notNull(),
+  read: boolean('read').notNull().default(false),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+}, (t) => [index('participant_notifications_participant_idx').on(t.participantId)]);
 
 export const refunds = mysqlTable('refunds', {
   id: varchar('id', { length: 64 }).primaryKey(),

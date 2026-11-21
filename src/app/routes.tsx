@@ -18,6 +18,18 @@ const StoryPage = lazy(() => import('./pages/StoryPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 const AdminLoginPage = lazy(() => import('./pages/AdminLoginPage'));
 const AdminAccessDeniedPage = lazy(() => import('./pages/AdminAccessDeniedPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+
+const DashboardRouteFallback: React.FC = () => (
+  <div
+    className="min-h-screen bg-[#0B111C] text-[#FFFDF7] flex flex-col items-center justify-center px-6"
+    role="status"
+    aria-live="polite"
+  >
+    <div className="w-9 h-9 rounded-full border border-[#F7D774]/40 border-t-[#F7D774] animate-spin mb-4" />
+    <p className="font-editorial text-lg tracking-wide text-[#F7D774]">Opening your Mahotsav dashboard…</p>
+  </div>
+);
 
 const StoryRouteFallback: React.FC = () => (
   <div
@@ -88,6 +100,22 @@ export const AppRoutes: React.FC = () => {
         <Route path="/participate" element={<ParticipationHubPage />} />
         <Route path="/participate/register" element={<RegistrationPage />} />
         <Route path="/register" element={<RegistrationPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Suspense fallback={<DashboardRouteFallback />}>
+              <DashboardPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/dashboard/:tab"
+          element={
+            <Suspense fallback={<DashboardRouteFallback />}>
+              <DashboardPage />
+            </Suspense>
+          }
+        />
         <Route path="/leadership" element={<LeadershipPage />} />
         <Route path="/partners" element={<PartnersPage />} />
         <Route path="/media" element={<MediaPage />} />

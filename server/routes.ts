@@ -49,6 +49,24 @@ import {
 import { inspectAllStoryGlbs } from './glbInspector.ts';
 import { createRateLimiter } from './rateLimit.ts';
 import {
+  finalizeCapturedPayment,
+  isSandboxGatewayEnabled,
+  issueParticipantSession,
+  markPaymentFailed,
+  mountPortalRoutes,
+  parseMethodSelection,
+  pushParticipantNotification,
+  razorpayModeFromKeyId,
+} from './portal.ts';
+import {
+  deleteParticipantCascade,
+  initPortalPersistence,
+  persistParticipant,
+  persistPass,
+  persistPayment,
+} from './db/portalSync.ts';
+import type { PaymentMethodFamily } from '../src/utils/paymentMethods.ts';
+import {
   buildAdminNotifications,
   computeMediaUsageLocations,
   filterRecordsByDateRange,
@@ -184,6 +202,60 @@ function getRazorpayClient(): Razorpay | null {
   return new Razorpay({ key_id: keys.keyId, key_secret: keys.keySecret });
 }
 
+/**
+ * Reads the instrument used for a Razorpay payment so receipts can show it. Only masked
+ * values are kept (card network + last4, UPI handle domain, bank/wallet code).
+ */
+async function fetchRazorpayMethodDetails(paymentId: string): Promise<{
+  methodFamily: PaymentMethodFamily | null;
+  methodProvider: string | null;
+  methodLabel: string | null;
+}> {
+  const empty = { methodFamily: null, methodProvider: null, methodLabel: null };
+  const client = getRazorpayClient();
+  if (!client) return empty;
+  try {
+    const p = (await client.payments.fetch(paymentId)) as unknown as {
+      method?: string;
+      vpa?: string | null;
+      bank?: string | null;
+      wallet?: string | null;
+      card?: { network?: string; last4?: string } | null;
+    };
+    switch (p.method) {
+      case 'upi': {
+        const vpa = p.vpa ?? '';
+        const [handle = '', psp = ''] = vpa.split('@');
+        const masked = handle.length > 4 ? `${handle.slice(0, 2)}•••••${handle.slice(-2)}@${psp}` : vpa ? `•••@${psp}` : '';
+        return { methodFamily: 'upi', methodProvider: null, methodLabel: masked ? `UPI · ${masked}` : 'UPI' };
+      }
+      case 'card': {
+        const network = p.card?.network ?? 'Card';
+        const last4 = p.card?.last4 ?? '';
+        const brand = network.toLowerCase().includes('visa')
+          ? 'visa'
+          : network.toLowerCase().includes('master')
+            ? 'mastercard'
+            : network.toLowerCase().includes('rupay')
+              ? 'rupay'
+              : network.toLowerCase().includes('amex') || network.toLowerCase().includes('american')
+                ? 'amex'
+                : 'unknown';
+        return { methodFamily: 'card', methodProvider: brand, methodLabel: last4 ? `${network} •••• ${last4}` : network };
+      }
+      case 'netbanking':
+        return { methodFamily: 'netbanking', methodProvider: p.bank ?? null, methodLabel: p.bank ? `Net Banking · ${p.bank}` : 'Net Banking' };
+      case 'wallet':
+        return { methodFamily: 'wallet', methodProvider: p.wallet ?? null, methodLabel: p.wallet ? `Wallet · ${p.wallet}` : 'Wallet' };
+      default:
+        return empty;
+    }
+  } catch (err) {
+    console.warn('[payments-api] Could not fetch Razorpay method details:', err instanceof Error ? err.message : err);
+    return empty;
+  }
+}
+
 function getPaymentGatewayStatus() {
   const razorpay = Boolean(getRazorpayKeys());
   const razorpayWebhook = Boolean(process.env.RAZORPAY_WEBHOOK_SECRET?.trim());
@@ -211,6 +283,14 @@ export function mountPlatformRoutes(
 
   const store = new PlatformStore(dataDir);
   const sessionSecret = getOrCreateSessionSecret(dataDir);
+
+  // Durable MySQL persistence for registrations/payments/passes (no-op without DATABASE_URL).
+  void initPortalPersistence(store, rootDir);
+  mountPortalRoutes(app, {
+    store,
+    sessionSecret,
+    isRazorpayConfigured: () => Boolean(getRazorpayKeys()),
+  });
 
   app.use('/uploads', express.static(uploadsDir, { maxAge: '7d' }));
 
@@ -665,6 +745,14 @@ export function mountPlatformRoutes(
 
     db.participants.unshift(participant);
     db.payments.unshift(payment);
+    persistParticipant(participant);
+    persistPayment(payment);
+    pushParticipantNotification(store, participant.id, {
+      kind: 'registration',
+      tone: 'info',
+      title: 'Registration received',
+      body: `Welcome, ${fullName.split(' ')[0]}! Your reference code is ${referenceCode}. Keep it safe — you'll use it with your email to sign in.`,
+    });
     store.appendAudit({
       actorEmail: email,
       actorRole: 'PUBLIC_SYSTEM',
@@ -818,19 +906,63 @@ export function mountPlatformRoutes(
       return;
     }
 
+    if (!participant || !payment) {
+      res.status(404).json({ error: 'Registration reference not found.', code: 'REFERENCE_NOT_FOUND' });
+      return;
+    }
+
+    if (participant.paymentStatus === 'paid' || payment.status === 'captured') {
+      res.status(409).json({
+        error: 'This registration is already paid. Open your dashboard to view passes and receipts.',
+        code: 'ALREADY_PAID',
+        referenceCode: participant.referenceCode,
+      });
+      return;
+    }
+
+    // Method the participant picked in our checkout (used to pre-select it at the gateway and
+    // for receipts). Only a masked label is ever accepted — never card numbers.
+    const method = parseMethodSelection(req.body as Record<string, unknown>);
+    payment.methodFamily = method.methodFamily;
+    payment.methodProvider = method.methodProvider;
+    payment.methodLabel = method.methodLabel;
+    payment.failureReason = null;
+    if (payment.status === 'failed') payment.status = 'initiated'; // retry after a failed attempt
+
     const razorpayClient = getRazorpayClient();
     const razorpayKeys = getRazorpayKeys();
 
     if (!razorpayClient || !razorpayKeys) {
-      res.json({
-        configured: false,
-        mode: 'official-portal-handoff',
-        officialPortalUrl: 'https://bhagavadgitavishwamahotsav.com/participate/register',
-        referenceCode: participant?.referenceCode ?? referenceCode,
+      if (!isSandboxGatewayEnabled(false)) {
+        res.status(503).json({
+          error: 'Online payments are temporarily unavailable. Your registration is saved — please try again later.',
+          code: 'GATEWAY_UNAVAILABLE',
+          referenceCode: participant.referenceCode,
+        });
+        return;
+      }
+      // Built-in test gateway: full end-to-end flow, clearly flagged, no real money moves.
+      payment.gateway = 'sandbox';
+      payment.mode = 'test';
+      payment.gatewayOrderId = `order_sbx_${crypto.randomBytes(8).toString('hex')}`;
+      persistPayment(payment);
+      store.appendAudit({
+        actorEmail: participant.email,
+        actorRole: 'PUBLIC_SYSTEM',
+        action: 'PAYMENT_ORDER_CREATED',
+        module: 'payments',
+        targetId: payment.id,
+        summary: `Created test-mode order ${payment.gatewayOrderId} for ${referenceCode} (₹${amountInr}).`,
+      });
+      res.status(201).json({
+        configured: true,
+        mode: 'sandbox-checkout',
+        orderId: payment.gatewayOrderId,
+        referenceCode: participant.referenceCode,
         amountInr,
-        status: participant?.paymentStatus ?? 'awaiting-gateway',
-        message:
-          'A payment gateway is not configured on this server. Complete checkout securely via the official Bhagavad Gita Vishwa Mahotsav payment portal.',
+        currency: 'INR',
+        status: participant.paymentStatus,
+        testMode: true,
       });
       return;
     }
@@ -844,17 +976,17 @@ export function mountPlatformRoutes(
         notes: { referenceCode },
       });
 
-      if (payment) {
-        payment.gateway = 'razorpay';
-        payment.gatewayOrderId = order.id;
-      }
+      payment.gateway = 'razorpay';
+      payment.mode = razorpayModeFromKeyId(razorpayKeys.keyId);
+      payment.gatewayOrderId = order.id;
+      persistPayment(payment);
 
       store.appendAudit({
-        actorEmail: participant?.email || 'public-checkout',
+        actorEmail: participant.email,
         actorRole: 'PUBLIC_SYSTEM',
         action: 'PAYMENT_ORDER_CREATED',
         module: 'payments',
-        targetId: payment?.id || referenceCode,
+        targetId: payment.id,
         summary: `Created Razorpay order ${order.id} for ${referenceCode} (₹${amountInr}).`,
       });
 
@@ -868,6 +1000,7 @@ export function mountPlatformRoutes(
         amountPaise: order.amount,
         currency: 'INR',
         status: participant?.paymentStatus ?? 'awaiting-gateway',
+        testMode: payment.mode !== 'live',
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unable to create payment order.';
@@ -879,7 +1012,7 @@ export function mountPlatformRoutes(
     }
   });
 
-  app.post('/api/public/payments/verify', paymentOrderLimiter, (req, res) => {
+  app.post('/api/public/payments/verify', paymentOrderLimiter, async (req, res) => {
     const razorpayKeys = getRazorpayKeys();
     if (!razorpayKeys) {
       res.status(503).json({ error: 'Payment gateway is not configured.', code: 'GATEWAY_UNCONFIGURED' });
@@ -919,22 +1052,25 @@ export function mountPlatformRoutes(
     }
 
     // Cryptographically confirmed by the signature check above — this is a real gateway
-    // confirmation, not "the browser returned to a success URL."
-    payment.status = 'captured';
-    payment.gatewayReference = paymentId;
-    const participant = db.participants.find((p) => p.id === payment.participantId);
-    if (participant) participant.paymentStatus = 'paid';
+    // confirmation, not "the browser returned to a success URL." Fetch how the participant
+    // actually paid (best effort) so receipts show e.g. "UPI · name@okhdfc" / "Visa •••• 4242".
+    const methodDetails = await fetchRazorpayMethodDetails(paymentId);
+    const { participant, passes } = finalizeCapturedPayment(
+      store,
+      payment,
+      { source: 'razorpay-verify', gatewayReference: paymentId, ...methodDetails },
+      sessionSecret,
+    );
+    if (participant) issueParticipantSession(req, res, participant.id, sessionSecret);
 
-    store.appendAudit({
-      actorEmail: participant?.email || 'public-checkout',
-      actorRole: 'PUBLIC_SYSTEM',
-      action: 'PAYMENT_VERIFIED_CLIENT',
-      module: 'payments',
-      targetId: payment.id,
-      summary: `Razorpay payment ${paymentId} verified for order ${orderId}.`,
+    res.json({
+      ok: true,
+      referenceCode: participant?.referenceCode,
+      status: 'paid',
+      receiptNumber: payment.receiptNumber,
+      passesIssued: passes.length,
+      mode: payment.mode ?? 'test',
     });
-
-    res.json({ ok: true, referenceCode: participant?.referenceCode, status: 'paid' });
   });
 
   app.post('/api/payments/webhook', (req: AuthenticatedRequest, res) => {
@@ -1036,18 +1172,42 @@ export function mountPlatformRoutes(
       return;
     }
 
+    // Captures and failures go through the shared, idempotent portal path so passes,
+    // receipts, notifications and MySQL stay consistent with the client-side verify route.
+    if (nextStatus === 'captured') {
+      finalizeCapturedPayment(
+        store,
+        payment,
+        { source: 'razorpay-webhook', gatewayReference: gatewayReference || undefined },
+        sessionSecret,
+      );
+      res.json({ ok: true, matched: true, payment });
+      return;
+    }
+    if (nextStatus === 'failed') {
+      markPaymentFailed(store, payment, 'The payment was declined at the gateway.');
+      res.json({ ok: true, matched: true, payment });
+      return;
+    }
+
     payment.status = nextStatus;
     if (gatewayReference) payment.gatewayReference = gatewayReference;
 
     const participant = db.participants.find((p) => p.id === payment!.participantId);
     if (participant) {
-      participant.paymentStatus =
-        payment.status === 'captured'
-          ? 'paid'
-          : payment.status === 'refunded'
-            ? 'refunded'
-            : 'awaiting-gateway';
+      // Captured/failed returned above, so only refund events reach this point.
+      participant.paymentStatus = payment.status === 'refunded' ? 'refunded' : 'awaiting-gateway';
+      persistParticipant(participant);
+      if (payment.status === 'refunded') {
+        pushParticipantNotification(store, participant.id, {
+          kind: 'payment',
+          tone: 'info',
+          title: 'Refund processed',
+          body: `₹${payment.amountInr.toLocaleString('en-IN')} has been refunded to your original payment method.`,
+        });
+      }
     }
+    persistPayment(payment);
 
     store.appendAudit({
       actorEmail: 'gateway-webhook',
@@ -1490,6 +1650,7 @@ export function mountPlatformRoutes(
       ) {
         target.paymentStatus = b.paymentStatus;
       }
+      persistParticipant(target);
       store.appendAudit({
         actorEmail: req.adminUser!.email,
         actorRole: req.adminUser!.role,
@@ -1513,6 +1674,9 @@ export function mountPlatformRoutes(
         return;
       }
       const [removed] = db.participants.splice(idx, 1);
+      db.entryPasses = db.entryPasses.filter((p) => p.participantId !== removed.id);
+      db.participantNotifications = db.participantNotifications.filter((n) => n.participantId !== removed.id);
+      deleteParticipantCascade(removed.id);
       store.appendAudit({
         actorEmail: req.adminUser!.email,
         actorRole: req.adminUser!.role,
@@ -1583,8 +1747,25 @@ export function mountPlatformRoutes(
       }
 
       payment.status = 'refunded';
+      persistPayment(payment);
       const participant = db.participants.find((p) => p.id === payment.participantId);
-      if (participant) participant.paymentStatus = 'refunded';
+      if (participant) {
+        participant.paymentStatus = 'refunded';
+        persistParticipant(participant);
+        // A refunded registration no longer admits anyone at the gate.
+        for (const pass of db.entryPasses) {
+          if (pass.paymentId === payment.id && pass.status === 'active') {
+            pass.status = 'revoked';
+            persistPass(pass);
+          }
+        }
+        pushParticipantNotification(store, participant.id, {
+          kind: 'payment',
+          tone: 'info',
+          title: 'Refund processed',
+          body: `₹${payment.amountInr.toLocaleString('en-IN')} has been refunded to your original payment method. Associated entry passes are now inactive.`,
+        });
+      }
 
       const refund = {
         id: `ref-${crypto.randomUUID().slice(0, 8)}`,

@@ -13,6 +13,68 @@
   animation: subtleReveal var(--duration-editorial) var(--ease-architectural) both;
 }
 
+/* ---- Toasts ---- */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(24px) scale(0.96); filter: blur(4px); }
+  to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(24px) scale(0.96); }
+}
+@keyframes toastTimer {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+.toast-enter { animation: toastIn 420ms var(--ease-architectural) both; }
+.toast-leave { animation: toastOut 260ms ease-in both; }
+.toast-timer { animation-name: toastTimer; animation-timing-function: linear; animation-fill-mode: forwards; }
+
+/* ---- Cinematic utilities (checkout + dashboard) ---- */
+@keyframes goldPulseRing {
+  0% { transform: scale(0.85); opacity: 0.75; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes cinematicRise {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes slowSpin { to { transform: rotate(360deg); } }
+@keyframes shimmerSweep {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to { transform: translateX(220%) skewX(-18deg); }
+}
+@keyframes confettiFall {
+  0% { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--drift, 0px), 520px, 0) rotate(var(--spin, 540deg)); opacity: 0; }
+}
+@keyframes checkDraw { to { stroke-dashoffset: 0; } }
+
+.gold-pulse-ring { animation: goldPulseRing 1.8s var(--ease-architectural) infinite; }
+.cinematic-rise { animation: cinematicRise 700ms var(--ease-architectural) both; }
+.slow-spin { animation: slowSpin 14s linear infinite; }
+.shimmer-sweep { animation: shimmerSweep 2.4s ease-in-out infinite; }
+.confetti-piece { animation: confettiFall var(--fall, 2.6s) cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+.check-draw { stroke-dasharray: 48; stroke-dashoffset: 48; animation: checkDraw 600ms 250ms ease-out forwards; }
+
+/* Card that lifts and glows gold on hover/focus */
+.glow-card {
+  transition: transform 260ms var(--ease-architectural), box-shadow 260ms ease, border-color 260ms ease;
+}
+.glow-card:hover,
+.glow-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(247, 215, 116, 0.55);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55), 0 0 36px -12px rgba(212, 165, 55, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-enter, .toast-leave, .gold-pulse-ring, .cinematic-rise, .slow-spin, .shimmer-sweep, .confetti-piece {
+    animation: none !important;
+  }
+  .check-draw { stroke-dashoffset: 0; animation: none; }
+  .glow-card:hover, .glow-card:focus-within { transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal-enter,
   [data-motion-reveal] {

@@ -269,6 +269,12 @@ function createGoldFiligreeCoverTextures(): { map: THREE.CanvasTexture; pbr: THR
   const map = make('color');
   map.colorSpace = THREE.SRGBColorSpace;
   const pbr = make('pbr'); // linear data texture
+  // The art sits on the board's underside (-Y face). When the cover folds shut it is rotated
+  // 180° about the spine, which would show the art upside down; pre-rotate so it reads upright.
+  for (const tex of [map, pbr]) {
+    tex.center.set(0.5, 0.5);
+    tex.rotation = Math.PI;
+  }
   return { map, pbr };
 }
 
@@ -506,6 +512,9 @@ export class SacredGitaBookEngine {
 
   private cameraLerpTargetPos: THREE.Vector3 | null = null;
   private cameraLerpTargetLook: THREE.Vector3 | null = null;
+  private activePreset: BookCameraPreset = 'desk';
+  /** ≥1 multiplier on camera distance so the open book fits narrow/portrait viewports. */
+  private fitFactor = 1;
 
   private isSoftwareGl = false;
   private paused = false;
@@ -605,7 +614,8 @@ export class SacredGitaBookEngine {
     this.scene.add(deskGlow);
 
     // Soft overhead "divine" pool of light that makes the gold leaf flare
-    const haloSpot = new THREE.SpotLight(0xffe2a8, 9, 14, Math.PI / 7, 0.65, 1.3);
+    // Kept moderate: stronger values wash the parchment out to flat white under ACES tone mapping
+    const haloSpot = new THREE.SpotLight(0xffe2a8, 4.5, 14, Math.PI / 7, 0.65, 1.3);
     haloSpot.position.set(0, 6.2, 1.1);
     haloSpot.target.position.set(0, 0, 0);
     this.scene.add(haloSpot);
@@ -741,40 +751,44 @@ export class SacredGitaBookEngine {
     leftBlock.receiveShadow = true;
     this.leftCoverPivot.add(leftBlock);
 
-    // Rounded leather spine with raised gold bands
-    const spine = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.11, 0.11, boardD, 24, 1, false, 0, Math.PI),
-      leatherMat,
-    );
-    spine.rotation.x = Math.PI / 2;
-    spine.rotation.z = Math.PI;
-    spine.position.set(0, -0.04, 0);
+    // Rounded leather spine cradling the gutter from below (half-cylinder along Z, bulging -Y),
+    // so from above it reads as a shadowed gutter rather than a strip standing between the pages.
+    const makeSpineGeo = (radius: number, length: number) =>
+      new THREE.CylinderGeometry(radius, radius, length, 24, 1, true, 0, Math.PI)
+        .rotateX(Math.PI / 2)
+        .rotateZ(-Math.PI / 2);
+    const spineMat = leatherMat.clone();
+    spineMat.side = THREE.DoubleSide;
+    const spine = new THREE.Mesh(makeSpineGeo(0.1, boardD), spineMat);
+    spine.position.set(0, 0.02, 0);
+    spine.castShadow = true;
     this.bookRoot.add(spine);
 
-    const spineBandGeo = new THREE.CylinderGeometry(0.118, 0.118, 0.045, 24, 1, false, 0, Math.PI);
+    // Raised gold bands sit outside the leather, so they show on the spine's outer curve only
+    const spineBandGeo = makeSpineGeo(0.108, 0.045);
     for (const z of [-0.98, -0.52, 0.52, 0.98]) {
       const band = new THREE.Mesh(spineBandGeo, boardMatGoldEdge);
-      band.rotation.x = Math.PI / 2;
-      band.rotation.z = Math.PI;
-      band.position.set(0, -0.04, z);
+      band.position.set(0, 0.02, z);
       this.bookRoot.add(band);
     }
 
     // Saffron silk ribbon marker: lies across the right folio and hangs off the foot
+    // Kept inside the gutter margin (page border starts ~0.15 from the spine) so it never covers text
     const ribbonMat = new THREE.MeshStandardMaterial({
-      color: 0xd9561c,
-      roughness: 0.38,
-      metalness: 0.1,
+      color: 0xa8380f,
+      roughness: 0.42,
+      metalness: 0.05,
       side: THREE.DoubleSide,
     });
-    const ribbonFlat = new THREE.Mesh(new THREE.PlaneGeometry(0.055, 1.98), ribbonMat);
+    const ribbonX = 0.11;
+    const ribbonFlat = new THREE.Mesh(new THREE.PlaneGeometry(0.03, 1.98), ribbonMat);
     ribbonFlat.rotation.x = -Math.PI / 2;
-    ribbonFlat.position.set(0.2, 0.1, 0.09);
+    ribbonFlat.position.set(ribbonX, 0.1, 0.09);
     ribbonFlat.receiveShadow = true;
     this.bookRoot.add(ribbonFlat);
 
-    const ribbonTail = new THREE.Mesh(new THREE.PlaneGeometry(0.055, 0.46), ribbonMat);
-    ribbonTail.position.set(0.2, 0.1 - 0.22, 1.1);
+    const ribbonTail = new THREE.Mesh(new THREE.PlaneGeometry(0.03, 0.46), ribbonMat);
+    ribbonTail.position.set(ribbonX, 0.1 - 0.22, 1.1);
     ribbonTail.rotation.x = -0.18;
     ribbonTail.castShadow = true;
     this.bookRoot.add(ribbonTail);
@@ -846,9 +860,8 @@ export class SacredGitaBookEngine {
     this.controls.dampingFactor = 0.06;
     this.controls.maxPolarAngle = Math.PI / 2.15;
     this.controls.minPolarAngle = 0.28;
-    this.controls.minDistance = 2.4;
-    this.controls.maxDistance = 6.2;
     this.controls.target.set(0, 0.05, 0);
+    this.applyFitFactor(this.computeFitFactor(), false);
 
     // Slowly rising gold motes around the volume (skipped on software GL to stay light)
     const reduceMotion =
@@ -861,7 +874,8 @@ export class SacredGitaBookEngine {
       this.goldMoteSpeeds = new Float32Array(count);
       const rand = seededRandom(108);
       for (let i = 0; i < count; i++) {
-        const r = 0.6 + rand() * 2.0;
+        // Ring outside the book's footprint (corners reach r≈2.05) so motes never drift over the text
+        const r = 2.1 + rand() * 0.6;
         const a = rand() * Math.PI * 2;
         positions[i * 3] = Math.cos(a) * r;
         positions[i * 3 + 1] = -0.1 + rand() * 2.4;
@@ -952,26 +966,69 @@ export class SacredGitaBookEngine {
     this.turningLeafMesh.visible = true;
   }
 
-  public setCameraPreset(preset: BookCameraPreset): void {
+  private static presetPose(preset: BookCameraPreset): { pos: THREE.Vector3; look: THREE.Vector3 } {
     switch (preset) {
       case 'reading':
-        this.cameraLerpTargetPos = new THREE.Vector3(0, 3.85, 1.55);
-        this.cameraLerpTargetLook = new THREE.Vector3(0, 0.05, 0.08);
-        break;
+        return { pos: new THREE.Vector3(0, 3.85, 1.55), look: new THREE.Vector3(0, 0.05, 0.08) };
       case 'close':
-        this.cameraLerpTargetPos = new THREE.Vector3(0.45, 2.25, 2.15);
-        this.cameraLerpTargetLook = new THREE.Vector3(0, 0.08, 0.15);
-        break;
+        return { pos: new THREE.Vector3(0.45, 2.25, 2.15), look: new THREE.Vector3(0, 0.08, 0.15) };
       case 'spine':
-        this.cameraLerpTargetPos = new THREE.Vector3(-2.6, 1.95, 2.75);
-        this.cameraLerpTargetLook = new THREE.Vector3(0, 0.05, 0);
-        break;
+        return { pos: new THREE.Vector3(-2.6, 1.95, 2.75), look: new THREE.Vector3(0, 0.05, 0) };
       case 'desk':
       default:
-        this.cameraLerpTargetPos = new THREE.Vector3(0, 3.35, 3.65);
-        this.cameraLerpTargetLook = new THREE.Vector3(0, 0.05, 0);
-        break;
+        return { pos: new THREE.Vector3(0, 3.35, 3.65), look: new THREE.Vector3(0, 0.05, 0) };
     }
+  }
+
+  /** Preset camera position pushed back along its view direction by the current fit factor. */
+  private fittedPresetPos(preset: BookCameraPreset): { pos: THREE.Vector3; look: THREE.Vector3 } {
+    const { pos, look } = SacredGitaBookEngine.presetPose(preset);
+    const offset = pos.clone().sub(look).multiplyScalar(this.fitFactor);
+    return { pos: look.clone().add(offset), look };
+  }
+
+  /**
+   * Camera distance needed so the open book (≈3.5 × 2.3 units, plus margin) fits the
+   * viewport. Presets were authored for ~16:10; narrower viewports need the camera further back.
+   */
+  private computeFitFactor(): number {
+    const BASE_DISTANCE = 4.95; // |desk preset offset|
+    const HALF_WIDTH = 2.0; // half the open book's width + margin
+    const HALF_DEPTH = 1.55;
+    const tanV = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+    const tanH = tanV * this.camera.aspect;
+    const needed = Math.max(HALF_WIDTH / tanH, HALF_DEPTH / tanV) + 0.45;
+    return Math.max(1, needed / BASE_DISTANCE);
+  }
+
+  private applyFitFactor(next: number, animate: boolean): void {
+    const prev = this.fitFactor;
+    this.fitFactor = next;
+    this.controls.minDistance = 2.4;
+    this.controls.maxDistance = 6.2 * next;
+
+    if (!animate) {
+      const { pos, look } = this.fittedPresetPos(this.activePreset);
+      this.camera.position.copy(pos);
+      this.controls.target.copy(look);
+      return;
+    }
+    if (Math.abs(next - prev) < 0.01) return;
+    if (this.cameraLerpTargetPos) {
+      // A preset glide is in flight: retarget it with the new framing
+      this.setCameraPreset(this.activePreset);
+    } else {
+      // Keep the user's orbit angle, only rescale the distance
+      const offset = this.camera.position.clone().sub(this.controls.target).multiplyScalar(next / prev);
+      this.camera.position.copy(this.controls.target).add(offset);
+    }
+  }
+
+  public setCameraPreset(preset: BookCameraPreset): void {
+    this.activePreset = preset;
+    const { pos, look } = this.fittedPresetPos(preset);
+    this.cameraLerpTargetPos = pos;
+    this.cameraLerpTargetLook = look;
   }
 
   private applyTurningLeafCurl(): void {
@@ -1012,6 +1069,7 @@ export class SacredGitaBookEngine {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
+    this.applyFitFactor(this.computeFitFactor(), true);
   }
 
   private animate = (): void => {

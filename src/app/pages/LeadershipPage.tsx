@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { ArrowUpRight, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { PublishedBlocksRenderer } from '../../components/cms/PublishedBlocksRenderer';
 import { Footer } from '../../components/layout/Footer';
 import { Header } from '../../components/layout/Header';
@@ -82,15 +83,13 @@ export const LeadershipPage: React.FC = () => {
                 </h2>
               </div>
 
-              <a
-                href="https://bhagavadgitavishwamahotsav.com/about/organising-committee"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/contact"
                 className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.06em] uppercase text-[var(--color-bronze)] hover:underline"
               >
-                <span>{t('footer.officialWebsite')}</span>
+                <span>Contact the Secretariat</span>
                 <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-              </a>
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">

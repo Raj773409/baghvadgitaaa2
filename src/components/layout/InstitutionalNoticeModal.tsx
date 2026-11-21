@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, ArrowUpRight } from 'lucide-react';
-import { OFFICIAL_EVENT_URLS } from '../../content/eventContent';
+import { Link } from 'react-router-dom';
 import { useI18n } from '../../i18n';
 
 export type NoticeKind = 'contact' | 'privacy' | 'terms' | 'refund' | null;
@@ -64,15 +64,14 @@ export const InstitutionalNoticeModal: React.FC<InstitutionalNoticeModalProps> =
         </p>
 
         <div className="mt-6 pt-5 border-t border-[var(--color-border)] flex flex-wrap items-center justify-between gap-4">
-          <a
-            href={OFFICIAL_EVENT_URLS.home}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/contact"
+            onClick={onClose}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-bronze)] hover:text-[var(--color-ink)] transition-colors"
           >
-            <span>{t('footer.officialWebsite')}</span>
+            <span>Contact the Secretariat</span>
             <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-          </a>
+          </Link>
 
           <button
             type="button"

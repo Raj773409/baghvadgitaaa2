@@ -85,7 +85,7 @@ export const CONTENT_PARITY_CHECKLIST: ReadonlyArray<ContentParityItem> = [
     id: 'parity-registration-8-step',
     sectionGroup: 'Registration & Voice',
     officialSourceElement: 'Multilingual 8-step guided registration + optional voice assistant + real payment webhook status',
-    localImplementation: 'RegistrationPage, RegistrationFormCard, VoiceRegistrationAssistant, PaymentHandoffModal',
+    localImplementation: 'RegistrationPage, RegistrationFormCard, VoiceRegistrationAssistant, CheckoutExperience',
     route: '/participate/register',
     verificationStatus: 'verified',
     notes: 'Zero auto-payment or unverified status fabrication; card/UPI handled strictly on gateway.',
