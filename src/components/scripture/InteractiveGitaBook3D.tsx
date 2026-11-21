@@ -34,6 +34,13 @@ interface InteractiveGitaBook3DProps {
 
 type BookLang = 'en' | 'hi' | 'te';
 
+const CAMERA_PRESET_LABELS: Record<BookCameraPreset, string> = {
+  desk: 'Altar',
+  reading: 'Read',
+  close: 'Close-up',
+  spine: 'Spine',
+};
+
 export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
   initialChapter = 1,
   compactHomepageMode = false,
@@ -166,18 +173,24 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
   return (
     <div
       data-testid="interactive-gita-book-3d"
-      className="rounded-2xl border border-[#C9A04E]/40 bg-[#11192A] text-[#FFFDF7] overflow-hidden shadow-[0_24px_64px_rgba(8,12,20,0.55)]"
+      className="relative rounded-2xl border border-[#D4A537]/45 bg-[#11192A] text-[#FFFDF7] overflow-hidden shadow-[0_24px_64px_rgba(8,12,20,0.55),0_0_0_1px_rgba(247,215,116,0.08),0_0_60px_-20px_rgba(212,165,55,0.45)]"
     >
+      {/* Gold-leaf top edge */}
+      <div className="absolute inset-x-0 top-0 h-[2px] gold-leaf-line" aria-hidden="true" />
+
       {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 bg-[#17233A]/95 border-b border-[#C9A04E]/30">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 bg-gradient-to-r from-[#1B2944] via-[#17233A] to-[#1B2944] border-b border-[#D4A537]/30">
         <div className="flex items-center gap-3">
-          <BookOpen className="w-4 h-4 text-[#F0D38B] shrink-0" aria-hidden="true" />
+          <span className="grid place-items-center w-9 h-9 rounded-full royal-gold-surface shrink-0">
+            <BookOpen className="w-4 h-4" aria-hidden="true" />
+          </span>
           <div>
-            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#C9A04E]">
+            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#D4A537]">
               Interactive 3D Sacred Collector Edition
             </p>
-            <h3 className="font-editorial text-lg sm:text-xl text-[#FFFDF7] leading-tight">
-              Chapter {chapterRecord.paddedCode} · {chapterRecord.transliteration}
+            <h3 className="font-editorial text-lg sm:text-xl leading-tight">
+              <span className="royal-gold-gradient-text">Chapter {chapterRecord.paddedCode}</span>
+              <span className="text-[#FFFDF7]"> · {chapterRecord.transliteration}</span>
             </h3>
           </div>
         </div>
@@ -188,26 +201,27 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
             type="button"
             data-testid="book3d-toggle-open"
             onClick={() => setBookOpen((o) => !o)}
-            className="inline-flex items-center gap-1.5 min-h-[34px] px-3 rounded-full border border-[#C9A04E]/45 text-xs font-medium text-[#F0D38B] hover:bg-[#C9A04E]/20 cursor-pointer"
+            className="inline-flex items-center gap-1.5 min-h-[34px] px-3 rounded-full border border-[#D4A537]/45 text-xs font-medium text-[#F7D774] hover:bg-[#D4A537]/20 cursor-pointer"
           >
             {bookOpen ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
             <span>{bookOpen ? 'Close Cover' : 'Open Cover'}</span>
           </button>
 
-          <div className="hidden sm:inline-flex items-center rounded-full border border-[#C9A04E]/35 p-0.5 bg-black/20">
+          <div className="hidden sm:inline-flex items-center rounded-full border border-[#D4A537]/35 p-0.5 bg-black/20">
             {(['desk', 'reading', 'close', 'spine'] as const).map((preset) => (
               <button
                 key={preset}
                 type="button"
                 onClick={() => handlePreset(preset)}
-                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] uppercase tracking-[0.06em] cursor-pointer ${
+                aria-pressed={cameraPreset === preset}
+                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] uppercase tracking-[0.06em] cursor-pointer transition-colors ${
                   cameraPreset === preset
-                    ? 'bg-[#C9A04E] text-[#171717] font-semibold'
-                    : 'text-[#FFFDF7]/75 hover:text-[#F0D38B]'
+                    ? 'royal-gold-surface font-semibold'
+                    : 'text-[#FFFDF7]/75 hover:text-[#F7D774]'
                 }`}
               >
                 <Camera className="w-3 h-3" aria-hidden="true" />
-                <span>{preset}</span>
+                <span>{CAMERA_PRESET_LABELS[preset]}</span>
               </button>
             ))}
           </div>
@@ -219,33 +233,51 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
             aria-pressed={isBookmarked}
             className={`inline-flex items-center gap-1.5 min-h-[34px] px-3 rounded-full border text-xs font-medium cursor-pointer ${
               isBookmarked
-                ? 'bg-[#C9A04E] text-[#171717] border-[#F0D38B]'
-                : 'border-[#C9A04E]/40 text-[#FFFDF7]/85 hover:border-[#F0D38B]'
+                ? 'royal-gold-surface border-[#F7D774]'
+                : 'border-[#D4A537]/40 text-[#FFFDF7]/85 hover:border-[#F7D774]'
             }`}
           >
-            <Bookmark className="w-3.5 h-3.5" aria-hidden="true" />
+            <Bookmark className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-current' : ''}`} aria-hidden="true" />
             <span>{isBookmarked ? 'Bookmarked' : 'Bookmark'}</span>
           </button>
 
-          <span className="px-2.5 py-1 rounded-full border border-[#C9A04E]/30 text-[11px] text-[#F0D38B] tabular-nums">
-            Progress {progressPct}%
-          </span>
+          <div
+            className="flex items-center gap-2 px-2.5 py-1 rounded-full border border-[#D4A537]/30"
+            role="progressbar"
+            aria-label="Reading progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progressPct}
+          >
+            <span className="block w-16 sm:w-20 h-1.5 rounded-full bg-black/40 overflow-hidden">
+              <span
+                className="block h-full rounded-full transition-[width] duration-500 shadow-[0_0_8px_rgba(247,215,116,0.6)]"
+                style={{ width: `${progressPct}%`, backgroundImage: 'var(--gold-gradient-metallic)' }}
+              />
+            </span>
+            <span className="text-[11px] text-[#F7D774] tabular-nums">{progressPct}%</span>
+          </div>
         </div>
       </div>
 
       {/* Main Split Stage: Left Interactive Three.js 3D Volume | Right Synced Folio Reader + Voice */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
         {/* 3D WebGL Viewport */}
-        <div className="lg:col-span-6 relative min-h-[360px] sm:min-h-[440px] lg:min-h-[520px] bg-gradient-to-b from-[#17233A] via-[#11192A] to-[#0B111C] border-b lg:border-b-0 lg:border-r border-[#C9A04E]/25">
+        <div className="lg:col-span-6 relative min-h-[360px] sm:min-h-[440px] lg:min-h-[520px] bg-[radial-gradient(ellipse_at_50%_38%,#2A3A5C_0%,#17233A_38%,#0B111C_100%)] border-b lg:border-b-0 lg:border-r border-[#D4A537]/25">
+          {/* Warm sanctum glow behind the volume */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full bg-[radial-gradient(circle,rgba(247,215,116,0.22)_0%,rgba(212,165,55,0.08)_40%,transparent_70%)] blur-2xl"
+          />
           {!webglFallback ? (
             <div ref={canvasHostRef} className="relative overflow-hidden w-full h-full min-h-[360px] sm:min-h-[440px] lg:min-h-[520px]" />
           ) : (
             <div className="p-8 h-full flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-48 h-64 rounded-lg border-2 border-[#C9A04E] bg-[#17233A] p-5 flex flex-col items-center justify-between shadow-2xl">
-                <span className="text-[10px] tracking-[0.2em] uppercase text-[#C9A04E]">
+              <div className="relative w-48 h-64 rounded-lg border-2 border-[#D4A537] bg-gradient-to-br from-[#6A1624] via-[#4A0E19] to-[#2C0710] p-5 flex flex-col items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_40px_-10px_rgba(212,165,55,0.5)] outline outline-1 outline-offset-[-10px] outline-[#D4A537]/50">
+                <span className="text-[10px] tracking-[0.2em] uppercase text-[#D4A537]">
                   Adhyaya {chapterRecord.paddedCode}
                 </span>
-                <p lang="sa" className="text-2xl text-[#F0D38B] font-semibold">
+                <p lang="sa" className="text-2xl text-[#F7D774] font-semibold">
                   {chapterRecord.sanskritDevanagari}
                 </p>
                 <p className="font-editorial text-sm text-[#FFFDF7]/90">
@@ -264,13 +296,13 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
               type="button"
               data-testid="book3d-prev-page"
               onClick={() => navigateChapter(chapterNum <= 1 ? 18 : chapterNum - 1, 'prev')}
-              className="pointer-events-auto inline-flex items-center gap-1.5 min-h-[38px] px-4 py-1.5 rounded-full bg-[#17233A]/90 border border-[#C9A04E]/55 text-xs font-medium text-[#FFFDF7] hover:border-[#F0D38B] cursor-pointer"
+              className="pointer-events-auto inline-flex items-center gap-1.5 min-h-[38px] px-4 py-1.5 rounded-full bg-[#17233A]/85 backdrop-blur-sm border border-[#D4A537]/55 text-xs font-medium text-[#FFFDF7] hover:border-[#F7D774] hover:text-[#F7D774] transition-colors cursor-pointer"
             >
-              <ChevronLeft className="w-4 h-4 text-[#F0D38B]" aria-hidden="true" />
+              <ChevronLeft className="w-4 h-4 text-[#F7D774]" aria-hidden="true" />
               <span>Prev Folio</span>
             </button>
 
-            <span className="hidden sm:inline-block px-3 py-1 rounded-full bg-[#17233A]/85 border border-[#C9A04E]/30 text-[11px] text-[#E9DCC5]/85">
+            <span className="hidden sm:inline-block px-3 py-1 rounded-full bg-[#17233A]/75 backdrop-blur-sm border border-[#D4A537]/30 text-[11px] text-[#E9DCC5]/85">
               Drag to orbit 360° · Scroll to zoom
             </span>
 
@@ -278,10 +310,10 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
               type="button"
               data-testid="book3d-next-page"
               onClick={() => navigateChapter(chapterNum >= 18 ? 1 : chapterNum + 1, 'next')}
-              className="pointer-events-auto inline-flex items-center gap-1.5 min-h-[38px] px-4 py-1.5 rounded-full bg-[#17233A]/90 border border-[#C9A04E]/55 text-xs font-medium text-[#FFFDF7] hover:border-[#F0D38B] cursor-pointer"
+              className="pointer-events-auto inline-flex items-center gap-1.5 min-h-[38px] px-4 py-1.5 rounded-full royal-gold-surface text-xs font-semibold cursor-pointer"
             >
               <span>Turn Page</span>
-              <ChevronRight className="w-4 h-4 text-[#F0D38B]" aria-hidden="true" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -299,7 +331,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
                   aria-pressed={bookLang === lang}
                   className={`px-2.5 py-1 rounded text-[11px] font-semibold uppercase tracking-[0.06em] border cursor-pointer ${
                     bookLang === lang
-                      ? 'bg-[#17233A] text-[#F0D38B] border-[#17233A] dark:bg-[#C9A04E] dark:text-[#171717]'
+                      ? 'bg-[#17233A] text-[#F7D774] border-[#17233A] dark:bg-[#D4A537] dark:text-[#171717]'
                       : 'border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                   }`}
                 >
@@ -313,7 +345,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
                 type="button"
                 aria-label="Decrease text size"
                 onClick={() => setFontScale((s) => clampBookFontScale(s - 0.1))}
-                className="p-1.5 rounded border border-[var(--color-border)] hover:border-[#C9A04E] cursor-pointer"
+                className="p-1.5 rounded border border-[var(--color-border)] hover:border-[#D4A537] cursor-pointer"
               >
                 <ZoomOut className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
@@ -324,7 +356,7 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
                 type="button"
                 aria-label="Increase text size"
                 onClick={() => setFontScale((s) => clampBookFontScale(s + 0.1))}
-                className="p-1.5 rounded border border-[var(--color-border)] hover:border-[#C9A04E] cursor-pointer"
+                className="p-1.5 rounded border border-[var(--color-border)] hover:border-[#D4A537] cursor-pointer"
               >
                 <ZoomIn className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
@@ -344,17 +376,18 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
                   onClick={() =>
                     navigateChapter(ch.chapterNumber, ch.chapterNumber >= chapterNum ? 'next' : 'prev')
                   }
-                  className={`relative min-w-[34px] h-8 px-2 rounded text-xs font-medium tabular-nums border transition-colors cursor-pointer ${
+                  aria-current={active ? 'true' : undefined}
+                  className={`relative min-w-[34px] h-8 px-2 rounded-md text-xs font-medium tabular-nums border transition-colors cursor-pointer ${
                     active
-                      ? 'bg-[#C9A04E] text-[#171717] border-[#A87932] font-semibold'
-                      : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[#C9A04E] hover:text-[var(--color-ink)]'
+                      ? 'royal-gold-surface border-[#9C6B1E] font-semibold scale-105'
+                      : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[#D4A537] hover:text-[var(--color-ink)]'
                   }`}
                 >
                   {ch.paddedCode}
                   {marked && (
                     <span
                       aria-hidden="true"
-                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#A87932]"
+                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#D9561C] ring-2 ring-[var(--surface-elevated)]"
                     />
                   )}
                 </button>
@@ -364,26 +397,31 @@ export const InteractiveGitaBook3D: React.FC<InteractiveGitaBook3DProps> = ({
 
           {/* Synchronized Shloka & Chapter Essence */}
           <div
-            className="space-y-3 rounded-xl bg-[#F8F3E8] dark:bg-[#17233A]/85 border border-[#C9A04E]/35 p-4 sm:p-5"
+            className="relative space-y-3 rounded-xl bg-[linear-gradient(160deg,#FBF4E4_0%,#F3E6CB_100%)] dark:bg-[linear-gradient(160deg,#1B2944_0%,#131D30_100%)] border border-[#D4A537]/45 p-4 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_24px_-12px_rgba(156,107,30,0.35)] dark:shadow-[inset_0_1px_0_rgba(247,215,116,0.12),0_8px_24px_-12px_rgba(0,0,0,0.6)]"
             style={{ fontSize: `${fontScale}rem` }}
           >
-            <div className="flex items-center justify-between gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#A87932] dark:text-[#F0D38B]">
-              <span>{recitation.verseReference}</span>
-              <span>{chapterRecord.verseCount} Shlokas</span>
+            {/* Inner gold-leaf frame */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-1.5 rounded-lg border border-[#D4A537]/25" />
+
+            <div className="flex items-center justify-between gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#9C6B1E] dark:text-[#F7D774]">
+              <span>✦ {recitation.verseReference}</span>
+              <span className="px-2 py-0.5 rounded-full border border-[#D4A537]/40">{chapterRecord.verseCount} Shlokas</span>
             </div>
 
-            <p lang="sa" className="text-[1.15em] font-medium text-[#4A251B] dark:text-[#F0D38B] whitespace-pre-line leading-relaxed">
+            <p lang="sa" className="text-[1.2em] font-semibold text-[#6A1624] dark:text-[#F7D774] whitespace-pre-line leading-relaxed text-center py-1">
               {recitation.sanskritDevanagari}
             </p>
-            <p className="text-[0.82em] italic text-[var(--color-muted)] whitespace-pre-line">
+            <p className="text-[0.82em] italic text-[var(--color-muted)] whitespace-pre-line text-center">
               {recitation.transliteration}
             </p>
 
-            <p className="font-editorial text-[1.12em] leading-relaxed text-[var(--color-ink)] pt-2 border-t border-[#C9A04E]/25">
+            <div aria-hidden="true" className="h-px w-2/3 mx-auto gold-leaf-line" />
+
+            <p className="font-editorial text-[1.12em] leading-relaxed text-[var(--color-ink)]">
               “{bookLang === 'hi' ? recitation.meaning.hi : bookLang === 'te' ? recitation.meaning.te : recitation.meaning.en}”
             </p>
 
-            <div className="pt-2 border-t border-[#C9A04E]/20 text-[0.84em] text-[var(--color-muted)] leading-relaxed">
+            <div className="pt-2 border-t border-[#D4A537]/20 text-[0.84em] text-[var(--color-muted)] leading-relaxed">
               <strong className="text-[var(--color-ink)]">Chapter Focus: </strong>
               {translated.essence}
               {featuredCanonical?.commentarySlot && (

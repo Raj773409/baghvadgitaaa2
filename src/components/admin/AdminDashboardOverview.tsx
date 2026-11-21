@@ -134,7 +134,7 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({
               onClick={() => onRangeChange(opt.id)}
               className={`px-3 py-1.5 rounded text-xs cursor-pointer transition-colors ${
                 activeRange === opt.id
-                  ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717] font-semibold'
+                  ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717] font-semibold'
                   : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'
               }`}
             >
@@ -156,13 +156,13 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({
               key={card.label}
               type="button"
               onClick={() => onNavigateModule(card.target)}
-              className="text-left rounded-xl border border-[var(--color-border)] bg-[var(--surface-elevated)] p-5 hover:border-[#D5AF62] transition-colors cursor-pointer space-y-2"
+              className="text-left rounded-xl border border-[var(--color-border)] bg-[var(--surface-elevated)] p-5 hover:border-[#D4A537] transition-colors cursor-pointer space-y-2"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-bronze)]">
                   {card.label}
                 </span>
-                <Icon className="w-4 h-4 text-[#D5AF62]" />
+                <Icon className="w-4 h-4 text-[#D4A537]" />
               </div>
               <p className="font-display text-3xl font-light text-[var(--color-ink)] tabular-nums">
                 {card.value}
@@ -178,7 +178,7 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({
         <div className="lg:col-span-7 rounded-xl border border-[var(--color-border)] bg-[var(--surface-elevated)] p-5 space-y-5">
           <div className="flex items-center justify-between gap-3 pb-3 border-b border-[var(--color-border)]">
             <div className="flex items-center gap-2">
-              <Globe2 className="w-4 h-4 text-[#D5AF62]" />
+              <Globe2 className="w-4 h-4 text-[#D4A537]" />
               <h3 className="font-editorial text-xl text-[var(--color-ink)]">
                 Country &amp; Track Breakdown
               </h3>
@@ -233,7 +233,7 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({
                         width={barWidth}
                         height={14}
                         rx={3}
-                        fill="#D5AF62"
+                        fill="#D4A537"
                       />
                       <text
                         x={494}
@@ -312,7 +312,7 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({
               <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-bronze)]">
                 Payment Gateway Integration
               </span>
-              <ShieldAlert className="w-4 h-4 text-[#D5AF62]" />
+              <ShieldAlert className="w-4 h-4 text-[#D4A537]" />
             </div>
             <p className="text-sm font-medium text-[var(--color-ink)]">
               {gatewayStatus.configured

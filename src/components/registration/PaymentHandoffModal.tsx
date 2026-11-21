@@ -351,7 +351,7 @@ export const PaymentHandoffModal: React.FC<PaymentHandoffModalProps> = ({
                   ? 'border-[#2E6F40]/45 bg-[#2E6F40]/15 text-[#1B4A28]'
                   : isFailed
                     ? 'border-red-500/45 bg-red-500/10 text-red-900'
-                    : 'border-[#C9A04E]/55 bg-[#F4E8D3]/80 text-[#5C4420]'
+                    : 'border-[#D4A537]/55 bg-[#F4E8D3]/80 text-[#5C4420]'
               }`}
             >
               <span className="inline-flex items-center gap-2 font-medium">

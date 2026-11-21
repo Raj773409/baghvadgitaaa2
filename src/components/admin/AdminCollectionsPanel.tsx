@@ -390,7 +390,7 @@ export const AdminCollectionsPanel: React.FC<AdminCollectionsPanelProps> = ({
                     <button
                       type="button"
                       onClick={() => void toggleStatus(item)}
-                      className="px-2.5 py-1 rounded border border-[#A77B37]/45 hover:bg-[#D5AF62]/15 cursor-pointer"
+                      className="px-2.5 py-1 rounded border border-[#9C6B1E]/45 hover:bg-[#D4A537]/15 cursor-pointer"
                     >
                       {item.status === 'published' ? 'Move to Draft' : 'Publish'}
                     </button>

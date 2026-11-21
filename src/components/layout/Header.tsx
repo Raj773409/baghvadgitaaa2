@@ -36,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({ variant = 'transparent-hero' }) 
     ? 'bg-[#FFFDF7]/95 dark:bg-[#17233A]/95 backdrop-blur-md text-[var(--color-ink)] border-b border-[var(--color-border)]'
     : variant === 'transparent-hero'
       ? 'bg-transparent text-white border-b border-transparent'
-      : 'bg-[#17233A]/95 backdrop-blur-md text-[#FFFDF7] border-b border-[#C9A04E]/28';
+      : 'bg-[#17233A]/95 backdrop-blur-md text-[#FFFDF7] border-b border-[#D4A537]/28';
 
   return (
     <>
@@ -62,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({ variant = 'transparent-hero' }) 
               fill="none"
               aria-hidden="true"
               className={`w-7 h-5 sm:w-10 sm:h-7 shrink-0 transition-colors duration-200 ${
-                isLightHeader ? 'text-[#A87932] dark:text-[#F0D38B]' : 'text-[#F0D38B]'
+                isLightHeader ? 'text-[#9C6B1E] dark:text-[#F7D774]' : 'text-[#F7D774]'
               }`}
             >
               <path
@@ -141,8 +141,8 @@ export const Header: React.FC<HeaderProps> = ({ variant = 'transparent-hero' }) 
               aria-controls="more-navigation-overlay"
               className={`inline-flex items-center gap-1.5 sm:gap-2 min-h-[38px] px-2.5 sm:px-4 py-1.5 rounded-full border text-[11px] sm:text-xs font-medium tracking-[0.08em] sm:tracking-[0.12em] uppercase whitespace-nowrap shrink-0 transition-colors duration-150 cursor-pointer ${
                 isLightHeader
-                  ? 'border-[var(--color-border)] text-[var(--color-ink)] hover:border-[#A87932] bg-[var(--surface-elevated)]/85 dark:bg-[#17233A]/85 dark:text-[#FFFDF7]'
-                  : 'border-[#C9A04E]/50 text-[#FFFDF7] hover:border-[#F0D38B] bg-[#17233A]/55'
+                  ? 'border-[var(--color-border)] text-[var(--color-ink)] hover:border-[#9C6B1E] bg-[var(--surface-elevated)]/85 dark:bg-[#17233A]/85 dark:text-[#FFFDF7]'
+                  : 'border-[#D4A537]/50 text-[#FFFDF7] hover:border-[#F7D774] bg-[#17233A]/55'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ variant = 'transparent-hero' }) 
             {isRegistration ? (
               <Link
                 to="/"
-                className="hidden md:inline-flex items-center gap-2 min-h-[38px] px-4 py-1.5 rounded-full border border-[#C9A04E]/65 text-[#F0D38B] hover:bg-[#C9A04E] hover:text-[#171717] text-xs font-medium tracking-[0.04em] whitespace-nowrap shrink-0 transition-colors duration-150"
+                className="hidden md:inline-flex items-center gap-2 min-h-[38px] px-4 py-1.5 rounded-full border border-[#D4A537]/65 text-[#F7D774] hover:bg-[#D4A537] hover:text-[#171717] text-xs font-medium tracking-[0.04em] whitespace-nowrap shrink-0 transition-colors duration-150"
               >
                 <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{t('navigationOverlay.backToHome')}</span>

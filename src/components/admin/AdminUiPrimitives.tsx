@@ -42,7 +42,7 @@ export const AdminToastStack: React.FC<{
             toast.kind === 'error'
               ? 'bg-[#FFF5F5] dark:bg-[#2B1416] border-red-400/60 text-red-900 dark:text-red-100'
               : toast.kind === 'success'
-                ? 'bg-[var(--surface-elevated)] border-[#A77B37]/60 text-[var(--color-ink)]'
+                ? 'bg-[var(--surface-elevated)] border-[#9C6B1E]/60 text-[var(--color-ink)]'
                 : 'bg-[var(--surface-elevated)] border-[var(--color-border)] text-[var(--color-ink)]'
           }`}
         >
@@ -193,7 +193,7 @@ export const AdminStatusBadge: React.FC<{
     norm === 'unpublished-draft'
   ) {
     toneClasses =
-      'border-[#A77B37]/50 text-[#865D21] dark:text-[#F5E2B5] bg-[#D5AF62]/15';
+      'border-[#9C6B1E]/50 text-[#865D21] dark:text-[#F7D774] bg-[#D4A537]/15';
   }
 
   return (
@@ -304,7 +304,7 @@ export const AdminPreviewModal: React.FC<{
                 onClick={() => setViewport('desktop')}
                 className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs cursor-pointer ${
                   viewport === 'desktop'
-                    ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717] font-semibold'
+                    ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717] font-semibold'
                     : 'text-[var(--color-muted)]'
                 }`}
               >
@@ -316,7 +316,7 @@ export const AdminPreviewModal: React.FC<{
                 onClick={() => setViewport('mobile')}
                 className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs cursor-pointer ${
                   viewport === 'mobile'
-                    ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717] font-semibold'
+                    ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717] font-semibold'
                     : 'text-[var(--color-muted)]'
                 }`}
               >
@@ -352,8 +352,8 @@ export const AdminPreviewModal: React.FC<{
               viewport === 'mobile' ? 'max-w-[390px]' : 'max-w-4xl'
             }`}
           >
-            <div className="bg-[#17233A] text-[#FFFDF8] p-6 sm:p-8 border-b border-[#D5AF62]/30 space-y-2">
-              <p className="text-[11px] font-mono text-[#F5E2B5] uppercase tracking-[0.14em]">
+            <div className="bg-[#17233A] text-[#FFFDF8] p-6 sm:p-8 border-b border-[#D4A537]/30 space-y-2">
+              <p className="text-[11px] font-mono text-[#F7D774] uppercase tracking-[0.14em]">
                 {snapshot.seo.metaTitle || page.route}
               </p>
               <h4 className="font-editorial text-2xl sm:text-3xl font-normal">

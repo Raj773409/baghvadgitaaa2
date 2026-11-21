@@ -113,14 +113,14 @@ export const AboutPage: React.FC = () => {
               <div className="pt-2 flex flex-wrap gap-4">
                 <Link
                   to="/gita"
-                  className="inline-flex items-center gap-2.5 min-h-[44px] px-6 py-2.5 rounded-full bg-[#17233A] text-[#FFFDF7] dark:bg-[#C9A04E] dark:text-[#171717] text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2.5 min-h-[44px] px-6 py-2.5 rounded-full bg-[#17233A] text-[#FFFDF7] dark:bg-[#D4A537] dark:text-[#171717] text-sm font-medium transition-colors"
                 >
                   <BookOpen className="w-4 h-4 text-[#D5AC70] dark:text-[#171717]" aria-hidden="true" />
                   <span>{t('navigationOverlay.items.gitaTitle')}</span>
                 </Link>
                 <Link
                   to="/leadership"
-                  className="inline-flex items-center gap-2.5 min-h-[44px] px-6 py-2.5 rounded-full border border-[#C9A04E] text-[var(--color-ink)] hover:bg-[#C9A04E]/15 text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2.5 min-h-[44px] px-6 py-2.5 rounded-full border border-[#D4A537] text-[var(--color-ink)] hover:bg-[#D4A537]/15 text-sm font-medium transition-colors"
                 >
                   <span>{t('navigationOverlay.items.leadershipTitle')}</span>
                   <ArrowRight className="w-4 h-4 text-[var(--color-bronze)]" aria-hidden="true" />
@@ -129,7 +129,7 @@ export const AboutPage: React.FC = () => {
             </div>
 
             <figure className="lg:col-span-6 space-y-3">
-              <div className="overflow-hidden border border-[#C9A04E]/45 bg-[#161412] aspect-[16/10]">
+              <div className="overflow-hidden border border-[#D4A537]/45 bg-[#161412] aspect-[16/10]">
                 <img
                   src={aboutImageUrl}
                   alt={stewardshipBlock?.mediaAlt || t(pavilionStudy.altKey)}
@@ -269,7 +269,7 @@ export const AboutPage: React.FC = () => {
                   {CONTENT_PARITY_CHECKLIST.map((item) => {
                     const isVerified = item.verificationStatus === 'verified';
                     return (
-                      <tr key={item.id} className="hover:bg-[#C9A04E]/5">
+                      <tr key={item.id} className="hover:bg-[#D4A537]/5">
                         <td className="p-4 font-semibold text-[var(--color-ink)] whitespace-nowrap">
                           {item.sectionGroup}
                         </td>
@@ -287,7 +287,7 @@ export const AboutPage: React.FC = () => {
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold uppercase tracking-[0.06em] ${
                               isVerified
                                 ? 'bg-[#2E6F40]/15 text-[#1B4A28] dark:text-[#6EE7B7]'
-                                : 'bg-[#C9A04E]/20 text-[#8F6018] dark:text-[#F0D38B]'
+                                : 'bg-[#D4A537]/20 text-[#8F6018] dark:text-[#F7D774]'
                             }`}
                           >
                             {isVerified ? (

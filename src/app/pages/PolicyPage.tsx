@@ -76,7 +76,7 @@ export const PolicyPage: React.FC<PolicyPageProps> = ({ policyId }) => {
                     aria-current={active ? 'page' : undefined}
                     className={`py-2 text-xs font-medium border-b-2 transition-colors ${
                       active
-                        ? 'border-[#C9A04E] text-[var(--color-ink)]'
+                        ? 'border-[#D4A537] text-[var(--color-ink)]'
                         : 'border-transparent text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                     }`}
                   >
@@ -118,7 +118,7 @@ export const PolicyPage: React.FC<PolicyPageProps> = ({ policyId }) => {
                   ))}
                 </div>
                 {section.bullets && section.bullets.length > 0 && (
-                  <ul className="space-y-2.5 pt-2 pl-4 border-l-2 border-[#C9A04E]/55">
+                  <ul className="space-y-2.5 pt-2 pl-4 border-l-2 border-[#D4A537]/55">
                     {section.bullets.map((b, bIdx) => (
                       <li
                         key={bIdx}

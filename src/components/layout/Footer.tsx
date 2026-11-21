@@ -199,7 +199,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4">
             <Link
               to="/admin"
-              className="text-xs font-medium tracking-[0.06em] uppercase text-[#C9A04E] hover:text-[#F0D38B] transition-colors"
+              className="text-xs font-medium tracking-[0.06em] uppercase text-[#D4A537] hover:text-[#F7D774] transition-colors"
             >
               Admin Portal
             </Link>

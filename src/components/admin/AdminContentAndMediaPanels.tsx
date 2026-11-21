@@ -501,7 +501,7 @@ export const AdminCmsPanel: React.FC<{
                   <button
                     type="button"
                     onClick={() => void toggleStatus(item)}
-                    className="px-3 py-1.5 rounded-lg border border-[#C9A04E]/50 hover:bg-[#C9A04E]/15 cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg border border-[#D4A537]/50 hover:bg-[#D4A537]/15 cursor-pointer"
                   >
                     {item.status === 'published' ? 'Move to Draft' : 'Publish'}
                   </button>

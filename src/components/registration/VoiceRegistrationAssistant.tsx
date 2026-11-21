@@ -299,10 +299,10 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
       aria-label="Multilingual Voice Registration Assistant"
       className="mb-3 rounded-2xl border border-[#D6A447]/60 bg-[#17233A] text-[#FFFDF7] shadow-[0_12px_30px_rgba(16,20,38,0.28)] overflow-hidden"
     >
-      <div className="px-3.5 py-2.5 flex items-center justify-between gap-2 bg-[#10182B]/70 border-b border-[#C9A04E]/25">
+      <div className="px-3.5 py-2.5 flex items-center justify-between gap-2 bg-[#10182B]/70 border-b border-[#D4A537]/25">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="inline-flex w-2 h-2 rounded-full bg-[#F0D38B] shrink-0" />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#F0D38B] truncate">
+          <span className="inline-flex w-2 h-2 rounded-full bg-[#F7D774] shrink-0" />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#F7D774] truncate">
             {locale === 'hi'
               ? 'गौरी · पंजीकरण सहायक (वैकल्पिक)'
               : locale === 'te'
@@ -317,7 +317,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
             data-testid="voice-locale-cycle"
             onClick={() => onLocaleChange(nextLocale())}
             aria-label="Switch voice assistant language"
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-[#C9A04E]/45 text-[10px] font-semibold uppercase text-[#F0D38B] hover:bg-[#C9A04E]/15 cursor-pointer"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-[#D4A537]/45 text-[10px] font-semibold uppercase text-[#F7D774] hover:bg-[#D4A537]/15 cursor-pointer"
           >
             <Languages className="w-3 h-3" aria-hidden="true" />
             <span>{locale.toUpperCase()}</span>
@@ -328,7 +328,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
             aria-label={expanded ? 'Collapse voice assistant' : 'Expand voice assistant'}
-            className="p-1 rounded-full border border-[#C9A04E]/35 text-[#F0D38B] hover:bg-[#C9A04E]/15 cursor-pointer"
+            className="p-1 rounded-full border border-[#D4A537]/35 text-[#F7D774] hover:bg-[#D4A537]/15 cursor-pointer"
           >
             {expanded ? (
               <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" />
@@ -356,15 +356,15 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
           {pendingConfirmation && (
             <div
               data-testid="voice-email-phone-confirmation"
-              className="rounded-lg border border-[#F0D38B]/50 bg-[#202F4C] px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-[11px]"
+              className="rounded-lg border border-[#F7D774]/50 bg-[#202F4C] px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-[11px]"
             >
-              <span className="text-[#F0D38B]">
+              <span className="text-[#F7D774]">
                 Confirm readback: <strong className="text-white">{pendingConfirmation}</strong>
               </span>
               <button
                 type="button"
                 onClick={() => setPendingConfirmation(null)}
-                className="px-2.5 py-0.5 rounded-full bg-[#C9A04E] text-[#171717] font-semibold text-[10px] uppercase cursor-pointer"
+                className="px-2.5 py-0.5 rounded-full bg-[#D4A537] text-[#171717] font-semibold text-[10px] uppercase cursor-pointer"
               >
                 Looks Correct
               </button>
@@ -381,7 +381,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
                 className={`min-h-[34px] px-2.5 rounded-lg border flex items-center gap-1.5 text-[11px] font-medium transition-colors cursor-pointer shrink-0 ${
                   listening
                     ? 'border-red-400 bg-red-500/20 text-red-100'
-                    : 'border-[#C9A04E]/50 text-[#F0D38B] hover:bg-[#C9A04E]/15'
+                    : 'border-[#D4A537]/50 text-[#F7D774] hover:bg-[#D4A537]/15'
                 }`}
               >
                 {listening ? (
@@ -412,7 +412,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
                     ? 'उदा: मेरा नाम रमेश, email ramesh@example.com, हैदराबाद'
                     : 'e.g. My name is Ananya, email ananya@org.in, Hyderabad India'
               }
-              className="flex-1 min-w-0 min-h-[34px] px-3 rounded-lg border border-[#C9A04E]/40 bg-[#0F172A] text-xs text-[#FFFDF7] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#F0D38B]"
+              className="flex-1 min-w-0 min-h-[34px] px-3 rounded-lg border border-[#D4A537]/40 bg-[#0F172A] text-xs text-[#FFFDF7] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#F7D774]"
             />
 
             <button
@@ -421,7 +421,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
               disabled={busy || !utteranceText.trim()}
               onClick={() => void submitUtterance(utteranceText)}
               aria-label="Send message to registration assistant"
-              className="min-h-[34px] px-3 rounded-lg bg-[#C9A04E] text-[#171717] text-xs font-semibold inline-flex items-center gap-1 hover:bg-[#F0D38B] disabled:opacity-50 cursor-pointer shrink-0"
+              className="min-h-[34px] px-3 rounded-lg bg-[#D4A537] text-[#171717] text-xs font-semibold inline-flex items-center gap-1 hover:bg-[#F7D774] disabled:opacity-50 cursor-pointer shrink-0"
             >
               <Send className="w-3 h-3" aria-hidden="true" />
               <span>Apply</span>
@@ -438,7 +438,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
                     ? stopAudio()
                     : void speakText(getVoiceStepPrompt(currentStep, locale), locale)
                 }
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#C9A04E]/40 text-[#F0D38B] hover:bg-[#C9A04E]/15 cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#D4A537]/40 text-[#F7D774] hover:bg-[#D4A537]/15 cursor-pointer"
               >
                 {speaking ? (
                   <VolumeX className="w-3 h-3" aria-hidden="true" />
@@ -451,7 +451,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
               <button
                 type="button"
                 onClick={() => void submitUtterance('Repeat')}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#C9A04E]/35 text-[#E9DCC5] hover:text-white cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#D4A537]/35 text-[#E9DCC5] hover:text-white cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" aria-hidden="true" />
                 <span>Repeat</span>
@@ -461,7 +461,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
                 <button
                   type="button"
                   onClick={() => onStepCommand('skip')}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#C9A04E]/35 text-[#E9DCC5] hover:text-white cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#D4A537]/35 text-[#E9DCC5] hover:text-white cursor-pointer"
                 >
                   <SkipForward className="w-3 h-3" aria-hidden="true" />
                   <span>Skip Step</span>
@@ -473,7 +473,7 @@ export const VoiceRegistrationAssistant: React.FC<VoiceRegistrationAssistantProp
                   type="button"
                   data-testid="voice-step8-readback"
                   onClick={handleReadStep8Summary}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C9A04E]/25 border border-[#F0D38B]/60 text-[#F0D38B] hover:bg-[#C9A04E]/35 cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#D4A537]/25 border border-[#F7D774]/60 text-[#F7D774] hover:bg-[#D4A537]/35 cursor-pointer"
                 >
                   <Volume2 className="w-3 h-3" aria-hidden="true" />
                   <span>Read Full Summary</span>

@@ -134,7 +134,7 @@ export const GitaPage: React.FC = () => {
         <PublishedBlocksRenderer blocks={pageDetails.extraBlocks} locale={contentLocale} />
 
         {/* Interactive 3D Bhagavad Gita Book + Indian Voice Assistant */}
-        <section className="py-14 sm:py-20 bg-[#0E1523] text-[#FFFDF7] border-b border-[#C9A04E]/25">
+        <section className="py-14 sm:py-20 bg-[#0E1523] text-[#FFFDF7] border-b border-[#D4A537]/25">
           <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12">
             <InteractiveGitaBook3D initialChapter={selectedChapterNum} />
           </div>

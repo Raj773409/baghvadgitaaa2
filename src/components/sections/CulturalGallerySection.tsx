@@ -106,8 +106,8 @@ export const CulturalGallerySection: React.FC<{
                   onClick={() => setCategory(cat.id)}
                   className={`min-h-[38px] px-4 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer whitespace-nowrap ${
                     active
-                      ? 'bg-[#17233A] text-[#F0D38B] border-[#17233A] dark:bg-[#C9A04E] dark:text-[#171717] dark:border-[#C9A04E]'
-                      : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[#C9A04E] hover:text-[var(--color-ink)]'
+                      ? 'bg-[#17233A] text-[#F7D774] border-[#17233A] dark:bg-[#D4A537] dark:text-[#171717] dark:border-[#D4A537]'
+                      : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[#D4A537] hover:text-[var(--color-ink)]'
                   }`}
                 >
                   {cat.label}
@@ -123,7 +123,7 @@ export const CulturalGallerySection: React.FC<{
             <article
               key={item.id}
               data-testid={`cultural-card-${item.id}`}
-              className="group rounded-xl overflow-hidden bg-[var(--surface-elevated)] border border-[var(--color-border)] hover:border-[#C9A04E] transition-colors flex flex-col justify-between"
+              className="group rounded-xl overflow-hidden bg-[var(--surface-elevated)] border border-[var(--color-border)] hover:border-[#D4A537] transition-colors flex flex-col justify-between"
             >
               <div>
                 <button
@@ -143,7 +143,7 @@ export const CulturalGallerySection: React.FC<{
                   />
                   <span
                     aria-hidden="true"
-                    className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#17233A]/85 text-[#F0D38B] text-[11px] font-medium border border-[#C9A04E]/45"
+                    className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#17233A]/85 text-[#F7D774] text-[11px] font-medium border border-[#D4A537]/45"
                   >
                     <Expand className="w-3 h-3" />
                     <span>Inspect Plate</span>
@@ -185,7 +185,7 @@ export const CulturalGallerySection: React.FC<{
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-4xl rounded-2xl overflow-hidden bg-[#17233A] border border-[#C9A04E]/45 text-[#FFFDF7] shadow-2xl grid grid-cols-1 lg:grid-cols-12"
+            className="w-full max-w-4xl rounded-2xl overflow-hidden bg-[#17233A] border border-[#D4A537]/45 text-[#FFFDF7] shadow-2xl grid grid-cols-1 lg:grid-cols-12"
           >
             <div className="lg:col-span-7 bg-[#0B111C] flex items-center justify-center">
               <img
@@ -197,14 +197,14 @@ export const CulturalGallerySection: React.FC<{
             <div className="lg:col-span-5 p-6 flex flex-col justify-between gap-5">
               <div className="space-y-4">
                 <div className="flex items-start justify-between gap-3">
-                  <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#F0D38B]">
+                  <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#F7D774]">
                     {selectedArtwork.publicationStatus}
                   </p>
                   <button
                     type="button"
                     onClick={() => setSelectedArtwork(null)}
                     aria-label="Close plate details"
-                    className="p-1.5 rounded-full border border-[#C9A04E]/40 hover:border-[#F0D38B] cursor-pointer"
+                    className="p-1.5 rounded-full border border-[#D4A537]/40 hover:border-[#F7D774] cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -217,17 +217,17 @@ export const CulturalGallerySection: React.FC<{
                   {selectedArtwork.description}
                 </p>
 
-                <dl className="pt-3 border-t border-[#C9A04E]/25 space-y-2 text-xs">
+                <dl className="pt-3 border-t border-[#D4A537]/25 space-y-2 text-xs">
                   <div>
-                    <dt className="text-[#C9A04E] uppercase tracking-[0.12em]">Source Archive</dt>
+                    <dt className="text-[#D4A537] uppercase tracking-[0.12em]">Source Archive</dt>
                     <dd className="text-[#FFFDF7]/90">{selectedArtwork.source}</dd>
                   </div>
                   <div>
-                    <dt className="text-[#C9A04E] uppercase tracking-[0.12em]">Languages / Script</dt>
+                    <dt className="text-[#D4A537] uppercase tracking-[0.12em]">Languages / Script</dt>
                     <dd className="text-[#FFFDF7]/90">{selectedArtwork.language}</dd>
                   </div>
                   <div>
-                    <dt className="text-[#C9A04E] uppercase tracking-[0.12em]">Rights & Attribution</dt>
+                    <dt className="text-[#D4A537] uppercase tracking-[0.12em]">Rights & Attribution</dt>
                     <dd className="text-[#FFFDF7]/90">{selectedArtwork.copyright}</dd>
                   </div>
                 </dl>

@@ -238,7 +238,7 @@ export const AdminGitaStudioPanel: React.FC<AdminGitaStudioPanelProps> = ({
             onClick={() => setTab('chapters')}
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer whitespace-nowrap ${
               tab === 'chapters'
-                ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                 : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'
             }`}
           >
@@ -253,7 +253,7 @@ export const AdminGitaStudioPanel: React.FC<AdminGitaStudioPanelProps> = ({
             onClick={() => setTab('verses')}
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer whitespace-nowrap ${
               tab === 'verses'
-                ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                 : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'
             }`}
           >
@@ -281,8 +281,8 @@ export const AdminGitaStudioPanel: React.FC<AdminGitaStudioPanelProps> = ({
                   onClick={() => setSelectedChapterNum(ch.chapterNumber)}
                   className={`w-full text-left p-3.5 transition-colors cursor-pointer flex items-center justify-between gap-2 ${
                     active
-                      ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62]/20 dark:text-[#FFFDF8]'
-                      : 'hover:bg-[#D5AF62]/10'
+                      ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537]/20 dark:text-[#FFFDF8]'
+                      : 'hover:bg-[#D4A537]/10'
                   }`}
                 >
                   <div className="min-w-0">

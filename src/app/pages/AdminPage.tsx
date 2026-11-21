@@ -138,8 +138,8 @@ const ForcedPasswordChangeScreen: React.FC<{ onSuccess: () => void }> = ({ onSuc
 
   return (
     <div className="min-h-screen bg-[#0D1422] text-[#FFFDF8] flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-2xl border border-[#D5AF62]/35 bg-[#131B2C] p-6 sm:p-8 shadow-[0_24px_60px_rgba(11,17,28,0.55)]">
-        <ShieldAlert className="w-8 h-8 text-[#F5E2B5] mb-3" />
+      <div className="w-full max-w-md rounded-2xl border border-[#D4A537]/35 bg-[#131B2C] p-6 sm:p-8 shadow-[0_24px_60px_rgba(11,17,28,0.55)]">
+        <ShieldAlert className="w-8 h-8 text-[#F7D774] mb-3" />
         <h1 className="font-editorial text-xl sm:text-2xl text-[#FFFDF8] mb-1.5">
           Password Change Required
         </h1>
@@ -149,7 +149,7 @@ const ForcedPasswordChangeScreen: React.FC<{ onSuccess: () => void }> = ({ onSuc
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="currentPassword" className="block text-xs uppercase tracking-[0.12em] text-[#D5AF62] mb-1.5">
+            <label htmlFor="currentPassword" className="block text-xs uppercase tracking-[0.12em] text-[#D4A537] mb-1.5">
               Current (temporary) password
             </label>
             <input
@@ -159,11 +159,11 @@ const ForcedPasswordChangeScreen: React.FC<{ onSuccess: () => void }> = ({ onSuc
               autoComplete="current-password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full min-h-[44px] px-3 rounded-lg border border-[#D5AF62]/40 bg-[#0D1422]/60 text-sm text-[#FFFDF8] focus:outline-none focus:border-[#F5E2B5]"
+              className="w-full min-h-[44px] px-3 rounded-lg border border-[#D4A537]/40 bg-[#0D1422]/60 text-sm text-[#FFFDF8] focus:outline-none focus:border-[#F7D774]"
             />
           </div>
           <div>
-            <label htmlFor="newPassword" className="block text-xs uppercase tracking-[0.12em] text-[#D5AF62] mb-1.5">
+            <label htmlFor="newPassword" className="block text-xs uppercase tracking-[0.12em] text-[#D4A537] mb-1.5">
               New password (minimum 12 characters)
             </label>
             <input
@@ -174,11 +174,11 @@ const ForcedPasswordChangeScreen: React.FC<{ onSuccess: () => void }> = ({ onSuc
               autoComplete="new-password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full min-h-[44px] px-3 rounded-lg border border-[#D5AF62]/40 bg-[#0D1422]/60 text-sm text-[#FFFDF8] focus:outline-none focus:border-[#F5E2B5]"
+              className="w-full min-h-[44px] px-3 rounded-lg border border-[#D4A537]/40 bg-[#0D1422]/60 text-sm text-[#FFFDF8] focus:outline-none focus:border-[#F7D774]"
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-xs uppercase tracking-[0.12em] text-[#D5AF62] mb-1.5">
+            <label htmlFor="confirmPassword" className="block text-xs uppercase tracking-[0.12em] text-[#D4A537] mb-1.5">
               Confirm new password
             </label>
             <input
@@ -189,14 +189,14 @@ const ForcedPasswordChangeScreen: React.FC<{ onSuccess: () => void }> = ({ onSuc
               autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full min-h-[44px] px-3 rounded-lg border border-[#D5AF62]/40 bg-[#0D1422]/60 text-sm text-[#FFFDF8] focus:outline-none focus:border-[#F5E2B5]"
+              className="w-full min-h-[44px] px-3 rounded-lg border border-[#D4A537]/40 bg-[#0D1422]/60 text-sm text-[#FFFDF8] focus:outline-none focus:border-[#F7D774]"
             />
           </div>
           {error && <p className="text-sm text-rose-300">{error}</p>}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full min-h-[44px] rounded-lg bg-[#D5AF62] text-[#17233A] font-semibold text-sm disabled:opacity-60 cursor-pointer"
+            className="w-full min-h-[44px] rounded-lg bg-[#D4A537] text-[#17233A] font-semibold text-sm disabled:opacity-60 cursor-pointer"
           >
             {submitting ? 'Updating…' : 'Set Permanent Password'}
           </button>
@@ -604,7 +604,7 @@ const AdminPage: React.FC = () => {
   if (sessionState === 'loading') {
     return (
       <div className="min-h-screen bg-[#0D1422] text-[#FFFDF8] flex items-center justify-center">
-        <p className="font-editorial text-lg text-[#F5E2B5]">Verifying Secretariat Session…</p>
+        <p className="font-editorial text-lg text-[#F7D774]">Verifying Secretariat Session…</p>
       </div>
     );
   }
@@ -637,27 +637,27 @@ const AdminPage: React.FC = () => {
   return (
     <div className="admin-executive-theme min-h-screen flex flex-col bg-[var(--color-canvas)] text-[var(--color-ink)]">
       {/* Executive Command Header */}
-      <header className="sticky top-0 z-30 h-16 bg-[#17233A] text-[#FFFDF8] border-b border-[#D5AF62]/35 px-4 sm:px-6 flex items-center justify-between gap-3 print:hidden">
+      <header className="sticky top-0 z-30 h-16 bg-[#17233A] text-[#FFFDF8] border-b border-[#D4A537]/35 px-4 sm:px-6 flex items-center justify-between gap-3 print:hidden">
         <div className="flex items-center gap-3 min-w-0">
           <button
             type="button"
             aria-label="Toggle admin navigation"
             onClick={() => setMobileNavOpen((prev) => !prev)}
-            className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg border border-[#D5AF62]/40 text-[#F5E2B5] cursor-pointer"
+            className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg border border-[#D4A537]/40 text-[#F7D774] cursor-pointer"
           >
             {mobileNavOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
 
-          <ShieldCheck className="w-5 h-5 text-[#F5E2B5] shrink-0" />
+          <ShieldCheck className="w-5 h-5 text-[#F7D774] shrink-0" />
           <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D5AF62] truncate">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D4A537] truncate">
               Mahotsav 2027 · Command Centre
             </p>
             <p className="font-editorial text-base sm:text-lg truncate">{user.name}</p>
           </div>
           <span
             data-testid="admin-active-role"
-            className="hidden sm:inline-flex px-2.5 py-0.5 rounded border border-[#D5AF62]/50 text-[10px] font-mono uppercase text-[#F5E2B5]"
+            className="hidden sm:inline-flex px-2.5 py-0.5 rounded border border-[#D4A537]/50 text-[10px] font-mono uppercase text-[#F7D774]"
           >
             {user.role}
           </span>
@@ -665,7 +665,7 @@ const AdminPage: React.FC = () => {
 
         {/* Global Search Input */}
         <div className="hidden md:block relative flex-1 max-w-sm">
-          <Search className="w-3.5 h-3.5 text-[#D5AF62] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-[#D4A537] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="search"
             value={globalSearch}
@@ -673,7 +673,7 @@ const AdminPage: React.FC = () => {
             data-testid="admin-global-search"
             placeholder="Jump to page route (/about, /gita) or module…"
             aria-label="Search modules and public routes"
-            className="w-full min-h-[36px] pl-8 pr-3 rounded-lg border border-[#D5AF62]/40 bg-[#0D1422]/60 text-xs text-[#FFFDF8] placeholder:text-[#EAE3D6]/60 focus:outline-none focus:border-[#F5E2B5]"
+            className="w-full min-h-[36px] pl-8 pr-3 rounded-lg border border-[#D4A537]/40 bg-[#0D1422]/60 text-xs text-[#FFFDF8] placeholder:text-[#EAE3D6]/60 focus:outline-none focus:border-[#F7D774]"
           />
           {globalSearch.trim() && (
             <div className="absolute left-0 right-0 mt-1.5 rounded-xl border border-[var(--color-border)] bg-[var(--surface-elevated)] text-[var(--color-ink)] shadow-[0_18px_40px_rgba(11,17,28,0.45)] p-2 z-50 space-y-2 text-xs">
@@ -692,7 +692,7 @@ const AdminPage: React.FC = () => {
                           key={p.id}
                           type="button"
                           onClick={() => handleOpenPageInBuilder(p.id)}
-                          className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#D5AF62]/15 flex items-center justify-between gap-2 cursor-pointer"
+                          className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#D4A537]/15 flex items-center justify-between gap-2 cursor-pointer"
                         >
                           <span className="font-medium truncate">{p.name}</span>
                           <span className="font-mono text-[11px] text-[var(--color-muted)]">
@@ -712,7 +712,7 @@ const AdminPage: React.FC = () => {
                           key={m.id}
                           type="button"
                           onClick={() => handleSelectModule(m.id)}
-                          className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#D5AF62]/15 flex items-center justify-between gap-2 cursor-pointer"
+                          className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#D4A537]/15 flex items-center justify-between gap-2 cursor-pointer"
                         >
                           <span className="font-medium">{m.label}</span>
                           <span className="font-mono text-[11px] text-[var(--color-muted)]">
@@ -737,11 +737,11 @@ const AdminPage: React.FC = () => {
               data-testid="admin-notifications-btn"
               aria-label="Secretariat Notifications"
               onClick={() => setNotifOpen((prev) => !prev)}
-              className="relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-[#D5AF62]/45 text-[#F5E2B5] hover:bg-[#D5AF62]/15 cursor-pointer"
+              className="relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-[#D4A537]/45 text-[#F7D774] hover:bg-[#D4A537]/15 cursor-pointer"
             >
               <Bell className="w-4 h-4" />
               {notifications.length > 0 && (
-                <span className=" -top-1.5 -right-1.5 absolute min-w-[18px] h-[18px] px-1 rounded-full bg-[#D5AF62] text-[#171717] text-[10px] font-mono font-bold flex items-center justify-center tabular-nums">
+                <span className=" -top-1.5 -right-1.5 absolute min-w-[18px] h-[18px] px-1 rounded-full bg-[#D4A537] text-[#171717] text-[10px] font-mono font-bold flex items-center justify-center tabular-nums">
                   {notifications.length}
                 </span>
               )}
@@ -782,7 +782,7 @@ const AdminPage: React.FC = () => {
                             setNotifOpen(false);
                           }
                         }}
-                        className="w-full text-left px-4 py-3 hover:bg-[#D5AF62]/10 space-y-1 cursor-pointer"
+                        className="w-full text-left px-4 py-3 hover:bg-[#D4A537]/10 space-y-1 cursor-pointer"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-xs font-semibold text-[var(--color-ink)]">
@@ -808,7 +808,7 @@ const AdminPage: React.FC = () => {
 
           <Link
             to="/"
-            className="hidden md:inline-flex items-center gap-1.5 min-h-[36px] px-3 rounded-lg border border-[#D5AF62]/40 text-xs text-[#EAE3D6] hover:border-[#F5E2B5]"
+            className="hidden md:inline-flex items-center gap-1.5 min-h-[36px] px-3 rounded-lg border border-[#D4A537]/40 text-xs text-[#EAE3D6] hover:border-[#F7D774]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Public Site</span>
@@ -817,7 +817,7 @@ const AdminPage: React.FC = () => {
             type="button"
             data-testid="admin-logout-btn"
             onClick={() => void handleLogout()}
-            className="inline-flex items-center gap-1.5 min-h-[36px] px-3 rounded-lg border border-[#D5AF62]/45 text-xs font-medium text-[#F5E2B5] hover:bg-[#D5AF62]/15 cursor-pointer"
+            className="inline-flex items-center gap-1.5 min-h-[36px] px-3 rounded-lg border border-[#D4A537]/45 text-xs font-medium text-[#F7D774] hover:bg-[#D4A537]/15 cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Sign Out</span>
@@ -851,8 +851,8 @@ const AdminPage: React.FC = () => {
                         onClick={() => handleSelectModule(item.id)}
                         className={`text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap cursor-pointer ${
                           active
-                            ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
-                            : 'text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:bg-[#D5AF62]/10'
+                            ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
+                            : 'text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:bg-[#D4A537]/10'
                         }`}
                       >
                         {item.label}
@@ -879,7 +879,7 @@ const AdminPage: React.FC = () => {
             <button
               type="button"
               onClick={() => void loadModuleData(activeModule, permissions, dashboardRange)}
-              className="inline-flex items-center gap-1.5 min-h-[36px] px-3.5 rounded-lg border border-[var(--color-border)] text-xs hover:border-[#D5AF62] cursor-pointer print:hidden"
+              className="inline-flex items-center gap-1.5 min-h-[36px] px-3.5 rounded-lg border border-[var(--color-border)] text-xs hover:border-[#D4A537] cursor-pointer print:hidden"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${moduleLoading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -910,7 +910,7 @@ const AdminPage: React.FC = () => {
                 <Link
                   to="/admin/access-denied"
                   state={{ reason: moduleForbidden }}
-                  className="px-4 py-1.5 rounded-lg border border-[#D5AF62]/55 text-xs font-medium"
+                  className="px-4 py-1.5 rounded-lg border border-[#D4A537]/55 text-xs font-medium"
                 >
                   View Access Details
                 </Link>
@@ -943,7 +943,7 @@ const AdminPage: React.FC = () => {
               data-testid="admin-module-loading"
               className="rounded-xl border border-[var(--color-border)] bg-[var(--surface-elevated)] p-10 flex items-center justify-center gap-3 text-xs text-[var(--color-muted)]"
             >
-              <Loader2 className="w-4 h-4 animate-spin text-[#D5AF62]" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#D4A537]" />
               <span>Loading {currentGroupItem?.label ?? activeModule} records…</span>
             </div>
           )}

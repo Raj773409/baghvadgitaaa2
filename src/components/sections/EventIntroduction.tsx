@@ -97,14 +97,14 @@ export const EventIntroduction: React.FC = () => {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/story"
-              className="inline-flex items-center gap-2 min-h-[40px] px-5 py-2 rounded-full bg-[#17233A] text-[#FFFDF7] hover:bg-[#0D1322] dark:bg-[#C9A04E] dark:text-[#171717] text-xs font-semibold uppercase tracking-[0.06em] transition-colors"
+              className="inline-flex items-center gap-2 min-h-[40px] px-5 py-2 rounded-full bg-[#17233A] text-[#FFFDF7] hover:bg-[#0D1322] dark:bg-[#D4A537] dark:text-[#171717] text-xs font-semibold uppercase tracking-[0.06em] transition-colors"
             >
               <span>Experience 3D Story</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
             </Link>
             <Link
               to="/gita"
-              className="inline-flex items-center gap-2 min-h-[40px] px-5 py-2 rounded-full border border-[#C9A04E]/60 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--color-ink)] hover:bg-[#C9A04E]/15 transition-colors"
+              className="inline-flex items-center gap-2 min-h-[40px] px-5 py-2 rounded-full border border-[#D4A537]/60 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--color-ink)] hover:bg-[#D4A537]/15 transition-colors"
             >
               <span>Open 3D Gita Book</span>
             </Link>

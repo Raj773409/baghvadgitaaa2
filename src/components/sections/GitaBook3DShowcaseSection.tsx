@@ -15,8 +15,8 @@ interface GitaBook3DShowcaseSectionProps {
 }
 
 const BookShowcasePlaceholder: React.FC = () => (
-  <div className="h-[460px] rounded-2xl border border-[#C9A04E]/35 bg-[#17233A] text-[#F0D38B] flex flex-col items-center justify-center gap-3">
-    <div className="w-8 h-8 rounded-full border-2 border-[#C9A04E]/40 border-t-[#F0D38B] animate-spin" />
+  <div className="h-[460px] rounded-2xl border border-[#D4A537]/35 bg-[radial-gradient(ellipse_at_50%_40%,#2A3A5C_0%,#17233A_45%,#0B111C_100%)] text-[#F7D774] flex flex-col items-center justify-center gap-3">
+    <div className="w-8 h-8 rounded-full border-2 border-[#D4A537]/40 border-t-[#F7D774] animate-spin" />
     <p className="text-xs tracking-[0.16em] uppercase">
       Preparing 3D Sacred Gita Collector Edition…
     </p>
@@ -53,7 +53,8 @@ export const GitaBook3DShowcaseSection: React.FC<GitaBook3DShowcaseSectionProps>
               id="gita-3d-book-heading"
               className="font-editorial text-3xl sm:text-4xl font-normal text-[var(--color-ink)]"
             >
-              Experience the Living 3D Bhagavad Gita
+              Experience the Living 3D{' '}
+              <span className="royal-gold-gradient-text-deep font-medium">Bhagavad Gita</span>
             </h2>
             <p className="text-sm sm:text-base text-[var(--color-muted)] leading-relaxed">
               Turn sculpted parchment folios, inspect the Royal Gold lotus binding from 360 degrees, switch effortlessly between Sanskrit, Telugu, Hindi, and English, and listen with the Indian Voice Assistant.

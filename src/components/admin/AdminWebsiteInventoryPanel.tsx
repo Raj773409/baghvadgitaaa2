@@ -200,7 +200,7 @@ export const AdminWebsiteInventoryPanel: React.FC<AdminWebsiteInventoryPanelProp
                 }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   active
-                    ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                    ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                     : 'bg-[var(--color-canvas)] text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                 }`}
               >
@@ -237,7 +237,7 @@ export const AdminWebsiteInventoryPanel: React.FC<AdminWebsiteInventoryPanelProp
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
                 {paged.items.map((pg) => (
-                  <tr key={pg.id} data-testid={`inventory-row-${pg.id}`} className="hover:bg-[#D5AF62]/5">
+                  <tr key={pg.id} data-testid={`inventory-row-${pg.id}`} className="hover:bg-[#D4A537]/5">
                     <td className="p-3.5">
                       <p className="font-semibold text-[var(--color-ink)]">{pg.name}</p>
                       <p className="text-[11px] text-[var(--color-muted)] truncate max-w-xs">
@@ -269,7 +269,7 @@ export const AdminWebsiteInventoryPanel: React.FC<AdminWebsiteInventoryPanelProp
                           type="button"
                           data-testid={`edit-page-btn-${pg.id}`}
                           onClick={() => onEditPage(pg.id)}
-                          className="inline-flex items-center gap-1 min-h-[32px] px-3 rounded-lg border border-[#A77B37]/45 text-[var(--color-ink)] hover:bg-[#D5AF62]/15 cursor-pointer whitespace-nowrap"
+                          className="inline-flex items-center gap-1 min-h-[32px] px-3 rounded-lg border border-[#9C6B1E]/45 text-[var(--color-ink)] hover:bg-[#D4A537]/15 cursor-pointer whitespace-nowrap"
                         >
                           <PenSquare className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
                           <span>Edit in Studio</span>

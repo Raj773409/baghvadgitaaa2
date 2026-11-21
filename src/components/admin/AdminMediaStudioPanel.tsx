@@ -464,7 +464,7 @@ export const AdminMediaStudioPanel: React.FC<AdminMediaStudioPanelProps> = ({
                 }}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   active
-                    ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                    ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                     : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                 }`}
               >
@@ -499,7 +499,7 @@ export const AdminMediaStudioPanel: React.FC<AdminMediaStudioPanelProps> = ({
               }}
               className={`rounded-xl border-2 border-dashed p-5 flex flex-wrap items-center justify-between gap-4 transition-colors ${
                 dragActive
-                  ? 'border-[var(--color-bronze)] bg-[#D5AF62]/15'
+                  ? 'border-[var(--color-bronze)] bg-[#D4A537]/15'
                   : 'border-[var(--color-border)] bg-[var(--surface-elevated)]'
               }`}
             >
@@ -605,7 +605,7 @@ export const AdminMediaStudioPanel: React.FC<AdminMediaStudioPanelProps> = ({
                   }}
                   className={`px-2.5 py-1 rounded text-xs capitalize cursor-pointer ${
                     categoryFilter === cat
-                      ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717] font-semibold'
+                      ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717] font-semibold'
                       : 'bg-[var(--color-canvas)] text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                   }`}
                 >
@@ -803,7 +803,7 @@ export const AdminMediaStudioPanel: React.FC<AdminMediaStudioPanelProps> = ({
                   disabled={savingCarousel}
                   data-testid="carousel-save-draft-btn"
                   onClick={() => void saveCarousel('draft')}
-                  className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 rounded-lg border border-[#A77B37]/60 text-xs font-semibold cursor-pointer"
+                  className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 rounded-lg border border-[#9C6B1E]/60 text-xs font-semibold cursor-pointer"
                 >
                   <Save className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
                   <span>Save Draft</span>

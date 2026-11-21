@@ -72,7 +72,7 @@ export const RegistrationStepIndicator: React.FC<RegistrationStepIndicatorProps>
                 <span
                   className={`w-full h-1.5 rounded-full transition-colors ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#C9A04E] to-[#8F6018]'
+                      ? 'bg-gradient-to-r from-[#D4A537] to-[#8F6018]'
                       : isCompleted
                         ? 'bg-[#2E6F40]'
                         : 'bg-[#D6C3A5]/70'

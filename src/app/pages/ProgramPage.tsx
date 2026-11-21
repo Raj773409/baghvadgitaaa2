@@ -202,7 +202,7 @@ export const ProgramPage: React.FC = () => {
                     onClick={() => setFilter(tab.id)}
                     className={`min-h-[40px] py-2 text-xs font-medium border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                       active
-                        ? 'border-[#C9A04E] text-[var(--color-ink)]'
+                        ? 'border-[#D4A537] text-[var(--color-ink)]'
                         : 'border-transparent text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                     }`}
                   >

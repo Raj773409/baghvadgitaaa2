@@ -53,7 +53,7 @@ export const ParticipationSection: React.FC = () => {
             <div className="flex items-center justify-center gap-5">
               <span
                 aria-hidden="true"
-                className="hidden sm:block h-px w-16 md:w-24 bg-gradient-to-r from-transparent to-[#C9A04E]/65"
+                className="hidden sm:block h-px w-16 md:w-24 bg-gradient-to-r from-transparent to-[#D4A537]/65"
               />
               <h2
                 id="participation-heading"
@@ -63,7 +63,7 @@ export const ParticipationSection: React.FC = () => {
               </h2>
               <span
                 aria-hidden="true"
-                className="hidden sm:block h-px w-16 md:w-24 bg-gradient-to-l from-transparent to-[#C9A04E]/65"
+                className="hidden sm:block h-px w-16 md:w-24 bg-gradient-to-l from-transparent to-[#D4A537]/65"
               />
             </div>
 
@@ -124,11 +124,11 @@ export const ParticipationSection: React.FC = () => {
           <div className="lg:col-span-3 flex flex-col items-center lg:items-end gap-3">
             <Link
               to="/participate/register"
-              className="group inline-flex items-center justify-center gap-3 min-h-[48px] px-8 py-3.5 rounded-full bg-[#17233A] dark:bg-[#C9A04E] text-[#FFFDF7] dark:text-[#171717] hover:bg-[#171717] dark:hover:bg-[#F0D38B] text-sm font-medium tracking-[0.02em] shadow-[0_10px_28px_rgba(23,24,23,0.16)] transition-colors duration-200 whitespace-nowrap shrink-0"
+              className="group inline-flex items-center justify-center gap-3 min-h-[48px] px-8 py-3.5 rounded-full bg-[#17233A] dark:bg-[#D4A537] text-[#FFFDF7] dark:text-[#171717] hover:bg-[#171717] dark:hover:bg-[#F7D774] text-sm font-medium tracking-[0.02em] shadow-[0_10px_28px_rgba(23,24,23,0.16)] transition-colors duration-200 whitespace-nowrap shrink-0"
             >
               <span>{t('participation.cta')}</span>
               <ArrowRight
-                className="w-4 h-4 text-[#F0D38B] dark:text-[#171717] transition-transform duration-200 group-hover:translate-x-1"
+                className="w-4 h-4 text-[#F7D774] dark:text-[#171717] transition-transform duration-200 group-hover:translate-x-1"
                 aria-hidden="true"
               />
             </Link>

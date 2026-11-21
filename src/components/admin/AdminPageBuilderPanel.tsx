@@ -375,7 +375,7 @@ export const AdminPageBuilderPanel: React.FC<AdminPageBuilderPanelProps> = ({
                   onClick={() => setLocale(code)}
                   className={`px-3 py-1.5 rounded text-xs font-semibold uppercase cursor-pointer ${
                     locale === code
-                      ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                      ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                       : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                   }`}
                 >
@@ -417,7 +417,7 @@ export const AdminPageBuilderPanel: React.FC<AdminPageBuilderPanelProps> = ({
                 disabled={savingDraft || publishing}
                 data-testid="page-builder-save-draft-btn"
                 onClick={() => void handleSave('draft')}
-                className="inline-flex items-center gap-1.5 min-h-[38px] px-4 rounded-lg border border-[#A77B37]/60 text-xs font-semibold text-[var(--color-ink)] hover:bg-[#D5AF62]/15 cursor-pointer whitespace-nowrap disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 min-h-[38px] px-4 rounded-lg border border-[#9C6B1E]/60 text-xs font-semibold text-[var(--color-ink)] hover:bg-[#D4A537]/15 cursor-pointer whitespace-nowrap disabled:opacity-50"
               >
                 <Save className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
                 <span>{savingDraft ? 'Saving Draft…' : 'Save Draft'}</span>
@@ -554,7 +554,7 @@ export const AdminPageBuilderPanel: React.FC<AdminPageBuilderPanelProps> = ({
                 type="button"
                 data-testid="page-builder-add-block-btn"
                 onClick={addBlock}
-                className="inline-flex items-center gap-1.5 min-h-[36px] px-3.5 rounded-lg border border-[#A77B37]/55 text-xs font-semibold hover:bg-[#D5AF62]/15 cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 min-h-[36px] px-3.5 rounded-lg border border-[#9C6B1E]/55 text-xs font-semibold hover:bg-[#D4A537]/15 cursor-pointer whitespace-nowrap"
               >
                 <Plus className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
                 <span>Add Section Block</span>
@@ -884,7 +884,7 @@ export const AdminPageBuilderPanel: React.FC<AdminPageBuilderPanelProps> = ({
                     type="button"
                     data-testid={`restore-revision-${rev.id}`}
                     onClick={() => setRestoreTarget(rev)}
-                    className="inline-flex items-center gap-1.5 min-h-[32px] px-3 rounded-lg border border-[#A77B37]/45 text-xs hover:bg-[#D5AF62]/15 cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 min-h-[32px] px-3 rounded-lg border border-[#9C6B1E]/45 text-xs hover:bg-[#D4A537]/15 cursor-pointer whitespace-nowrap"
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
                     <span>Restore Snapshot</span>

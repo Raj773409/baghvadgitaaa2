@@ -213,8 +213,8 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
 
   const containerCls =
     tone === 'dark'
-      ? 'bg-[#17233A]/90 border border-[#C9A04E]/35 text-[#FFFDF7]'
-      : 'bg-[#FFFDF7] dark:bg-[#17233A] border border-[#C9A04E]/45 text-[var(--color-ink)]';
+      ? 'bg-[#17233A]/90 border border-[#D4A537]/35 text-[#FFFDF7]'
+      : 'bg-[#FFFDF7] dark:bg-[#17233A] border border-[#D4A537]/45 text-[var(--color-ink)]';
 
   return (
     <div
@@ -222,9 +222,9 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
       className={`rounded-xl p-4 sm:p-5 space-y-4 ${containerCls}`}
     >
       {/* Header Row: Title + Gender Voice Selector */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#C9A04E]/22">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#D4A537]/22">
         <div className="space-y-0.5 min-w-0">
-          <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#C9A04E]">
+          <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#D4A537]">
             Indian Sacred Voice Assistant · {title}
           </p>
           <p className="text-xs text-[#E9DCC5]/80 dark:text-[#C6BA9F] opacity-90">
@@ -237,7 +237,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
           <div
             role="group"
             aria-label="Select narrator voice gender"
-            className="inline-flex rounded-full border border-[#C9A04E]/40 p-0.5 bg-black/15"
+            className="inline-flex rounded-full border border-[#D4A537]/40 p-0.5 bg-black/15"
           >
             {(['female', 'male'] as const).map((g) => (
               <button
@@ -248,8 +248,8 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
                 onClick={() => setGender(g)}
                 className={`px-3 py-1 rounded-full text-[11px] font-medium uppercase tracking-[0.06em] transition-colors cursor-pointer ${
                   gender === g
-                    ? 'bg-[#C9A04E] text-[#171717]'
-                    : 'text-current/75 hover:text-[#F0D38B]'
+                    ? 'bg-[#D4A537] text-[#171717]'
+                    : 'text-current/75 hover:text-[#F7D774]'
                 }`}
               >
                 {g === 'female' ? 'Female Voice' : 'Male Voice'}
@@ -273,8 +273,8 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
               onClick={() => setLanguage(opt.id)}
               className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors cursor-pointer ${
                 active
-                  ? 'border-[#C9A04E] bg-[#C9A04E]/20 text-[#F0D38B]'
-                  : 'border-[#C9A04E]/25 opacity-75 hover:opacity-100'
+                  ? 'border-[#D4A537] bg-[#D4A537]/20 text-[#F7D774]'
+                  : 'border-[#D4A537]/25 opacity-75 hover:opacity-100'
               }`}
             >
               {opt.label}
@@ -285,7 +285,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
 
       {/* Synchronized Highlighting Captions */}
       <div
-        className="rounded-lg bg-black/15 dark:bg-black/30 border border-[#C9A04E]/20 p-3.5 space-y-1.5 max-h-40 overflow-y-auto"
+        className="rounded-lg bg-black/15 dark:bg-black/30 border border-[#D4A537]/20 p-3.5 space-y-1.5 max-h-40 overflow-y-auto"
         aria-live="polite"
       >
         {segments.map((line, i) => {
@@ -295,7 +295,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
               key={`${i}-${line.slice(0, 12)}`}
               className={`text-sm leading-relaxed transition-colors px-2 py-0.5 rounded ${
                 isCurrent
-                  ? 'bg-[#C9A04E]/25 text-[#F0D38B] font-medium'
+                  ? 'bg-[#D4A537]/25 text-[#F7D774] font-medium'
                   : 'opacity-80'
               }`}
             >
@@ -337,7 +337,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
             type="button"
             onClick={stopPlayback}
             aria-label="Stop narration"
-            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A04E]/40 hover:border-[#F0D38B] cursor-pointer"
+            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#D4A537]/40 hover:border-[#F7D774] cursor-pointer"
           >
             <Square className="w-3.5 h-3.5 fill-current" aria-hidden="true" />
           </button>
@@ -354,7 +354,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
             value={currentTime}
             onChange={(e) => handleScrub(Number(e.target.value))}
             aria-label="Audio progress"
-            className="w-full accent-[#C9A04E] cursor-pointer"
+            className="w-full accent-[#D4A537] cursor-pointer"
           />
           <span>{formatSec(duration)}</span>
         </div>
@@ -369,8 +369,8 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
               aria-pressed={speed === rate}
               className={`px-2 py-1 rounded border text-[11px] cursor-pointer ${
                 speed === rate
-                  ? 'border-[#C9A04E] bg-[#C9A04E]/25 text-[#F0D38B]'
-                  : 'border-[#C9A04E]/25 opacity-75 hover:opacity-100'
+                  ? 'border-[#D4A537] bg-[#D4A537]/25 text-[#F7D774]'
+                  : 'border-[#D4A537]/25 opacity-75 hover:opacity-100'
               }`}
             >
               {rate}x
@@ -384,7 +384,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
             type="button"
             onClick={() => setMuted((m) => !m)}
             aria-label={muted ? 'Unmute voice' : 'Mute voice'}
-            className="p-1.5 rounded hover:bg-[#C9A04E]/20 cursor-pointer"
+            className="p-1.5 rounded hover:bg-[#D4A537]/20 cursor-pointer"
           >
             {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
@@ -399,7 +399,7 @@ export const IndianVoiceAssistant: React.FC<IndianVoiceAssistantProps> = ({
               setVolume(Number(e.target.value));
             }}
             aria-label="Volume"
-            className="w-16 accent-[#C9A04E] cursor-pointer"
+            className="w-16 accent-[#D4A537] cursor-pointer"
           />
         </div>
       </div>

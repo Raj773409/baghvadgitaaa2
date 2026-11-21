@@ -380,13 +380,13 @@ export const RegistrationFormCard: React.FC<RegistrationFormCardProps> = ({
                           className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                             active
                               ? 'border-[#8F6018] bg-[#17233A] text-[#FFFDF7] shadow-sm'
-                              : 'border-[#D6C3A5] bg-white/85 text-[#24201C] hover:border-[#C9A04E]'
+                              : 'border-[#D6C3A5] bg-white/85 text-[#24201C] hover:border-[#D4A537]'
                           }`}
                         >
                           <p className="text-xs font-semibold">{lang.native}</p>
                           <p
                             className={`text-[10.5px] ${
-                              active ? 'text-[#F0D38B]' : 'text-[#6B6155]'
+                              active ? 'text-[#F7D774]' : 'text-[#6B6155]'
                             }`}
                           >
                             {lang.label}
@@ -423,11 +423,11 @@ export const RegistrationFormCard: React.FC<RegistrationFormCardProps> = ({
                           className={`p-3 rounded-xl border text-left flex items-center justify-between gap-2 transition-all cursor-pointer ${
                             active
                               ? 'border-[#8F6018] bg-[#17233A] text-[#FFFDF7]'
-                              : 'border-[#D6C3A5] bg-white/85 text-[#24201C] hover:border-[#C9A04E]'
+                              : 'border-[#D6C3A5] bg-white/85 text-[#24201C] hover:border-[#D4A537]'
                           }`}
                         >
                           <span className="text-xs font-semibold">{t(opt.labelKey)}</span>
-                          {active && <Check className="w-4 h-4 text-[#F0D38B] shrink-0" />}
+                          {active && <Check className="w-4 h-4 text-[#F7D774] shrink-0" />}
                         </button>
                       );
                     })}
@@ -1120,7 +1120,7 @@ export const RegistrationFormCard: React.FC<RegistrationFormCardProps> = ({
                         type="button"
                         data-testid="confirm-my-details-btn"
                         onClick={handleConfirmMyDetails}
-                        className="min-h-[42px] px-6 py-2 rounded-full bg-[#17233A] text-[#F0D38B] text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#223456] transition-colors cursor-pointer"
+                        className="min-h-[42px] px-6 py-2 rounded-full bg-[#17233A] text-[#F7D774] text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#223456] transition-colors cursor-pointer"
                       >
                         Confirm My Details
                       </button>
@@ -1129,7 +1129,7 @@ export const RegistrationFormCard: React.FC<RegistrationFormCardProps> = ({
                     <div className="space-y-3">
                       <div
                         data-testid="golden-confirmation-banner"
-                        className="rounded-xl border-2 border-[#C9A04E] bg-gradient-to-r from-[#FFFDF7] via-[#F9ECCF] to-[#FFFDF7] p-3.5 flex items-start gap-3 shadow-sm"
+                        className="rounded-xl border-2 border-[#D4A537] bg-gradient-to-r from-[#FFFDF7] via-[#F9ECCF] to-[#FFFDF7] p-3.5 flex items-start gap-3 shadow-sm"
                       >
                         <CheckCircle2 className="w-5 h-5 text-[#2E6F40] shrink-0 mt-0.5" />
                         <div className="text-xs space-y-0.5">
@@ -1207,7 +1207,7 @@ export const RegistrationFormCard: React.FC<RegistrationFormCardProps> = ({
                       type="button"
                       data-testid="reg-next-btn"
                       onClick={handleNextStep}
-                      className="inline-flex items-center gap-1.5 min-h-[38px] px-5 rounded-full bg-gradient-to-r from-[#C9A04E] to-[#A87932] text-[#FFFDF7] text-xs font-semibold uppercase tracking-[0.08em] hover:brightness-105 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 min-h-[38px] px-5 rounded-full bg-gradient-to-r from-[#D4A537] to-[#9C6B1E] text-[#FFFDF7] text-xs font-semibold uppercase tracking-[0.08em] hover:brightness-105 cursor-pointer"
                     >
                       <span>{currentStep === 7 ? 'Proceed to Confirm' : 'Continue'}</span>
                       <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />

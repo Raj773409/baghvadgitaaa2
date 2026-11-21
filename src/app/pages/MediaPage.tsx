@@ -184,7 +184,7 @@ export const MediaPage: React.FC = () => {
                     onClick={() => setFilter(tab.id)}
                     className={`min-h-[40px] py-2 text-xs font-medium whitespace-nowrap border-b-2 transition-colors cursor-pointer ${
                       active
-                        ? 'border-[#C9A04E] text-[var(--color-ink)]'
+                        ? 'border-[#D4A537] text-[var(--color-ink)]'
                         : 'border-transparent text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                     }`}
                   >
@@ -202,7 +202,7 @@ export const MediaPage: React.FC = () => {
                       type="button"
                       onClick={() => setLightboxIndex(idx)}
                       aria-label={`${t(item.titleKey)} — Open lightbox`}
-                      className="relative overflow-hidden bg-[#101426] aspect-[16/10] border border-[var(--color-border)] group-hover:border-[#C9A04E] transition-colors cursor-pointer text-left"
+                      className="relative overflow-hidden bg-[#101426] aspect-[16/10] border border-[var(--color-border)] group-hover:border-[#D4A537] transition-colors cursor-pointer text-left"
                     >
                       {item.imageSrc && (
                         <img

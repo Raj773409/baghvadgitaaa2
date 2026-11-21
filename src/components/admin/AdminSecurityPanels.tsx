@@ -190,7 +190,7 @@ export const AdminUsersPanel: React.FC<{
             </thead>
             <tbody className="divide-y divide-[var(--color-border)]">
               {paged.items.map((u) => (
-                <tr key={u.id} className="hover:bg-[#D5AF62]/5">
+                <tr key={u.id} className="hover:bg-[#D4A537]/5">
                   <td className="p-3.5">
                     <p className="font-semibold text-[var(--color-ink)]">{u.name}</p>
                     <p className="text-[var(--color-muted)]">{u.email}</p>
@@ -223,7 +223,7 @@ export const AdminUsersPanel: React.FC<{
                       <button
                         type="button"
                         onClick={() => setStatusTarget(u)}
-                        className="px-3 py-1 rounded border border-[#D5AF62]/55 cursor-pointer hover:bg-[#D5AF62]/15"
+                        className="px-3 py-1 rounded border border-[#D4A537]/55 cursor-pointer hover:bg-[#D4A537]/15"
                       >
                         {u.active ? 'Suspend' : 'Reactivate'}
                       </button>
@@ -300,7 +300,7 @@ export const AdminAnalyticsPanel: React.FC<{ data: DashboardPayload }> = ({ data
           <button
             type="button"
             onClick={() => void handleExport('csv')}
-            className="inline-flex items-center gap-1.5 min-h-[38px] px-4 rounded-lg border border-[#D5AF62]/55 text-xs font-medium cursor-pointer"
+            className="inline-flex items-center gap-1.5 min-h-[38px] px-4 rounded-lg border border-[#D4A537]/55 text-xs font-medium cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -308,7 +308,7 @@ export const AdminAnalyticsPanel: React.FC<{ data: DashboardPayload }> = ({ data
           <button
             type="button"
             onClick={() => void handleExport('xls')}
-            className="inline-flex items-center gap-1.5 min-h-[38px] px-4 rounded-lg border border-[#D5AF62]/55 text-xs font-medium cursor-pointer"
+            className="inline-flex items-center gap-1.5 min-h-[38px] px-4 rounded-lg border border-[#D4A537]/55 text-xs font-medium cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Excel</span>
@@ -418,7 +418,7 @@ export const AdminAuditPanel: React.FC<{ auditLogs: AuditLogEntry[] }> = ({ audi
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
                 {paged.items.map((log) => (
-                  <tr key={log.id} className="hover:bg-[#D5AF62]/5">
+                  <tr key={log.id} className="hover:bg-[#D4A537]/5">
                     <td className="p-3.5 whitespace-nowrap tabular-nums text-[var(--color-muted)]">
                       {new Date(log.timestamp).toLocaleString()}
                     </td>
@@ -552,7 +552,7 @@ export const AdminSettingsPanel: React.FC<{
               disabled={!canWrite}
               checked={settings.registrationOpen}
               onChange={(e) => void saveSettings({ registrationOpen: e.target.checked })}
-              className="w-4 h-4 accent-[#D5AF62]"
+              className="w-4 h-4 accent-[#D4A537]"
             />
           </label>
           <label className="flex items-center justify-between p-3.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-canvas)]">
@@ -564,7 +564,7 @@ export const AdminSettingsPanel: React.FC<{
               onChange={(e) =>
                 void saveSettings({ requireVolunteerApproval: e.target.checked })
               }
-              className="w-4 h-4 accent-[#D5AF62]"
+              className="w-4 h-4 accent-[#D4A537]"
             />
           </label>
         </div>
@@ -614,7 +614,7 @@ export const AdminSettingsPanel: React.FC<{
       <div className="rounded-xl border border-[var(--color-border)] bg-[var(--surface-elevated)] p-5 sm:p-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Archive className="w-4 h-4 text-[#D5AF62]" />
+            <Archive className="w-4 h-4 text-[#D4A537]" />
             <h3 className="font-editorial text-xl text-[var(--color-ink)]">
               Database Snapshots &amp; Recovery
             </h3>
@@ -648,7 +648,7 @@ export const AdminSettingsPanel: React.FC<{
                   <button
                     type="button"
                     onClick={() => setRestoreTarget(b.fileName)}
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded border border-[#D5AF62]/55 hover:bg-[#D5AF62]/15 cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded border border-[#D4A537]/55 hover:bg-[#D4A537]/15 cursor-pointer"
                   >
                     <RotateCcw className="w-3 h-3" />
                     <span>Restore</span>

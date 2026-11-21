@@ -53,7 +53,7 @@ const AdminLoginPage: React.FC = () => {
   if (status === 'checking') {
     return (
       <div className="min-h-screen bg-[#0D1120] text-[#FFFDF7] flex items-center justify-center">
-        <p className="font-editorial text-lg text-[#F0D38B]">Verifying Secretariat Session…</p>
+        <p className="font-editorial text-lg text-[#F7D774]">Verifying Secretariat Session…</p>
       </div>
     );
   }

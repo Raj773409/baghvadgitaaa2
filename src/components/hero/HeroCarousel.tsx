@@ -249,8 +249,8 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
         data-testid="hero-carousel-controls"
       >
         {/* Active Slide Caption Tag */}
-        <div className="hidden xl:flex items-center gap-3 bg-[#17233A]/85 border border-[#C9A04E]/35 rounded-full px-4 py-1.5 max-w-xs">
-          <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#F0D38B] shrink-0">
+        <div className="hidden xl:flex items-center gap-3 bg-[#17233A]/85 border border-[#D4A537]/35 rounded-full px-4 py-1.5 max-w-xs">
+          <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#F7D774] shrink-0">
             {formatSlideCounter(activeIndex, total)}
           </span>
           <span className="text-xs text-[#FFFDF7] truncate">
@@ -259,13 +259,13 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
         </div>
 
         {/* Manual Prev / Pause-Resume / Numbered Slide Indicators / Next */}
-        <div className="inline-flex items-center gap-1 rounded-full bg-[#17233A]/88 border border-[#C9A04E]/45 p-1 shadow-[0_8px_28px_rgba(11,17,28,0.45)]">
+        <div className="inline-flex items-center gap-1 rounded-full bg-[#17233A]/88 border border-[#D4A537]/45 p-1 shadow-[0_8px_28px_rgba(11,17,28,0.45)]">
           <button
             type="button"
             onClick={handlePrev}
             data-testid="hero-carousel-prev"
             aria-label="Previous hero image"
-            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-[#FFFDF7] hover:bg-[#C9A04E]/20 hover:text-[#F0D38B] transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-[#FFFDF7] hover:bg-[#D4A537]/20 hover:text-[#F7D774] transition-colors cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           </button>
@@ -276,7 +276,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
             data-testid="hero-carousel-pause"
             aria-label={paused ? 'Resume hero slideshow' : 'Pause hero slideshow'}
             aria-pressed={paused}
-            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-[#F0D38B] hover:bg-[#C9A04E]/20 transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-[#F7D774] hover:bg-[#D4A537]/20 transition-colors cursor-pointer"
           >
             {paused ? (
               <Play className="w-3.5 h-3.5 fill-current" aria-hidden="true" />
@@ -299,8 +299,8 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
                   onClick={() => goToSlide(idx)}
                   className={`min-w-[26px] h-7 px-1.5 rounded-full text-[11px] font-medium tabular-nums transition-colors cursor-pointer ${
                     current
-                      ? 'bg-[#C9A04E] text-[#171717] font-semibold'
-                      : 'text-[#FFFDF7]/75 hover:text-[#F0D38B]'
+                      ? 'bg-[#D4A537] text-[#171717] font-semibold'
+                      : 'text-[#FFFDF7]/75 hover:text-[#F7D774]'
                   }`}
                 >
                   {String(idx + 1).padStart(2, '0')}
@@ -314,7 +314,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
             onClick={handleNext}
             data-testid="hero-carousel-next"
             aria-label="Next hero image"
-            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-[#FFFDF7] hover:bg-[#C9A04E]/20 hover:text-[#F0D38B] transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-[#FFFDF7] hover:bg-[#D4A537]/20 hover:text-[#F7D774] transition-colors cursor-pointer"
           >
             <ChevronRight className="w-4 h-4" aria-hidden="true" />
           </button>

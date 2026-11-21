@@ -17,11 +17,11 @@ export const HeroContent: React.FC = () => {
           <div className="lg:col-span-7 xl:col-span-6 space-y-5 sm:space-y-6 pointer-events-auto">
             {/* Minimal Eyebrow with Long Fading Royal Gold Rule */}
             <div className="flex items-center gap-5" data-hero-reveal>
-              <p className="text-[11px] sm:text-xs font-medium tracking-[0.26em] uppercase text-[#F0D38B] whitespace-nowrap">
+              <p className="text-[11px] sm:text-xs font-medium tracking-[0.26em] uppercase text-[#F7D774] whitespace-nowrap">
                 {t('hero.eyebrow')}
               </p>
               <span
-                className="hidden sm:block h-px w-24 sm:w-32 bg-gradient-to-r from-[#C9A04E]/75 to-transparent"
+                className="hidden sm:block h-px w-24 sm:w-32 bg-gradient-to-r from-[#D4A537]/75 to-transparent"
                 aria-hidden="true"
               />
             </div>
@@ -35,7 +35,7 @@ export const HeroContent: React.FC = () => {
             >
               <span className="block">{t('hero.headlineLine1')}</span>
               <span className="block mt-0.5">{t('hero.headlineLine2')}</span>
-              <span className="block text-[#F0D38B] font-light mt-0.5">
+              <span className="block royal-gold-gradient-text font-normal mt-0.5">
                 {t('hero.headlineAccent')}
               </span>
             </h1>
@@ -43,9 +43,9 @@ export const HeroContent: React.FC = () => {
             {/* Prominent Global Scale Pillar Callout: 18 Countries · 18 Chapters · 18 Languages */}
             <div
               data-hero-reveal
-              className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-medium tracking-[0.12em] uppercase text-[#F0D38B] border-l-2 border-[#C9A04E] pl-3.5"
+              className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-medium tracking-[0.12em] uppercase text-[#F7D774] border-l-2 border-[#D4A537] pl-3.5"
             >
-              <Globe2 className="w-4 h-4 text-[#C9A04E] shrink-0" aria-hidden="true" />
+              <Globe2 className="w-4 h-4 text-[#D4A537] shrink-0" aria-hidden="true" />
               <span className="tabular-nums">{t('hero.pillars')}</span>
             </div>
 
@@ -65,7 +65,7 @@ export const HeroContent: React.FC = () => {
             >
               <div className="flex items-center gap-3.5">
                 <Calendar
-                  className="w-5 h-5 text-[#F0D38B] shrink-0"
+                  className="w-5 h-5 text-[#F7D774] shrink-0"
                   aria-hidden="true"
                 />
                 <div>
@@ -78,11 +78,11 @@ export const HeroContent: React.FC = () => {
                 </div>
               </div>
 
-              <span className="hidden sm:block h-9 w-px bg-[#C9A04E]/40" aria-hidden="true" />
+              <span className="hidden sm:block h-9 w-px bg-[#D4A537]/40" aria-hidden="true" />
 
               <div className="flex items-center gap-3.5 sm:block">
                 <Calendar
-                  className="sm:hidden w-5 h-5 text-[#F0D38B]/80 shrink-0"
+                  className="sm:hidden w-5 h-5 text-[#F7D774]/80 shrink-0"
                   aria-hidden="true"
                 />
                 <div>
@@ -100,7 +100,7 @@ export const HeroContent: React.FC = () => {
             <div data-hero-reveal className="flex flex-wrap items-center gap-3 sm:gap-3.5 pt-2">
               <Link
                 to="/participate/register"
-                className="inline-flex items-center justify-center gap-2.5 min-h-[46px] px-6 sm:px-7 py-3 rounded-full royal-gold-surface text-sm font-semibold tracking-[0.02em] shadow-[0_10px_28px_rgba(201,160,78,0.28)] hover:brightness-105 transition-all duration-200 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2.5 min-h-[46px] px-6 sm:px-7 py-3 rounded-full royal-gold-surface text-sm font-semibold tracking-[0.02em] shadow-[0_10px_28px_rgba(212,165,55,0.28)] hover:brightness-105 transition-all duration-200 whitespace-nowrap shrink-0"
               >
                 <span>{t('nav.register')}</span>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -108,25 +108,25 @@ export const HeroContent: React.FC = () => {
 
               <a
                 href="#eternal-message"
-                className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 sm:px-6 py-3 rounded-full border border-[#F0D38B]/60 bg-[#17233A]/65 backdrop-blur-xs text-[#FFFDF7] text-sm font-medium hover:border-[#F0D38B] hover:text-[#F0D38B] transition-colors duration-200 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 sm:px-6 py-3 rounded-full border border-[#F7D774]/60 bg-[#17233A]/65 backdrop-blur-xs text-[#FFFDF7] text-sm font-medium hover:border-[#F7D774] hover:text-[#F7D774] transition-colors duration-200 whitespace-nowrap shrink-0"
               >
                 <span>{t('hero.primaryCta')}</span>
               </a>
 
               <Link
                 to="/gita"
-                className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 py-3 rounded-full border border-white/35 bg-[#17233A]/65 backdrop-blur-xs text-[#FFFDF7] text-sm font-medium hover:border-[#F0D38B] hover:text-[#F0D38B] transition-colors duration-200 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 py-3 rounded-full border border-white/35 bg-[#17233A]/65 backdrop-blur-xs text-[#FFFDF7] text-sm font-medium hover:border-[#F7D774] hover:text-[#F7D774] transition-colors duration-200 whitespace-nowrap shrink-0"
               >
-                <BookOpen className="w-4 h-4 text-[#F0D38B]" aria-hidden="true" />
+                <BookOpen className="w-4 h-4 text-[#F7D774]" aria-hidden="true" />
                 <span>3D Gita Book</span>
               </Link>
 
               <Link
                 to="/story"
-                className="group inline-flex items-center justify-center gap-2 min-h-[46px] px-5 py-3 rounded-full border border-[#C9A04E]/55 bg-[#171717]/65 backdrop-blur-xs text-[#FFFDF7] text-sm font-medium hover:border-[#F0D38B] hover:text-[#F0D38B] transition-colors duration-200 whitespace-nowrap shrink-0"
+                className="group inline-flex items-center justify-center gap-2 min-h-[46px] px-5 py-3 rounded-full border border-[#D4A537]/55 bg-[#171717]/65 backdrop-blur-xs text-[#FFFDF7] text-sm font-medium hover:border-[#F7D774] hover:text-[#F7D774] transition-colors duration-200 whitespace-nowrap shrink-0"
               >
                 <PlayCircle
-                  className="w-4 h-4 text-[#F0D38B]"
+                  className="w-4 h-4 text-[#F7D774]"
                   aria-hidden="true"
                 />
                 <span>{t('hero.storyCta')}</span>
@@ -151,8 +151,8 @@ export const HeroContent: React.FC = () => {
             className="inline-flex flex-col items-start gap-2 text-[11px] sm:text-xs font-medium text-[#FFFDF7]/90 hover:text-white transition-colors group shrink-0"
           >
             <span className="inline-flex items-center gap-2.5 sm:gap-3">
-              <span className="w-5 h-8 rounded-full border border-[#F0D38B]/60 flex items-start justify-center pt-1.5 shrink-0">
-                <span className="w-0.5 h-2 bg-[#F0D38B] rounded-full group-hover:translate-y-1 transition-transform duration-200" />
+              <span className="w-5 h-8 rounded-full border border-[#F7D774]/60 flex items-start justify-center pt-1.5 shrink-0">
+                <span className="w-0.5 h-2 bg-[#F7D774] rounded-full group-hover:translate-y-1 transition-transform duration-200" />
               </span>
               <span>{t('hero.scrollCue')}</span>
             </span>
@@ -162,7 +162,7 @@ export const HeroContent: React.FC = () => {
             type="button"
             onClick={dispatchReplayWelcome}
             data-testid="hero-replay-welcome"
-            className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium tracking-[0.06em] uppercase text-[#F0D38B]/90 hover:text-[#FFFDF7] transition-colors cursor-pointer pb-1"
+            className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium tracking-[0.06em] uppercase text-[#F7D774]/90 hover:text-[#FFFDF7] transition-colors cursor-pointer pb-1"
           >
             <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{t('welcome.replayWelcome')}</span>

@@ -175,11 +175,11 @@ export const WhyParticipateSection: React.FC = () => {
             <article
               key={reason.id}
               data-testid={`why-reason-${reason.index}`}
-              className="rounded-xl bg-[var(--color-canvas)] border border-[var(--color-border)] hover:border-[#C9A04E] p-6 flex flex-col justify-between gap-4 transition-colors"
+              className="rounded-xl bg-[var(--color-canvas)] border border-[var(--color-border)] hover:border-[#D4A537] p-6 flex flex-col justify-between gap-4 transition-colors"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-display text-2xl font-light text-[#A87932] dark:text-[#F0D38B] tabular-nums">
+                  <span className="font-display text-2xl font-light text-[#9C6B1E] dark:text-[#F7D774] tabular-nums">
                     {reason.index}
                   </span>
                   <span className="text-[10px] font-semibold tracking-[0.16em] uppercase text-[var(--color-bronze)]">
@@ -200,11 +200,11 @@ export const WhyParticipateSection: React.FC = () => {
         {/* Interactive Canonical Shloka Contemplation Panel */}
         <div
           data-testid="canonical-shloka-reader"
-          className="rounded-2xl bg-[#17233A] text-[#FFFDF7] border border-[#C9A04E]/45 p-6 sm:p-8 lg:p-10 shadow-[0_20px_54px_rgba(14,21,35,0.22)] space-y-6"
+          className="rounded-2xl bg-[#17233A] text-[#FFFDF7] border border-[#D4A537]/45 p-6 sm:p-8 lg:p-10 shadow-[0_20px_54px_rgba(14,21,35,0.22)] space-y-6"
         >
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-[#C9A04E]/25">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-[#D4A537]/25">
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase text-[#F0D38B]">
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase text-[#F7D774]">
                 <BookOpen className="w-4 h-4" aria-hidden="true" />
                 <span>{copy.readerTitle}</span>
               </div>
@@ -228,8 +228,8 @@ export const WhyParticipateSection: React.FC = () => {
                     data-testid={`shloka-select-${verse.id}`}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-colors cursor-pointer ${
                       selected
-                        ? 'royal-gold-surface border-[#F0D38B] text-[#171717]'
-                        : 'border-[#C9A04E]/40 text-[#FFFDF7] hover:border-[#F0D38B]'
+                        ? 'royal-gold-surface border-[#F7D774] text-[#171717]'
+                        : 'border-[#D4A537]/40 text-[#FFFDF7] hover:border-[#F7D774]'
                     }`}
                   >
                     BG {verse.chapter}.{verse.verse}
@@ -243,7 +243,7 @@ export const WhyParticipateSection: React.FC = () => {
             <div className="lg:col-span-6 space-y-3">
               <p
                 lang="sa"
-                className="font-editorial text-2xl sm:text-3xl leading-[1.6] text-[#F0D38B] whitespace-pre-line"
+                className="font-editorial text-2xl sm:text-3xl leading-[1.6] text-[#F7D774] whitespace-pre-line"
               >
                 {activeVerse.sanskritDevanagari}
               </p>
@@ -257,7 +257,7 @@ export const WhyParticipateSection: React.FC = () => {
                   onClick={handleToggleRecitation}
                   disabled={audioStatus === 'loading'}
                   data-testid="why-shloka-recite"
-                  className="inline-flex items-center gap-2 min-h-[40px] px-4 py-2 rounded-full border border-[#F0D38B]/65 bg-[#0E1729] text-xs font-semibold text-[#F0D38B] hover:bg-[#C9A04E] hover:text-[#171717] transition-colors cursor-pointer disabled:opacity-60"
+                  className="inline-flex items-center gap-2 min-h-[40px] px-4 py-2 rounded-full border border-[#F7D774]/65 bg-[#0E1729] text-xs font-semibold text-[#F7D774] hover:bg-[#D4A537] hover:text-[#171717] transition-colors cursor-pointer disabled:opacity-60"
                 >
                   {audioStatus === 'loading' ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -275,7 +275,7 @@ export const WhyParticipateSection: React.FC = () => {
 
                 <Link
                   to="/gita"
-                  className="text-xs font-medium text-[#E9DCC5] hover:text-[#F0D38B] underline underline-offset-4"
+                  className="text-xs font-medium text-[#E9DCC5] hover:text-[#F7D774] underline underline-offset-4"
                 >
                   Open Full 18-Chapter Gita &rarr;
                 </Link>
@@ -287,8 +287,8 @@ export const WhyParticipateSection: React.FC = () => {
             </div>
 
             <div className="lg:col-span-6 space-y-4">
-              <div className="rounded-xl bg-[#101A2C] border border-[#C9A04E]/25 p-4 space-y-1.5">
-                <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-[#F0D38B]">
+              <div className="rounded-xl bg-[#101A2C] border border-[#D4A537]/25 p-4 space-y-1.5">
+                <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-[#F7D774]">
                   English Translation
                 </p>
                 <p className="text-sm leading-relaxed text-[#FFFDF7]">
@@ -296,16 +296,16 @@ export const WhyParticipateSection: React.FC = () => {
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-xl bg-[#101A2C] border border-[#C9A04E]/25 p-4 space-y-1">
-                  <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#F0D38B]">
+                <div className="rounded-xl bg-[#101A2C] border border-[#D4A537]/25 p-4 space-y-1">
+                  <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#F7D774]">
                     हिन्दी भावार्थ
                   </p>
                   <p lang="hi" className="text-xs sm:text-sm leading-relaxed text-[#E9DCC5]">
                     {activeVerse.meaningHi}
                   </p>
                 </div>
-                <div className="rounded-xl bg-[#101A2C] border border-[#C9A04E]/25 p-4 space-y-1">
-                  <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#F0D38B]">
+                <div className="rounded-xl bg-[#101A2C] border border-[#D4A537]/25 p-4 space-y-1">
+                  <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#F7D774]">
                     తెలుగు తాత్పర్యం
                   </p>
                   <p lang="te" className="text-xs sm:text-sm leading-relaxed text-[#E9DCC5]">

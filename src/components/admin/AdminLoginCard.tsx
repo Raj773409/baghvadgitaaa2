@@ -47,10 +47,10 @@ export const AdminLoginCard: React.FC<AdminLoginCardProps> = ({ onSuccess }) => 
 
   return (
     <div className="min-h-screen bg-[#0D1120] text-[#FFFDF7] flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md rounded-2xl border border-[#C9A04E]/45 bg-[#17233A]/95 p-7 sm:p-9 shadow-2xl space-y-6">
-        <div className="space-y-2 border-b border-[#C9A04E]/25 pb-5">
-          <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#F0D38B]">
-            <ShieldCheck className="w-4 h-4 text-[#C9A04E]" aria-hidden="true" />
+      <div className="w-full max-w-md rounded-2xl border border-[#D4A537]/45 bg-[#17233A]/95 p-7 sm:p-9 shadow-2xl space-y-6">
+        <div className="space-y-2 border-b border-[#D4A537]/25 pb-5">
+          <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#F7D774]">
+            <ShieldCheck className="w-4 h-4 text-[#D4A537]" aria-hidden="true" />
             <span>Project Eternal · Command Centre</span>
           </div>
           <h1 className="font-editorial text-3xl text-[#FFFDF7]">
@@ -72,7 +72,7 @@ export const AdminLoginCard: React.FC<AdminLoginCardProps> = ({ onSuccess }) => 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="secretariat@eternal2027.org"
-              className="w-full min-h-[44px] px-3.5 rounded-lg border border-[#C9A04E]/35 bg-[#0D1120] text-sm text-[#FFFDF7] focus:outline-none focus:border-[#F0D38B]"
+              className="w-full min-h-[44px] px-3.5 rounded-lg border border-[#D4A537]/35 bg-[#0D1120] text-sm text-[#FFFDF7] focus:outline-none focus:border-[#F7D774]"
             />
           </label>
 
@@ -86,7 +86,7 @@ export const AdminLoginCard: React.FC<AdminLoginCardProps> = ({ onSuccess }) => 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter administrator password"
-              className="w-full min-h-[44px] px-3.5 rounded-lg border border-[#C9A04E]/35 bg-[#0D1120] text-sm text-[#FFFDF7] focus:outline-none focus:border-[#F0D38B]"
+              className="w-full min-h-[44px] px-3.5 rounded-lg border border-[#D4A537]/35 bg-[#0D1120] text-sm text-[#FFFDF7] focus:outline-none focus:border-[#F7D774]"
             />
           </label>
 
@@ -112,13 +112,13 @@ export const AdminLoginCard: React.FC<AdminLoginCardProps> = ({ onSuccess }) => 
           </button>
         </form>
 
-        <div className="rounded-xl border border-[#C9A04E]/25 bg-[#0D1120]/60 p-3.5 text-[11px] text-[#E9DCC5]/75 leading-relaxed">
+        <div className="rounded-xl border border-[#D4A537]/25 bg-[#0D1120]/60 p-3.5 text-[11px] text-[#E9DCC5]/75 leading-relaxed">
           Role-based credentials are managed by the Mahotsav Secretariat and provisioned via server environment configuration.
         </div>
 
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs text-[#F0D38B] hover:underline"
+          className="inline-flex items-center gap-2 text-xs text-[#F7D774] hover:underline"
         >
           <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Return to Public Mahotsav Site</span>

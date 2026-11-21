@@ -277,7 +277,7 @@ export const ContactFaqPage: React.FC = () => {
                       }}
                       className={`min-h-[38px] py-1.5 text-xs font-medium border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                         active
-                          ? 'border-[#C9A04E] text-[var(--color-ink)]'
+                          ? 'border-[#D4A537] text-[var(--color-ink)]'
                           : 'border-transparent text-[var(--color-muted)] hover:text-[var(--color-ink)]'
                       }`}
                     >

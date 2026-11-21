@@ -200,7 +200,7 @@ export const AdminParticipantsPanel: React.FC<{
               type="button"
               onClick={() => void handleExport('csv')}
               data-testid="export-csv-link"
-              className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 rounded-lg border border-[#D5AF62]/55 text-xs font-medium text-[var(--color-ink)] hover:bg-[#D5AF62]/15 cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 rounded-lg border border-[#D4A537]/55 text-xs font-medium text-[var(--color-ink)] hover:bg-[#D4A537]/15 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
               <span>CSV Export</span>
@@ -209,7 +209,7 @@ export const AdminParticipantsPanel: React.FC<{
               type="button"
               onClick={() => void handleExport('xls')}
               data-testid="export-xls-link"
-              className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 rounded-lg border border-[#D5AF62]/55 text-xs font-medium text-[var(--color-ink)] hover:bg-[#D5AF62]/15 cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 rounded-lg border border-[#D4A537]/55 text-xs font-medium text-[var(--color-ink)] hover:bg-[#D4A537]/15 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-[var(--color-bronze)]" />
               <span>Excel (.xls)</span>
@@ -247,7 +247,7 @@ export const AdminParticipantsPanel: React.FC<{
               }}
               className={`px-3 py-1 rounded border text-xs cursor-pointer ${
                 assistanceFilter === flag.id
-                  ? 'bg-[#17233A] text-[#F5E2B5] border-[#17233A] dark:bg-[#D5AF62] dark:text-[#171717] dark:border-[#D5AF62] font-semibold'
+                  ? 'bg-[#17233A] text-[#F7D774] border-[#17233A] dark:bg-[#D4A537] dark:text-[#171717] dark:border-[#D4A537] font-semibold'
                   : 'border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-muted)] hover:text-[var(--color-ink)]'
               }`}
             >
@@ -306,7 +306,7 @@ export const AdminParticipantsPanel: React.FC<{
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
                 {paged.items.map((p) => (
-                  <tr key={p.id} className="hover:bg-[#D5AF62]/5">
+                  <tr key={p.id} className="hover:bg-[#D4A537]/5">
                     <td className="p-3.5 font-mono font-semibold text-[var(--color-ink)] whitespace-nowrap">
                       {p.referenceCode}
                     </td>
@@ -527,7 +527,7 @@ export const AdminPaymentsPanel: React.FC<{
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
                 {paged.items.map((pay) => (
-                  <tr key={pay.id} className="hover:bg-[#D5AF62]/5">
+                  <tr key={pay.id} className="hover:bg-[#D4A537]/5">
                     <td className="p-3.5 font-mono font-semibold text-[var(--color-ink)]">
                       {pay.gatewayReference}
                     </td>
@@ -545,7 +545,7 @@ export const AdminPaymentsPanel: React.FC<{
                           <button
                             type="button"
                             onClick={() => setRefundTarget(pay)}
-                            className="px-3 py-1 rounded border border-[#D5AF62]/55 text-xs hover:bg-[#D5AF62]/15 cursor-pointer"
+                            className="px-3 py-1 rounded border border-[#D4A537]/55 text-xs hover:bg-[#D4A537]/15 cursor-pointer"
                           >
                             {pay.gateway === 'razorpay' ? 'Issue Gateway Refund' : 'Record Refund'}
                           </button>
@@ -727,7 +727,7 @@ export const AdminVolunteersPanel: React.FC<{
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
                 {paged.items.map((v) => (
-                  <tr key={v.id} className="hover:bg-[#D5AF62]/5">
+                  <tr key={v.id} className="hover:bg-[#D4A537]/5">
                     <td className="p-3.5 font-mono font-semibold">{v.volunteerBadgeId}</td>
                     <td className="p-3.5">
                       <p className="font-semibold text-[var(--color-ink)]">{v.fullName}</p>
@@ -752,7 +752,7 @@ export const AdminVolunteersPanel: React.FC<{
                         <button
                           type="button"
                           onClick={() => void patchVol(v.id, { incrementAttendance: true })}
-                          className="px-2.5 py-1 rounded border border-[#D5AF62]/55 text-[var(--color-ink)] cursor-pointer inline-flex items-center gap-1"
+                          className="px-2.5 py-1 rounded border border-[#D4A537]/55 text-[var(--color-ink)] cursor-pointer inline-flex items-center gap-1"
                         >
                           <RefreshCw className="w-3 h-3" />
                           +1 Shift
@@ -914,7 +914,7 @@ export const AdminMembershipsPanel: React.FC<{
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
                 {paged.items.map((m) => (
-                  <tr key={m.id} className="hover:bg-[#D5AF62]/5">
+                  <tr key={m.id} className="hover:bg-[#D4A537]/5">
                     <td className="p-3.5">
                       <p className="font-semibold text-[var(--color-ink)]">{m.memberName}</p>
                       <p className="text-[var(--color-muted)]">{m.email}</p>

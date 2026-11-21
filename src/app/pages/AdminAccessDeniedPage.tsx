@@ -44,9 +44,9 @@ const AdminAccessDeniedPage: React.FC = () => {
       data-testid="admin-access-denied"
       className="min-h-screen bg-[#0D1120] text-[#FFFDF7] flex items-center justify-center px-4 py-12"
     >
-      <div className="w-full max-w-lg rounded-2xl border border-[#C9A04E]/45 bg-[#17233A]/95 p-8 shadow-2xl space-y-6">
-        <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#F0D38B]">
-          <ShieldAlert className="w-4 h-4 text-[#C9A04E]" aria-hidden="true" />
+      <div className="w-full max-w-lg rounded-2xl border border-[#D4A537]/45 bg-[#17233A]/95 p-8 shadow-2xl space-y-6">
+        <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#F7D774]">
+          <ShieldAlert className="w-4 h-4 text-[#D4A537]" aria-hidden="true" />
           <span>403 · Administrative Access Restricted</span>
         </div>
 
@@ -56,10 +56,10 @@ const AdminAccessDeniedPage: React.FC = () => {
         </div>
 
         {user && (
-          <div className="rounded-xl border border-[#C9A04E]/30 bg-[#0D1120]/70 p-4 text-xs space-y-1">
+          <div className="rounded-xl border border-[#D4A537]/30 bg-[#0D1120]/70 p-4 text-xs space-y-1">
             <p className="text-[#E9DCC5]/70">Signed in as:</p>
             <p className="font-medium text-[#FFFDF7]">{user.name}</p>
-            <p className="text-[#F0D38B] font-mono">
+            <p className="text-[#F7D774] font-mono">
               {user.email} · Role: {user.role}
             </p>
           </div>
@@ -77,7 +77,7 @@ const AdminAccessDeniedPage: React.FC = () => {
 
           <Link
             to="/"
-            className="inline-flex items-center gap-2 min-h-[42px] px-5 rounded-full border border-[#C9A04E]/45 text-xs font-medium text-[#F0D38B] hover:bg-[#C9A04E]/10"
+            className="inline-flex items-center gap-2 min-h-[42px] px-5 rounded-full border border-[#D4A537]/45 text-xs font-medium text-[#F7D774] hover:bg-[#D4A537]/10"
           >
             <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Return to Public Site</span>

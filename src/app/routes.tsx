@@ -38,8 +38,8 @@ const AdminRouteFallback: React.FC = () => (
     role="status"
     aria-live="polite"
   >
-    <div className="w-9 h-9 rounded-full border border-[#F0D38B]/40 border-t-[#F0D38B] animate-spin mb-4" />
-    <p className="font-editorial text-lg tracking-wide text-[#F0D38B]">
+    <div className="w-9 h-9 rounded-full border border-[#F7D774]/40 border-t-[#F7D774] animate-spin mb-4" />
+    <p className="font-editorial text-lg tracking-wide text-[#F7D774]">
       Loading Secretariat Command Centre…
     </p>
   </div>

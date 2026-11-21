@@ -149,7 +149,7 @@ export const PartnersPage: React.FC = () => {
             <div className="flex flex-wrap gap-4 shrink-0">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 min-h-[46px] px-6 py-3 rounded-full border border-[#C9A04E] text-[var(--color-ink)] hover:bg-[#C9A04E]/15 text-sm font-medium transition-colors"
+                className="inline-flex items-center gap-2 min-h-[46px] px-6 py-3 rounded-full border border-[#D4A537] text-[var(--color-ink)] hover:bg-[#D4A537]/15 text-sm font-medium transition-colors"
               >
                 <span>{t('sitemap.contact')}</span>
               </Link>

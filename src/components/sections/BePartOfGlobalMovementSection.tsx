@@ -130,10 +130,10 @@ export const BePartOfGlobalMovementSection: React.FC = () => {
             }, 60);
           }}
           data-testid={`movement-cta-${item.id}`}
-          className="inline-flex items-center justify-between gap-1.5 w-full min-h-[40px] px-3.5 py-2 rounded-full bg-[#17233A] text-[#FFFDF7] hover:bg-[#0D1322] dark:bg-[#C9A04E] dark:text-[#171717] dark:hover:bg-[#F0D38B] text-[10.5px] font-semibold uppercase tracking-[0.04em] whitespace-nowrap transition-colors cursor-pointer"
+          className="inline-flex items-center justify-between gap-1.5 w-full min-h-[40px] px-3.5 py-2 rounded-full bg-[#17233A] text-[#FFFDF7] hover:bg-[#0D1322] dark:bg-[#D4A537] dark:text-[#171717] dark:hover:bg-[#F7D774] text-[10.5px] font-semibold uppercase tracking-[0.04em] whitespace-nowrap transition-colors cursor-pointer"
         >
           <span className="truncate">{item.ctaLabel[locale]}</span>
-          <HandHeart className="w-3.5 h-3.5 shrink-0 text-[#F0D38B] dark:text-[#171717]" aria-hidden="true" />
+          <HandHeart className="w-3.5 h-3.5 shrink-0 text-[#F7D774] dark:text-[#171717]" aria-hidden="true" />
         </button>
       );
     }
@@ -142,7 +142,7 @@ export const BePartOfGlobalMovementSection: React.FC = () => {
       <Link
         to={item.actionHref}
         data-testid={`movement-cta-${item.id}`}
-        className="inline-flex items-center justify-between gap-1.5 w-full min-h-[40px] px-3.5 py-2 rounded-full border border-[#C9A04E]/55 text-[var(--color-ink)] hover:bg-[#C9A04E] hover:text-[#171717] hover:border-[#C9A04E] text-[10.5px] font-semibold uppercase tracking-[0.04em] whitespace-nowrap transition-colors"
+        className="inline-flex items-center justify-between gap-1.5 w-full min-h-[40px] px-3.5 py-2 rounded-full border border-[#D4A537]/55 text-[var(--color-ink)] hover:bg-[#D4A537] hover:text-[#171717] hover:border-[#D4A537] text-[10.5px] font-semibold uppercase tracking-[0.04em] whitespace-nowrap transition-colors"
       >
         <span className="truncate">{item.ctaLabel[locale]}</span>
         <ArrowRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -191,8 +191,8 @@ export const BePartOfGlobalMovementSection: React.FC = () => {
                 data-testid={`movement-tab-${tab.id}`}
                 className={`px-4 py-2 rounded-full text-xs font-semibold tracking-[0.04em] border transition-colors cursor-pointer ${
                   selected
-                    ? 'royal-gold-surface border-[#C9A04E] text-[#171717]'
-                    : 'bg-[var(--surface-elevated)] border-[var(--color-border)] text-[var(--color-ink)] hover:border-[#C9A04E]'
+                    ? 'royal-gold-surface border-[#D4A537] text-[#171717]'
+                    : 'bg-[var(--surface-elevated)] border-[var(--color-border)] text-[var(--color-ink)] hover:border-[#D4A537]'
                 }`}
               >
                 {tab.label[locale]}
@@ -213,12 +213,12 @@ export const BePartOfGlobalMovementSection: React.FC = () => {
               <article
                 key={item.id}
                 data-testid={`movement-card-${item.id}`}
-                className="rounded-xl bg-[var(--surface-elevated)] border border-[var(--color-border)] hover:border-[#C9A04E] p-5 flex flex-col justify-between gap-5 transition-colors shadow-[0_6px_22px_rgba(23,35,58,0.04)]"
+                className="rounded-xl bg-[var(--surface-elevated)] border border-[var(--color-border)] hover:border-[#D4A537] p-5 flex flex-col justify-between gap-5 transition-colors shadow-[0_6px_22px_rgba(23,35,58,0.04)]"
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between gap-2 text-[10px] font-semibold tracking-[0.16em] uppercase text-[var(--color-bronze)] tabular-nums">
                     <span>{String(idx + 1).padStart(2, '0')}</span>
-                    <Users className="w-3.5 h-3.5 text-[#C9A04E]" aria-hidden="true" />
+                    <Users className="w-3.5 h-3.5 text-[#D4A537]" aria-hidden="true" />
                   </div>
                   <h3 className="font-editorial text-xl text-[var(--color-ink)] leading-snug">
                     {titleText}
@@ -242,12 +242,12 @@ export const BePartOfGlobalMovementSection: React.FC = () => {
         {/* Toggleable Inline Volunteer Seva Application Form */}
         <div
           id="volunteer-seva-inline"
-          className="rounded-2xl bg-[var(--surface-elevated)] border border-[#C9A04E]/45 p-6 sm:p-8"
+          className="rounded-2xl bg-[var(--surface-elevated)] border border-[#D4A537]/45 p-6 sm:p-8"
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.16em] uppercase text-[var(--color-bronze)]">
-                <Globe2 className="w-4 h-4 text-[#C9A04E]" aria-hidden="true" />
+                <Globe2 className="w-4 h-4 text-[#D4A537]" aria-hidden="true" />
                 <span>Karma Yoga · Seva Desk</span>
               </div>
               <h3 className="font-editorial text-2xl sm:text-3xl text-[var(--color-ink)]">

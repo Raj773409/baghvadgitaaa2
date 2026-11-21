@@ -131,7 +131,7 @@ export const AdminStoryStudioPanel: React.FC<AdminStoryStudioPanelProps> = ({
             onClick={() => setSubTab('scenes')}
             className={`inline-flex items-center gap-2 min-h-[38px] px-4 rounded-lg text-xs font-semibold cursor-pointer ${
               subTab === 'scenes'
-                ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                 : 'border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-bronze)]'
             }`}
           >
@@ -144,7 +144,7 @@ export const AdminStoryStudioPanel: React.FC<AdminStoryStudioPanelProps> = ({
             onClick={() => setSubTab('glbs')}
             className={`inline-flex items-center gap-2 min-h-[38px] px-4 rounded-lg text-xs font-semibold cursor-pointer ${
               subTab === 'glbs'
-                ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717]'
+                ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717]'
                 : 'border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-bronze)]'
             }`}
           >
@@ -187,8 +187,8 @@ export const AdminStoryStudioPanel: React.FC<AdminStoryStudioPanelProps> = ({
                     onClick={() => setSelectedSceneId(scene.id)}
                     className={`w-full text-left px-4 py-3 transition-colors cursor-pointer space-y-1 ${
                       active
-                        ? 'bg-[#D5AF62]/15 text-[var(--color-ink)]'
-                        : 'hover:bg-[#D5AF62]/5 text-[var(--color-ink)]'
+                        ? 'bg-[#D4A537]/15 text-[var(--color-ink)]'
+                        : 'hover:bg-[#D4A537]/5 text-[var(--color-ink)]'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -233,7 +233,7 @@ export const AdminStoryStudioPanel: React.FC<AdminStoryStudioPanelProps> = ({
                         onClick={() => setLocale(loc)}
                         className={`px-3 py-1 rounded text-xs font-mono uppercase cursor-pointer ${
                           locale === loc
-                            ? 'bg-[#17233A] text-[#F5E2B5] dark:bg-[#D5AF62] dark:text-[#171717] font-semibold'
+                            ? 'bg-[#17233A] text-[#F7D774] dark:bg-[#D4A537] dark:text-[#171717] font-semibold'
                             : 'text-[var(--color-muted)]'
                         }`}
                       >

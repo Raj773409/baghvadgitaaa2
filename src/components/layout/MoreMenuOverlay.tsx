@@ -522,7 +522,7 @@ export const MoreMenuOverlay: React.FC<MoreMenuOverlayProps> = ({
                 <Link
                   to="/admin"
                   onClick={onClose}
-                  className="text-[#C9A04E] hover:text-[#F0D38B] transition-colors font-medium"
+                  className="text-[#D4A537] hover:text-[#F7D774] transition-colors font-medium"
                 >
                   Admin Command Centre
                 </Link>

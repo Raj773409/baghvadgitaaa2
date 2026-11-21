@@ -111,8 +111,8 @@ export const ChaptersGridSection: React.FC = () => {
                   onClick={() => setDivision(tab.id)}
                   className={`min-h-[36px] px-4 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
                     active
-                      ? 'bg-[#17233A] text-[#F0D38B] border-[#17233A] dark:bg-[#C9A04E] dark:text-[#171717]'
-                      : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[#C9A04E]'
+                      ? 'bg-[#17233A] text-[#F7D774] border-[#17233A] dark:bg-[#D4A537] dark:text-[#171717]'
+                      : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[#D4A537]'
                   }`}
                 >
                   {tab.label}
@@ -151,7 +151,7 @@ export const ChaptersGridSection: React.FC = () => {
                 type="button"
                 data-testid={`gita-card-${ch.chapterNumber}`}
                 onClick={() => setModalChapter(ch.chapterNumber)}
-                className="group text-left rounded-xl p-5 bg-[var(--surface-elevated)] border border-[var(--color-border)] hover:border-[#C9A04E] hover:shadow-[0_12px_32px_rgba(201,160,78,0.14)] transition-all flex flex-col justify-between gap-4 cursor-pointer"
+                className="group text-left rounded-xl p-5 bg-[var(--surface-elevated)] border border-[var(--color-border)] hover:border-[#D4A537] hover:shadow-[0_12px_32px_rgba(212,165,55,0.14)] transition-all flex flex-col justify-between gap-4 cursor-pointer"
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-[var(--color-bronze)] tabular-nums">
@@ -161,11 +161,11 @@ export const ChaptersGridSection: React.FC = () => {
                     <span className="text-[var(--color-muted)]">{ch.verseCount} Verses</span>
                   </div>
 
-                  <p lang="sa" className="text-lg font-medium text-[#8A693A] dark:text-[#F0D38B]">
+                  <p lang="sa" className="text-lg font-medium text-[#8A693A] dark:text-[#F7D774]">
                     {ch.sanskritDevanagari}
                   </p>
 
-                  <h3 className="font-editorial text-xl text-[var(--color-ink)] leading-snug group-hover:text-[#A87932] dark:group-hover:text-[#F0D38B] transition-colors">
+                  <h3 className="font-editorial text-xl text-[var(--color-ink)] leading-snug group-hover:text-[#9C6B1E] dark:group-hover:text-[#F7D774] transition-colors">
                     {displayTitle}
                   </h3>
 
@@ -198,15 +198,15 @@ export const ChaptersGridSection: React.FC = () => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-3xl my-8 rounded-2xl bg-[#17233A] border border-[#C9A04E]/50 text-[#FFFDF7] p-6 sm:p-8 space-y-6 shadow-2xl"
+            className="w-full max-w-3xl my-8 rounded-2xl bg-[#17233A] border border-[#D4A537]/50 text-[#FFFDF7] p-6 sm:p-8 space-y-6 shadow-2xl"
           >
-            <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#C9A04E]/25">
+            <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#D4A537]/25">
               <div className="space-y-1">
-                <p className="text-xs font-semibold tracking-[0.16em] uppercase text-[#F0D38B]">
+                <p className="text-xs font-semibold tracking-[0.16em] uppercase text-[#F7D774]">
                   Chapter {activeChapter.paddedCode} · {activeChapter.romanNumeral} ·{' '}
                   {activeChapter.verseCount} Shlokas
                 </p>
-                <p lang="sa" className="text-2xl font-medium text-[#F0D38B]">
+                <p lang="sa" className="text-2xl font-medium text-[#F7D774]">
                   {activeChapter.sanskritDevanagari}
                 </p>
                 <h3 id="chapter-modal-title" className="font-editorial text-2xl sm:text-3xl text-[#FFFDF7]">
@@ -218,7 +218,7 @@ export const ChaptersGridSection: React.FC = () => {
                 type="button"
                 onClick={() => setModalChapter(null)}
                 aria-label="Close chapter modal"
-                className="p-2 rounded-full border border-[#C9A04E]/45 hover:border-[#F0D38B] cursor-pointer"
+                className="p-2 rounded-full border border-[#D4A537]/45 hover:border-[#F7D774] cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -229,11 +229,11 @@ export const ChaptersGridSection: React.FC = () => {
                 {activeChapter.essence[contentLocale] || getChapterContent(activeChapter.chapterNumber).essence}
               </p>
 
-              <div className="rounded-xl bg-[#0E1523]/75 border border-[#C9A04E]/30 p-4 space-y-2">
-                <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#C9A04E]">
+              <div className="rounded-xl bg-[#0E1523]/75 border border-[#D4A537]/30 p-4 space-y-2">
+                <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#D4A537]">
                   Canonical Anchor Verse · {activeRecitation.verseReference}
                 </p>
-                <p lang="sa" className="text-base sm:text-lg text-[#F0D38B] whitespace-pre-line">
+                <p lang="sa" className="text-base sm:text-lg text-[#F7D774] whitespace-pre-line">
                   {activeRecitation.sanskritDevanagari}
                 </p>
                 <p className="text-xs italic text-[#E9DCC5]/75 whitespace-pre-line">
@@ -258,11 +258,11 @@ export const ChaptersGridSection: React.FC = () => {
               }}
             />
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#C9A04E]/25">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#D4A537]/25">
               <Link
                 to="/gita"
                 onClick={() => setModalChapter(null)}
-                className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#F0D38B] hover:underline"
+                className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#F7D774] hover:underline"
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Read in 3D Collector Book</span>
