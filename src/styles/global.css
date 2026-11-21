@@ -1,0 +1,146 @@
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  overflow-x: clip;
+  overflow-y: visible;
+  line-height: 1.65;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+html[lang="hi"] body {
+  font-family: var(--font-devanagari);
+}
+
+html[lang="te"] body {
+  font-family: var(--font-telugu);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+}
+
+html[lang="hi"] .font-display,
+html[lang="hi"] .font-editorial {
+  font-family: var(--font-devanagari);
+}
+
+html[lang="te"] .font-display,
+html[lang="te"] .font-editorial {
+  font-family: var(--font-telugu);
+}
+
+.font-sans-ui {
+  font-family: var(--font-sans);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Eternal Royal Gold Architectural Surface & Reflection Utilities */
+.royal-gold-gradient-text {
+  background: linear-gradient(135deg, #F0D38B 0%, #C9A04E 52%, #A87932 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.royal-gold-surface {
+  background: linear-gradient(135deg, #F0D38B 0%, #C9A04E 55%, #A87932 100%);
+  color: #171717;
+}
+
+.royal-marble-surface {
+  background-color: var(--surface-elevated);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(201, 160, 78, 0.06) 0%, transparent 46%),
+    radial-gradient(circle at 86% 82%, rgba(233, 220, 197, 0.14) 0%, transparent 52%);
+}
+
+.dark .royal-marble-surface {
+  background-color: #131D30;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(201, 160, 78, 0.08) 0%, transparent 48%),
+    radial-gradient(circle at 86% 82%, rgba(23, 35, 58, 0.55) 0%, transparent 56%);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-bronze);
+  outline-offset: 3px;
+}
+
+/* Contemporary Hairline Separators */
+.hairline-t {
+  border-top: 1px solid var(--border-hairline);
+}
+
+.hairline-b {
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.hairline-all {
+  border: 1px solid var(--border-hairline);
+}
+
+.hairline-dark-t {
+  border-top: 1px solid var(--border-hairline-dark);
+}
+
+.hairline-dark-b {
+  border-bottom: 1px solid var(--border-hairline-dark);
+}
+
+.hairline-dark-all {
+  border: 1px solid var(--border-hairline-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Homepage Section Scroll-Snap Points (scoped to HomePage mount) */
+html.home-scroll-snap {
+  scroll-snap-type: y mandatory;
+}
+
+html.home-scroll-snap main > section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  scroll-margin-top: 70px;
+}
+
+@media (min-width: 640px) {
+  html.home-scroll-snap main > section {
+    scroll-margin-top: 76px;
+  }
+}
+
+html.home-scroll-snap main > section#top {
+  scroll-margin-top: 0px;
+}
+
+html.home-scroll-snap footer {
+  scroll-snap-align: end;
+}

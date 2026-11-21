@@ -1,0 +1,8 @@
+{
+  "name": "Remix Bhagavad Gita Vishwa Mahotsav 2027",
+  "description": "Project Eternal — A global cultural celebration of the eternal wisdom of the Bhagavad Gita. 18 Countries, 18 Chapters, 18 Languages, One Gita.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

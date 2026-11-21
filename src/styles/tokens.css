@@ -1,0 +1,129 @@
+:root {
+  /* ETERNAL ROYAL GOLD DESIGN SYSTEM — Light Mode (Ivory & Warm Marble) */
+  --color-royal-gold: #C9A04E;
+  --color-champagne-gold: #F0D38B;
+  --color-antique-gold: #A87932;
+  --color-ivory-white: #FFFDF7;
+  --color-warm-marble: #E9DCC5;
+  --color-royal-navy: #17233A;
+  --color-deep-charcoal: #171717;
+
+  /* Core Design System Surface & Ink Tokens */
+  --color-navy: #17233A;
+  --color-atmospheric-blue: #243B59;
+  --color-twilight-blue: #435B78;
+  --color-sunset: #E9AE78;
+  --color-champagne: #F0D38B;
+  --color-ivory: #FFFDF7;
+  --color-charcoal: #171717;
+  --color-stone: #E9DCC5;
+
+  /* Light Mode Semantic Tokens */
+  --color-canvas: #F8F3E8;
+  --color-surface: #E9DCC5;
+  --surface-elevated: #FFFDF7;
+  --color-white: #FFFFFF;
+  --color-ink: #171717;
+  --color-muted: #524D45;
+  --color-olive: #243B59;
+  --color-bronze: #A87932;
+  --color-bronze-light: #C9A04E;
+  --color-border: #D9C9AD;
+  --color-obsidian: #17233A;
+
+  /* Architectural Twilight & Hero Contrast Tokens */
+  --color-sky-zenith: #17233A;
+  --color-sky-horizon: #243B59;
+  --color-border-dark: rgba(201, 160, 78, 0.25);
+  --color-text-dark-muted: rgba(255, 253, 247, 0.8);
+
+  /* Semantic Aliases */
+  --surface-primary: var(--color-canvas);
+  --surface-secondary: var(--color-surface);
+  --surface-dark: var(--color-obsidian);
+  --border-hairline: var(--color-border);
+  --border-hairline-dark: var(--color-border-dark);
+  --text-muted: var(--color-muted);
+  --text-muted-light: var(--color-text-dark-muted);
+
+  /* Metallic Gold Gradients & Illuminated Hairlines */
+  --gold-gradient-metallic: linear-gradient(135deg, #F0D38B 0%, #C9A04E 50%, #A87932 100%);
+  --gold-gradient-soft: linear-gradient(90deg, rgba(201, 160, 78, 0) 0%, rgba(201, 160, 78, 0.55) 50%, rgba(201, 160, 78, 0) 100%);
+
+  /* Contemporary Typographic System */
+  --font-sans: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-editorial: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-devanagari: "Noto Sans Devanagari", "Manrope", sans-serif;
+  --font-telugu: "Noto Sans Telugu", "Manrope", sans-serif;
+
+  /* 8px Architectural Spacing Grid */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-12: 96px;
+  --space-16: 128px;
+  --container-max: 1360px;
+
+  /* Restrained Motion Timing */
+  --ease-architectural: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-ui: 180ms;
+  --duration-editorial: 620ms;
+}
+
+.dark {
+  /* ETERNAL ROYAL GOLD DESIGN SYSTEM — Dark Mode (Royal Navy & Deep Charcoal) */
+  --color-canvas: #0E1523;
+  --color-surface: #17233A;
+  --surface-elevated: #131D30;
+  --color-ink: #FFFDF7;
+  --color-muted: #C6BA9F;
+  --color-olive: #9DB5D8;
+  --color-bronze: #F0D38B;
+  --color-bronze-light: #C9A04E;
+  --color-border: rgba(201, 160, 78, 0.24);
+  --color-obsidian: #0B111C;
+}
+
+/* ETERNAL ROYAL GOLD — EXECUTIVE EDITION (Admin Command Centre Scope) */
+.admin-executive-theme {
+  --admin-gold: #D5AF62;
+  --admin-gold-soft: #F5E2B5;
+  --admin-gold-antique: #A77B37;
+  --admin-ivory: #FFFDF8;
+  --admin-warm-surface: #EAE3D6;
+  --admin-navy: #17233A;
+  --admin-charcoal: #171717;
+
+  --color-canvas: #F4EFE4;
+  --color-surface: #EAE3D6;
+  --surface-elevated: #FFFDF8;
+  --color-ink: #171717;
+  --color-muted: #585046;
+  --color-bronze: #A77B37;
+  --color-bronze-light: #D5AF62;
+  --color-border: #D9CCB5;
+  --gold-gradient-metallic: linear-gradient(135deg, #F5E2B5 0%, #D5AF62 52%, #A77B37 100%);
+}
+
+.dark .admin-executive-theme {
+  --admin-gold: #D5AF62;
+  --admin-gold-soft: #F5E2B5;
+  --admin-gold-antique: #A77B37;
+  --admin-ivory: #FFFDF8;
+  --admin-warm-surface: #1E2C47;
+  --admin-navy: #17233A;
+  --admin-charcoal: #0C121F;
+
+  --color-canvas: #0D1422;
+  --color-surface: #1E2C47;
+  --surface-elevated: #17233A;
+  --color-ink: #FFFDF8;
+  --color-muted: #D3C8B2;
+  --color-bronze: #F5E2B5;
+  --color-bronze-light: #D5AF62;
+  --color-border: rgba(213, 175, 98, 0.26);
+}

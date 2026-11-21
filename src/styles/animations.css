@@ -1,0 +1,24 @@
+@keyframes subtleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-enter {
+  animation: subtleReveal var(--duration-editorial) var(--ease-architectural) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-enter,
+  [data-motion-reveal] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
